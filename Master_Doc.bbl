@@ -1,0 +1,408 @@
+\begin{thebibliography}{999}
+\setlength{\itemsep}{-2mm}
+\bibitem{HeXijun2015}
+贺茜君. 求解波动方程的间断有限元方法及其波场模拟[D]. 北京:清华大学. 2015.
+
+\bibitem{Alterman1968}
+Alterman Z, Karal Jr F C. Propagation of elastic waves in layered media by finite difference methods[J]. Bulletin of the Seismological Society of America, 1968, 58(1): 367-398.
+
+\bibitem{Madariaga1976}
+Madariaga R. Dynamics of an expanding circular fault[J]. Bulletin of the Seismological Society of America, 1976, 66(3): 639-666.
+
+\bibitem{Virieux1984}
+Virieux J. SH-wave propagation in heterogeneous media: Velocity-stress finite-difference method[J]. Geophysics, 1984, 49(11): 1933-1942.
+
+\bibitem{Virieux1986}
+Virieux J. P-SV wave propagation in heterogeneous media: Velocity-stress finite-difference method[J]. Geophysics, 1986, 51(4): 889-901.
+
+\bibitem{Lavander1988}
+Levander A R. Fourth-order finite-difference P-SV seismograms[J]. Geophysics, 1988, 53(11): 1425-1436.
+
+\bibitem{Igel1995}
+Igel H, Mora P, Riollet B. Anisotropic wave propagation through finite-difference grids[J]. Geophysics, 1995, 60(4): 1203-1216.
+
+\bibitem{Hrennikoff1941}
+Hrennikoff A. Solution of problems of elasticity by the framework method[J]. J. appl. Mech., 1941.
+
+\bibitem{Courant1943}
+Courant R. Variational methods for the solution of problems of equilibrium and vibrations[M]. Verlag nicht ermittelbar, 1943.
+
+\bibitem{Strang1973}
+Strang G, Fix G. An Analysis of the Finite Element Method, 7 rentice-e all[J]. New Y ork, 1973.
+
+\bibitem{Zienkiewicz2005}
+Zienkiewicz O C, Taylor R L, Zhu J Z. The finite element method: its basis and fundamentals[M]. Elsevier, 2005.
+
+\bibitem{Bathe2006}
+Bathe K J. Finite element procedures[M]. Klaus-Jurgen Bathe, 2006.
+
+\bibitem{Lysmer1972}
+Lysmer J, Drake L A. A finite element method for seismology[J]. Methods in computational physics, 1972, 11: 181-216.
+
+\bibitem{Smith1975}
+Smith W D. The application of finite element analysis to body wave propagation problems[J]. Geophysical Journal International, 1975, 42(2): 747-768.
+
+\bibitem{Marfurt1984}
+Marfurt K J. Accuracy of finite-difference and finite-element modeling of the scalar and elastic wave equations[J]. Geophysics, 1984, 49(5): 533-549.
+
+\bibitem{Mullen1982}
+Mullen R,Belytschko T. Dispersion analysis of finite element semidiscretizations of the two‐dimensional wave equation[J]. International Journal for Numerical Methods in Engineering, 1982, 18(1): 11-29.
+
+\bibitem{Kosloff1982}
+Kosloff D D, Baysal E. Forward modeling by a Fourier method[J]. Geophysics, 1982, 47(10): 1402-1412.
+
+\bibitem{Kosloff1984}
+Kosloff D, Reshef M, Loewenthal D. Elastic wave calculations by the Fourier method[J]. Bulletin of the Seismological Society of America, 1984, 74(3): 875-891.
+
+\bibitem{Fornberg1975}
+Fornberg B. On a Fourier method for the integration of hyperbolic equations[J]. SIAM Journal on Numerical Analysis, 1975, 12(4): 509-528.
+
+\bibitem{Fornberg1998}
+Fornberg B. A practical guide to pseudospectral methods[M]. Cambridge university press, 1998.
+
+\bibitem{Fornberg1994}
+Fornberg B, Sloan D M. A review of pseudospectral methods for solving partial differential equations[J]. Acta numerica, 1994, 3: 203-267.
+
+\bibitem{Priolo1991}
+Priolo E, Seriani G. A numerical investigation of Chebyshev spectral element method for acoustic wave propagation[C]//Proc. 13th IMACS Conf. on Comp. Appl. Math. Ireland Dublin, 1991, 2: 551-556.
+
+\bibitem{Seriani1994}
+Seriani G, Priolo E. Spectral element method for acoustic wave simulation in heterogeneous media[J]. Finite elements in analysis and design, 1994, 16(3-4): 337-348.
+
+\bibitem{Komatitsch1998}
+Komatitsch D, Vilotte J P. The spectral element method: an efficient tool to simulate the seismic response of 2D and 3D geological structures[J]. Bulletin of the seismological society of America, 1998, 88(2): 368-392.
+
+\bibitem{Komatitsch1999}
+Komatitsch D, Tromp J. Introduction to the spectral element method for three-dimensional seismic wave propagation[J]. Geophysical journal international, 1999, 139(3): 806-822.
+
+\bibitem{Komatitsch2002}
+Komatitsch D, Ritsema J, Tromp J. The spectral-element method, Beowulf computing, and global seismology[J]. Science, 2002, 298(5599): 1737-1742.
+
+\bibitem{Komatitsch2005}
+Komatitsch D, Tsuboi S, Tromp J, et al. The spectral-element method in seismology[J]. GEOPHYSICAL MONOGRAPH-AMERICAN GEOPHYSICAL UNION, 2005, 157: 205.
+
+\bibitem{Komatitsch2001}
+Komatitsch D, Martin R, TROMP J, et al. Wave propagation in 2-D elastic media using a spectral element method with triangles and quadrangles[J]. Journal of Computational Acoustics, 2001, 9(02): 703-718.
+
+\bibitem{LiuYoushan2014}
+刘有山, 滕吉文, 徐涛, 等. 三角网格谱元法地震波场数值模拟[J]. 地球物理学进展, 2014, 29(4): 1715-1726.
+
+\bibitem{Reed1973}
+Reed W H, Hill T R. Triangular mesh methods for the neutron transport equation[R]. Los Alamos Scientific Lab., N. Mex.(USA), 1973.
+
+\bibitem{Lesaint1974}
+Lesaint P, Raviart P A. On a finite element method for solving the neutron transport equation[J]. Publications mathématiques et informatique de Rennes, 1974 (S4): 1-40.
+
+\bibitem{Cockburn1989a}
+Cockburn B, Lin S Y, Shu C W. TVB Runge-Kutta local projection discontinuous Galerkin finite element method for conservation laws III: one-dimensional systems[J]. Journal of Computational Physics, 1989, 84(1): 90-113.
+
+\bibitem{Cockburn1989b}
+Cockburn B, Lin S Y, Shu C W. TVB Runge-Kutta local projection discontinuous Galerkin finite element method for conservation laws III: one-dimensional systems[J]. Journal of Computational Physics, 1989, 84(1): 90-113.
+
+\bibitem{Cockburn1989c}
+Chavent G, Cockburn B. The local projection $ P^ 0-P^ 1$-discontinuous-Galerkin finite element method for scalar conservation laws[J]. ESAIM: Mathematical Modelling and Numerical Analysis-Modélisation Mathématique et Analyse Numérique, 1989, 23(4): 565-592.
+
+\bibitem{Cockburn1990}
+Cockburn B, Hou S, Shu C W. The Runge-Kutta local projection discontinuous Galerkin finite element method for conservation laws. IV. The multidimensional case[J]. Mathematics of Computation, 1990, 54(190): 545-581.
+
+\bibitem{Cockburn1998}
+Cockburn B, Shu C W. The Runge–Kutta discontinuous Galerkin method for conservation laws V: multidimensional systems[J]. Journal of Computational Physics, 1998, 141(2): 199-224.
+
+\bibitem{Cockburn2000}
+Cockburn B, Karniadakis G E, Shu C W. The development of discontinuous Galerkin methods[M]//Discontinuous Galerkin Methods. Springer, Berlin, Heidelberg, 2000: 3-50.
+
+\bibitem{Cockburn2001}
+Cockburn B, Shu C W. Runge–Kutta discontinuous Galerkin methods for convection-dominated problems[J]. Journal of scientific computing, 2001, 16(3): 173-261.
+
+\bibitem{Li2006}
+Li B Q. Discontinuous finite elements in fluid dynamics and heat transfer[M]. Springer Science \& Business Media, 2006.
+
+\bibitem{Hesthaven2008}
+Hesthaven J S, Warburton T. Nodal discontinuous Galerkin methods, volume 54 of Texts in Applied Mathematics[J]. 2008.
+
+\bibitem{Arnold1982}
+Arnold D N. An interior penalty finite element method with discontinuous elements[J]. SIAM journal on numerical analysis, 1982, 19(4): 742-760.
+
+\bibitem{Arnold2002}
+Arnold D N, Brezzi F, Cockburn B, et al. Unified analysis of discontinuous Galerkin methods for elliptic problems[J]. SIAM journal on numerical analysis, 2002, 39(5): 1749-1779.
+
+\bibitem{van2002}
+van der Vegt J J W, Van der Ven H. Space–time discontinuous Galerkin finite element method with dynamic grid motion for inviscid compressible flows: I. General formulation[J]. Journal of Computational Physics, 2002, 182(2): 546-585.
+
+\bibitem{Hesthaven2002}
+Hesthaven J S, Warburton T. Nodal high-order methods on unstructured grids: I. Time-domain solution of Maxwell's equations[J]. Journal of Computational Physics, 2002, 181(1): 186-221.
+
+\bibitem{Lu2004}
+Lu T, Zhang P, Cai W. Discontinuous Galerkin methods for dispersive and lossy Maxwell's equations and PML boundary conditions[J]. Journal of Computational Physics, 2004, 200(2): 549-580.
+
+\bibitem{Atkins1997}
+Atkins H, Atkins H. Continued development of the discontinuous Galerkin method for computational aeroacoustic applications[C]//3rd AIAA/CEAS Aeroacoustics Conference. 1997: 1581.
+
+\bibitem{Dumbser2005}
+Dumbser M, Munz C D. ADER discontinuous Galerkin schemes for aeroacoustics[J]. Comptes Rendus Mécanique, 2005, 333(9): 683-687.
+
+\bibitem{Dumbser2006}
+Dumbser M, Käser M. An arbitrary high-order discontinuous Galerkin method for elastic waves on unstructured meshes—II. The three-dimensional isotropic case[J]. Geophysical Journal International, 2006, 167(1): 319-336.
+
+\bibitem{Dumbser2007}
+Dumbser M, Käser M, Toro E F. An arbitrary high-order Discontinuous Galerkin method for elastic waves on unstructured meshes-V. Local time stepping and p-adaptivity[J]. Geophysical Journal International, 2007, 171(2): 695-717.
+
+\bibitem{Käser2006}
+Käser M, Dumbser M. An arbitrary high-order discontinuous Galerkin method for elastic waves on unstructured meshes—I. The two-dimensional isotropic case with external source terms[J]. Geophysical Journal International, 2006, 166(2): 855-877.
+
+\bibitem{Käser2007}
+Käser M, Dumbser M, De La Puente J, et al. An arbitrary high-order discontinuous Galerkin method for elastic waves on unstructured meshes—III. Viscoelastic attenuation[J]. Geophysical Journal International, 2007, 168(1): 224-242.
+
+\bibitem{Käser2008}
+de la Puente J, Dumbser M, Käser M, et al. Discontinuous Galerkin methods for wave propagation in poroelastic media[J]. Geophysics, 2008, 73(5): T77-T97.
+
+\bibitem{Pelties2010}
+Pelties C, Käser M, Hermann V, et al. Regular versus irregular meshing for complicated models and their effect on synthetic seismograms[J]. Geophysical Journal International, 2010, 183(2): 1031-1051.
+
+\bibitem{Pelties2012}
+Pelties C, Puente J, Ampuero J P, et al. Three‐dimensional dynamic rupture simulation with a high‐order discontinuous Galerkin method on unstructured tetrahedral meshes[J]. Journal of Geophysical Research: Solid Earth, 2012, 117(B2).
+
+\bibitem{Lailly1983}
+Lailly P, Bednar J B. The seismic inverse problem as a sequence of before stack migrations[C]//Conference on inverse scattering: theory and application. Philadelphia, PA: Siam, 1983: 206-220.
+
+\bibitem{Tarantola1984}
+Tarantola A. Inversion of seismic reflection data in the acoustic approximation[J]. Geophysics, 1984, 49(8): 1259-1266.
+
+\bibitem{Virieux2009}
+Virieux J, Operto S. An overview of full-waveform inversion in exploration geophysics[J]. Geophysics, 2009, 74(6): WCC1-WCC26.
+
+\bibitem{Mora2018}
+Mora P, Wu Z. Elastic versus acoustic inversion for marine surveys[J]. Geophysical Journal International, 2018, 214(1): 596-622.
+
+\bibitem{ZhangGuangzhi}
+张广智, 孙昌路, 潘新朋, 等 . 变密度声波全波形反演中密度影响因素及反演策略. 吉林大学学报(地球科学版), 2016, 46(5): 1550-1560
+
+\bibitem{Operto2013}
+Operto S, Gholami Y, Prieux V, et al. A guided tour of multiparameter full-waveform inversion with multicomponent data: From theory to practice[J]. The Leading Edge, 2013, 32(9): 1040-1054.
+
+\bibitem{Chen2018}
+Chen K, Sacchi M D. The importance of including density in elastic least-squares reverse time migration: multiparameter crosstalk and convergence[J]. Geophysical Journal International, 2018, 216(1): 61-80.
+
+\bibitem{Asnaashari2013}
+Asnaashari A, Brossier R, Garambois S, et al. Regularized seismic full waveform inversion with prior model information[J]. Geophysics, 2013, 78(2): R25-R36.
+
+\bibitem{Huang2008}
+Huang Y, Ng M K, Wen Y W. A fast total variation minimization method for image restoration[J]. Multiscale Modeling \& Simulation, 2008, 7(2): 774-795.
+
+\bibitem{Huang2009}
+Huang Y M, Ng M K, Wen Y W. A new total variation method for multiplicative noise removal[J]. SIAM Journal on imaging sciences, 2009, 2(1): 20-40.
+
+\bibitem{Lin2014}
+Lin Y, Huang L. Acoustic-and elastic-waveform inversion using a modified total-variation regularization scheme[J]. Geophysical Journal International, 2014, 200(1): 489-502.
+
+\bibitem{Alrajawi2007}
+Alrajawi M, Siahkoohi H R, Gholami A. Inversion of seismic arrival times with erratic noise using robust Tikhonov–TV regularization[J]. Geophysical Journal International, 2017, 211(2): 831-842.
+
+\bibitem{Xue2017}
+Xue Z, Zhu H, Fomel S. Full-waveform inversion using seislet regularization[J]. Geophysics, 2017, 82(5): A43-A49.
+
+\bibitem{Esser2018}
+Esser E, Guasch L, van Leeuwen T, et al. Total variation regularization strategies in full-waveform inversion[J]. SIAM Journal on Imaging Sciences, 2018, 11(1): 376-406.
+
+\bibitem{Zhang2017}
+Zhang Z, Alkhalifah T, Naeini E Z. Multiparameter elastic full waveform inversion with facies constraints[M]//SEG Technical Program Expanded Abstracts 2017. Society of Exploration Geophysicists, 2017: 1551-1555.
+
+\bibitem{Andrew2018}
+Andrew P Valentine, Malcolm Sambridge, Optimal regularization for a class of linear inverse problem[J], Geophysical Journal International, 2018: 215(2):1003–1021.
+
+\bibitem{Romero1999}
+Romero L A, Ghiglia D C, Ober C C, et al. Phase encoding of shot records in prestack migration[J]. Geophysics, 1999, 65(2): 426-436.
+
+\bibitem{Vigh2008}
+Vigh D, Starr E W. 3D prestack plane-wave, full-waveform inversion[J]. Geophysics, 2008, 73(5): VE135-VE144.
+
+\bibitem{Krebs2009}
+Krebs J R, Anderson J E, Hinkley D, et al. Fast full-wavefield seismic inversion using encoded sources[J]. Geophysics, 2009, 74(6): WCC177-WCC188.
+
+\bibitem{Schuster2011}
+Schuster G T, Wang X, Huang Y, et al. Theory of multisource crosstalk reduction by phase-encoded statics[J]. Geophysical Journal International, 2011, 184(3): 1289-1303.
+
+\bibitem{Castellanos2014}
+Castellanos C, Métivier L, Operto S, et al. Fast full waveform inversion with source encoding and second-order optimization methods[J]. Geophysical Journal International, 2014, 200(2): 720-744.
+
+\bibitem{ZhangQ2018}
+Qingchen Zhang, Weijian Mao, Hui Zhou, Hongjing Zhang, Yangkang Chen. Hybrid-domain simultaneous-source full waveform inversion without crosstalk noise[J]. Geophysical Journal International, 2018, 215(3): 1659-1681, 
+
+\bibitem{Matharu2018}
+Matharu G, Sacchi M D. Source encoding in multiparameter full waveform inversion[J]. Geophysical Journal International, 2018, 214(2): 792-810.
+
+\bibitem{Forgues1997}
+Forgues E, Lambaré G. Parameterization study for acoustic and elastic ray plus born inversion[J]. Journal of Seismic Exploration, 1997, 6(2-3): 253-277.
+
+\bibitem{Jeong2012}
+Jeong H, Lam Y W. Source implementation to eliminate low-frequency artifacts in finite difference time domain room acoustic simulation[J]. The Journal of the Acoustical Society of America, 2012, 131(1): 258-268.
+
+\bibitem{Plessix2013}
+Plessix R E, Milcik P, Rynja H, et al. Multiparameter full-waveform inversion: Marine and land examples[J]. The Leading Edge, 2013, 32(9): 1030-1038.
+
+\bibitem{XuK2013}
+Xu K, McMechan G A. 2D frequency-domain elastic full-waveform inversion using time-domain modeling and a multistep-length gradient approach[J]. Geophysics, 2014, 79(2): R41-R53.
+
+\bibitem{Raknes2014}
+Raknes E B, Arntsen B. Time-lapse full-waveform inversion of limited-offset seismic data using a local migration regularization[J]. Geophysics, 2014, 79(3): WA117-WA128.
+
+\bibitem{Pan2017}
+Pan W, Innanen K A, Liao W. Accelerating Hessian-free Gauss-Newton full-waveform inversion via l-BFGS preconditioned conjugate-gradient algorithm[J]. Geophysics, 2017, 82(2): R49-R64.
+
+\bibitem{Ernst2007}
+Ernst J R, Green A G, Maurer H, et al. Application of a new 2D time-domain full-waveform inversion scheme to crosshole radar data[J]. Geophysics, 2007, 72(5): J53-J64.
+
+\bibitem{Alkhalifah2006}
+Alkhalifah T, Bagaini C. Straight-rays redatuming: A fast and robust alternative to wave-equation-based datuming[J]. Geophysics, 2006, 71(3): U37-U46.
+
+\bibitem{Zhanyuan2018}
+Zhanyuan L, Guochen W, Xiaoyu Z. Time domain full waveform inversion with low frequency wavefield decompression[J]. Journal of Geophysics and Engineering, 2018, 15(6): 2330-2338.
+
+\bibitem{Choi2018}
+Choi Y, Alkhalifah T. Time-domain full-waveform inversion of exponentially damped wavefield using the deconvolution-based objective function[J]. Geophysics, 2018, 83(2): R77-R88.
+
+\bibitem{Pratt1988}
+Pratt R G, Worthington M H. The application of diffraction tomography to cross-hole seismic data[J]. Geophysics, 1988, 53(10): 1284-1294.
+
+\bibitem{Pratt1998}
+Pratt R G, Shin C, Hick G J. Gauss–Newton and full Newton methods in frequency–space seismic waveform inversion[J]. Geophysical Journal International, 1998, 133(2): 341-362.
+
+\bibitem{Pratt1999}
+Pratt R G. Seismic waveform inversion in the frequency domain, Part 1: Theory and verification in a physical scale model[J]. Geophysics, 1999, 64(3): 888-901.
+
+\bibitem{PrattShipp1999}
+Pratt R G, Shipp R M. Seismic waveform inversion in the frequency domain, Part 2: Fault delineation in sediments using crosshole data[J]. Geophysics, 1999, 64(3): 902-914.
+
+\bibitem{Sirgue2004}
+Sirgue L, Pratt R G. Efficient waveform inversion and imaging: A strategy for selecting temporal frequencies[J]. Geophysics, 2004, 69(1): 231-248.
+
+\bibitem{Geng2018}
+Yu Geng, Wenyong Pan, Kristopher A Innanen. Frequency-domain full-waveform inversion with non-linear descent directions[J]. Geophysical Journal International, 2018, 213(2): 739-756.
+
+\bibitem{Shin2008}
+Shin C, Cha Y H. Waveform inversion in the Laplace domain[J]. Geophysical Journal International, 2008, 173(3): 922-931.
+
+\bibitem{Shin2009}
+Shin C, Ho Cha Y. Waveform inversion in the Laplace—Fourier domain[J]. Geophysical Journal International, 2009, 177(3): 1067-1079.
+
+\bibitem{Shin2012}
+Ha W, Shin C. Laplace-domain full-waveform inversion of seismic data lacking low-frequency information[J]. Geophysics, 2012, 77(5): R199-R206.
+
+\bibitem{Kwon2017}
+Kwon J, Jun H, Song H, et al. Waveform inversion in the shifted Laplace domain[J]. Geophysical Journal International, 2017, 210(1): 340-353.
+
+\bibitem{Gudla2005}
+Gudla P K, Ganguli R. An automated hybrid genetic-conjugate gradient algorithm for multimodal optimization problems[J]. Applied Mathematics and Computation, 2005, 167(2): 1457-1474.
+
+\bibitem{MaHale2012}
+Ma Y, Hale D. Quasi-Newton full-waveform inversion with a projected Hessian matrix[J]. Geophysics, 2012, 77(5): R207-R216.
+
+\bibitem{LiMQuA2014}
+Li M, Qu A. Some sufficient descent conjugate gradient methods and their global convergence[J]. Computational and Applied Mathematics, 2014, 33(2): 333-347.
+
+\bibitem{Anagaw2018}
+Anagaw A Y, Sacchi M D. Model parametrization strategies for Newton-based acoustic full waveform inversion[J]. Journal of Applied Geophysics, 2018, 157: 23-36.
+
+\bibitem{Nocedal1989}
+Liu D C, Nocedal J. On the limited memory BFGS method for large scale optimization[J]. Mathematical programming, 1989, 45(1-3): 503-528.
+
+\bibitem{Al‐Baali1999}
+Al‐Baali M. Improved Hessian approximations for the limited memory BFGS method[J]. Numerical Algorithms, 1999, 22(1): 99-112.
+
+\bibitem{Marmousi22006}
+Martin G S, Wiley R, Marfurt K J. Marmousi2: An elastic upgrade for Marmousi[J]. The Leading Edge, 2006, 25(2): 156-166.
+
+\bibitem{Szeg1939}
+Szeg G. Orthogonal polynomials[M]. American Mathematical Soc., 1939.
+
+\bibitem{Gordon1973}
+Gordon W J, Hall C A. Construction of curvilinear co‐ordinate systems and applications to mesh generation[J]. International Journal for Numerical Methods in Engineering, 1973, 7(4): 461-477.
+
+\bibitem{Berenger1994}
+Jean-Pierre Berenger.A perfectly matched layer for the absorption of electromagnetic waves[J].Journal of Computational Physics,1994,114(2):185-200
+
+\bibitem{Chew1996}
+Chew W C, Liu Q H. Perfectly matched layers for elastodynamics: a new absorbing boundary condition[J]. Journal of Computational Acoustics, 1996, 4(04): 341-359.
+
+\bibitem{Hastings1996}
+Hastings F D, Schneider J B, Broschat S L. Application of the perfectly matched layer (PML) absorbing boundary condition to elastic wave propagation[J]. The Journal of the Acoustical Society of America, 1996, 100(5): 3061-3069.
+
+\bibitem{Drossaert2007}
+Drossaert F H, Giannopoulos A. A nonsplit complex frequency-shifted PML based on recursive integration for FDTD modeling of elastic waves[J]. Geophysics, 2007, 72(2): T9-T17.
+
+\bibitem{Carpenter1994}
+Carpenter M H, Kennedy C A. Fourth-order 2N-storage Runge-Kutta schemes[J]. 1994.
+
+\bibitem{Boonyasiriwat2009}
+Boonyasiriwat C. Acoustic waveform inversion of two-dimensional Gulf of Mexico data[D]. Department of Geology and Geophysics, University of Utah, 2009.
+
+\bibitem{Hansen1989}
+Hansen R O, Pawlowski R S. Reduction to the pole at low latitudes by Wiener filtering[J]. Geophysics, 1989, 54(12): 1607-1613.
+
+\bibitem{Portilla2001}
+Portilla J, Strela V, Wainwright M J, et al. Adaptive Wiener denoising using a Gaussian scale mixture model in the wavelet domain[C]//Proceedings 2001 International Conference on Image Processing (Cat. No. 01CH37205). IEEE, 2001, 2: 37-40.
+
+\bibitem{King1984}
+King M A, Schwinger R B, Doherty P W, et al. Two-dimensional filtering of SPECT images using the Metz and Wiener filters[J]. Journal of Nuclear Medicine, 1984, 25(11): 1234-1240.
+
+\bibitem{Choi2008}
+Choi Y, Min D J, Shin C. Two-dimensional waveform inversion of multi-component data in acoustic-elastic coupled media[J]. Geophysical prospecting, 2008, 56(6): 863-881.
+
+\bibitem{Prieux2013a} 
+Prieux V, Brossier R, Operto S, et al. Multiparameter full waveform inversion of multicomponent ocean-bottom-cable data from the Valhall field. Part 1: Imaging compressional wave speed, density and attenuation[J]. Geophysical Journal International, 2013, 194(3): 1640-1664.
+
+\bibitem{Prieux2013b} 
+Prieux V, Brossier R, Operto S, et al. Multiparameter full waveform inversion of multicomponent ocean-bottom-cable data from the Valhall field. Part 2: imaging compressive-wave and shear-wave velocities[J]. Geophysical Journal International, 2013, 194(3): 1665-1681.
+
+\bibitem{Crase1990} 
+Crase E, Pica A, Noble M, et al. Robust elastic nonlinear waveform inversion: Application to real data[J]. Geophysics, 1990, 55(5): 527-538.
+
+\bibitem{Meles2010a} 
+Meles G A, Van der Kruk J, Greenhalgh S A, et al. A new vector waveform inversion algorithm for simultaneous updating of conductivity and permittivity parameters from combination crosshole/borehole-to-surface GPR data[J]. IEEE Transactions on geoscience and remote sensing, 2010, 48(9): 3391-3407.
+
+\bibitem{Meles2010b} 
+Klotzsche A, van der Kruk J, Meles G A, et al. Full-waveform inversion of cross-hole ground-penetrating radar data to characterize a gravel aquifer close to the Thur River, Switzerland[J]. Near surface geophysics, 2010, 8(6): 635-649.
+
+\bibitem{DuHLiuY2018} 
+Du H, Liu Y. Minmax-concave total variation denoising[J]. Signal, Image and Video Processing, 2018, 12(6): 1027-1034.
+
+\bibitem{Oliphant2007} 
+Oliphant T E. Python for scientific computing[J]. Computing in Science \& Engineering, 2007, 9(3): 10-20.
+
+\bibitem{Lutz2001} 
+Lutz M. Programming python[M]. " O'Reilly Media, Inc.", 2001.
+
+\bibitem{VanRossum1995} 
+Van Rossum G, Drake Jr F L. Python reference manual[M]. Amsterdam: Centrum voor Wiskunde en Informatica, 1995.
+
+\bibitem{Shapiro2005}
+Shapiro A, Nemirovski A. On complexity of stochastic programming problems[M]//Continuous optimization. Springer, Boston, MA, 2005: 111-146.
+
+\bibitem{Nemirovski2009}
+Nemirovski A, Juditsky A, Lan G, et al. Robust stochastic approximation approach to stochastic programming[J]. SIAM Journal on optimization, 2009, 19(4): 1574-1609.
+
+\bibitem{Moghaddam2010}
+Moghaddam P P, Herrmann F J. Randomized full-waveform inversion: a dimenstionality-reduction approach[M]//SEG Technical Program Expanded Abstracts 2010. Society of Exploration Geophysicists, 2010: 977-982.
+
+\bibitem{van2011}
+van Leeuwen T, Aravkin A Y, Herrmann F J. Seismic waveform inversion by stochastic optimization[J]. International Journal of Geophysics, 2011, 2011.
+
+\bibitem{Aravkin2012}
+Aravkin A, Friedlander M P, Herrmann F J, et al. Robust inversion, dimensionality reduction, and randomized sampling[J]. Mathematical Programming, 2012, 134(1): 101-125.
+
+\bibitem{van2013}
+van Leeuwen T, Herrmann F J. Fast waveform inversion without source-encoding[J]. Geophysical Prospecting, 2013, 61(sup1): 10-19.
+
+\bibitem{BP19941995} 
+Gray S H, Marfurt K J. Migration from topography: Improving the near-surface image[J]. Canadian Journal of Exploration Geophysics, 1995, 31(1-2): 18-24.
+
+\bibitem{Lianghuang2017} 
+梁煌. 基于互相关的全波形反演初始模型构建方法研究[D]. 吉林大学, 2017.
+
+
+\end{thebibliography}
+
+
+
+
+

@@ -1,0 +1,2756 @@
+\documentclass[12pt]{article}
+\usepackage{fancyhdr}
+\usepackage{pythonhighlight}
+\usepackage{amsmath,amsfonts,amssymb,graphicx}    % EPS 图片支持
+\usepackage{indentfirst} % 中文段落首行缩进
+\setlength{\parindent}{2em}
+\usepackage{bm}          % 公式中的粗体字符(用命令\boldsymbol）
+\usepackage{indentfirst} % 中文首段缩进
+\usepackage{amsthm}      % 使用定理
+\usepackage{booktabs}    % 使用表格
+\usepackage{abstract}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{titlesec}
+\usepackage{titletoc}
+\usepackage{times}
+\usepackage{wasysym}
+\usepackage{pifont}
+\usepackage[sort]{cite}
+\usepackage{ccaption}
+\usepackage{float}
+\usepackage{calc}
+\usepackage{environ}
+\usepackage{xeCJK}
+\setCJKfamilyfont{song}{SimSun}
+\setCJKfamilyfont{hei}{SimHei}
+\setCJKfamilyfont{xingkai}{STXingkai}
+\setCJKfamilyfont{kai}{KaiTi}
+\setCJKfamilyfont{fang}{FangSong}
+\newcommand{\song}{\CJKfamily{song}}
+\newcommand{\hei}{\CJKfamily{hei}}
+\newcommand{\kai}{\CJKfamily{kai}}
+\newcommand{\fang}{\CJKfamily{fang}}
+\newfontfamily\CalibriFont{Calibri}
+\newfontfamily\TimesNMFont{Times New Roman}
+
+\newcommand{\erhao}{\fontsize{22pt}{\baselineskip}\selectfont}     
+\newcommand{\xiaoerhao}{\fontsize{20pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\sanhao}{\fontsize{16pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}      % 字号设置
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    % 字号设置
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   % 字号设置
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\myxiaoliuhao}{\fontsize{6.5pt}{\baselineskip}\selectfont}  % 字号设置
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    % 字号设置
+\setlength{\abovedisplayskip}{2.5mm}
+\setlength{\belowdisplayskip}{2.5mm}
+\renewcommand{\tablename}{表}
+\renewcommand{\figurename}{图}
+\captiondelim{~~}
+\captionnamefont{\wuhao\kai}
+\captiontitlefont{\wuhao\kai}
+%\usepackage[tabelfont=\wuhao\kai ,textfont=\wuhao\kai ,justification=centering]{caption}
+
+\setmainfont{Times New Roman}
+\setCJKfamilyfont{hwxingkai}{STXingkai}
+\newcommand{\hwxingkai}{\CJKfamily{hwxingkai}}
+\usepackage{geometry}
+
+\geometry{left=3.18cm,right=3.18cm,top=2.54cm,bottom=2.54cm}
+\makeatletter
+\@addtoreset{equation}{section}
+\makeatother
+\renewcommand\theequation{\arabic{section}-\arabic{equation}}
+\renewcommand {\thefigure} {\arabic{section}-\arabic{figure}}
+\renewcommand {\thetable} {\arabic{section}-\arabic{table}}
+
+\usepackage{algorithm}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+
+\floatname{algorithm}{算法}
+\renewcommand{\algorithmicrequire}{\textbf{参数说明:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\renewcommand {\thealgorithm} {\arabic{section}-\arabic{algorithm}}
+\renewcommand{\abstractname}{间断Galerkin声波方程正演模拟及全波形反演}
+\renewcommand{\abstractnamefont}{\sanhao\hei}
+\renewcommand{\refname}{\hei\sihao\centerline{参考文献}}
+\newcommand{\upcite}[1]{\textsuperscript{\textsuperscript{\cite{#1}}}}
+\usepackage{tocloft}
+\renewcommand\contentsname{\sanhao\hei\centerline{目录}}
+\setlength\cftparskip{2pt}
+\setlength\cftbeforesecskip{2pt}
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+
+\usepackage{fancyhdr}
+
+\begin{document}
+\setlength{\baselineskip}{20pt}
+\pagenumbering{Roman}
+\section*{\sanhao\hei\centerline{声波方程间断Galerkin正演模拟及L-BFGS全波形反演}}
+\noindent\hei{摘要:}\song{地震勘探是一种常见的地球物理勘探方法，在很多工程领域及石油勘探领域得到了广泛的应用，在不考虑转换波的前提下，使用爆炸震源、空气枪震源、电火花震源激发的地震勘探均可以由声波近似。为了提高地震数据的处理水平，本文对高精度声波方程正演算法及全波形反演算法开展了深入研究，正演模拟应用了卷积完全匹配层的间断Galerkin方法，反演计算采用了声波方程全波形双参数反演策略，为了使反演更加稳定从而提高反演精度，加载了正则化模型约束，为了提高全波形反演的效率，提出了声波方程全波形双参数随机震源、随机震源编码策略，该研究是在国家自然科学基金(41774132,41574116)和中南大学研究生自由探索创新项目(2018zzts688)的资助下进行的，主要开展以下工作：
+\par
+(1)简要介绍了声波方程正演算法，以及间断Galerkin算法的研究前沿及进展，总结了间断Galerkin算法国内外的研究现状。推导了声波方程DGTD(Discontinuous Galerkin Time Domain)算法的双曲守恒形式，给出了声波方程DGTD算法的弱形式，加载了完全匹配层(Perfectly Matched Layer,PML)吸收边界，使用LSERK(Low-Storage Five-Stage Fourth-Order Explicit Runge-Kutta,LSERK)算法实现了时间积分的计算，提高了算法的稳定性，编写了声波方程DGTD算法的正演程序，对比了DGTD算法、FETD(Finite Element Time Domain)算法与FDTD(Finite Difference Time Domain)算法的差异，比较了选取不同阶数的基函数对声波方程正演模拟精度的影响。
+\par
+(2)构建了时间域声波方程全波形双参数反演目标函数，推导了反演目标函数梯度的计算，对L-BFGS最优化算法进行了简单的说明，通过双“十”字型模型的试算，说明了多尺度串行全波形反演策略对提升反演精度的影响，并且通过加载多步长策略解决了由于介质密度和声波速度的摄动对反演结果的敏感度不同而导致的介质密度反演结果较差的问题，最后通过对Marmousi-II国际标准模型的计算验证了全波形双参数反演策略对于复杂模型的适应性。
+\par
+(3)通过对双”十“字型模型的计算，实现了Tikhonov正则化、传统全变差正则化、修正全变差正则化和考虑高阶项的修正全变差正则化模型约束全波形反演策略，提升了全波形反演算法的稳定性，提高了声波方程全波形反演的精度，比较了各种正则化模型约束策略对全波形反演算法稳定性、反演精度的不同影响，通过对SEAM国际标准模型的反演计算验证了正则化模型约束全波形反演策略对于复杂模型的适应性。
+\par
+(4)实现了时间域声波方程全波形双参数高效反演，提出了震源并行技术加快了正演模拟的计算速度，从而提高了全波形反演的效率，进而以BP1994地形偏移国际标准模型验证了随机震源全波形反演策略对于反演效率的提升，对比了不同方法的震源编码全波形反演策略，最后提出了随机震源与震源编码全波形联合反演策略，得到了更优的全波形反演结果。
+\par
+图69幅，表9个，参考文献138篇
+\par
+\noindent\hei{关键词:}\song{声波方程；间断Galerkin正演模拟；全波形双参数反演；修正全变差；正则化模型约束；震源并行技术；随机震源全波形反演策略；震源编码全波形反演策略；全波形联合反演策略}
+\par
+\noindent\hei{分类号:}\song{P631}
+}
+\newpage
+\section*{\sanhao\hei\center{Discontinuous Galerkin Forward Modeling and L-BFGS Full Waveform Inversion of Acoustic Wave Equation }}
+\noindent
+Abstract: Seismic exploration is a common geophysical exploration method. It has been widely used in many engineering fields and petroleum exploration fields. It uses exploration sources, airguns sources and spark-excited seismic without considering the converted waves. Both can be approximated by acoustic waves. In order to improve the processing level of seismic data, this paper carried out in-depth research on the high-precision acoustic equation forward modeling algorithm and full waveform inversion algorithm. Forward modeling simulation applied the discontinuous Galerkin Time Domain method based on the convolution perfect matching layer, and the full waveform dual-parameter inversion strategy of acoustic equation was used in the inversion calculation. With the addition of regularization model constraints, the full waveform dual-parameter efficient inversion method of acoustic equation was proposed. The research was carried out with the support of the National Natural Science Foundation of China (41774132,41574116) and the graduate free exploration and innovation project of Central South University(2018zz
+ts688). The main work is as follows:
+\par
+(1) This paper briefly introduces the forward algorithm of acoustic wave equation and the research frontier and progress of Discontinuous Galerkin Time-Domain algorithm, and summarizes the research status of Discontinuous Galerkin Time-Domain algorithm at domestic and abroad. The hyperbolic conservation form of the acoustic equation of the DGTD algorithm is derived, the weak form of the acoustic equation of the DGTD algorithm is given, the convolution perfect match layer absorption boundary is loaded, the time integral calculation is realized by using the LSERK algorithm, the stability of the algorithm is improved, the forward modeling program of the acoustic equation of DGTD algorithm is written, the difference between the DGTD algorithm and the FDTD algorithm is compared, and the influence of different base function orders on the forward simulation accuracy of the acoustic equation is compared.
+\par
+(2) The objective function of the full waveform dual-parameter inversion of the time domain acoustic equation is constructed, the calculation of the inverse objective function gradient is derived, and the L-BFGS optimization algorithm is simply explained. Through dual-cross-type model trial, the multi-scale serial full waveform inversion effect of strategy to improve the inversion accuracy, and by loading multystep strategy to solve the problem due to the density and velocity perturbation of the sensitivity of the inversion results due to the bad density inversion results, finally through the Marmousi-II international standard model of dual-parameter calculation verified the full waveform inversion strategy for complex model adaptability.
+\par
+(3) Based on the dual-cross-type model calculation, implements the Tikhonov regularization constraint, traditional total variation regularization constraint, modified total variation regularization and considering high-order item modified total variation regularization constraint, improve the stability of the full waveform inversion algorithm and enhances the precision of acoustic full waveform inversion equation, through compared the dual-cross-type model of various regularization model constraints strategy on the stability  of full waveform inversion algorithm, and the effect of different inversion accuracy, illustrates the considering high-order item correction total variation model constraints can more effectively improve the stability and accuracy of the full waveform inversion algorithm.
+\par
+(4) The full-waveform two-parameter efficient inversion of the time domain acoustic wave equation is realized. The parallel source technique is proposed to speed up the calculation speed of forward modeling and improve the efficiency of full-waveform inversion.Then, BP1994 international standard model of topographic migration is used to verify the improvement of inversion efficiency of the full waveform inversion strategy of random source, and the full waveform inversion strategy of source encoding with different methods is compared. Finally, the combined inversion strategy of the strategy of random source and the strategy of source encoding is proposed, and the better full waveform inversion result is obtained.
+\par
+Figure 69, table 9, reference 138. 
+\par
+\noindent
+Keywords: acoustic equation, Discontinuous Galerkin Modeling,full waveform dual parameters inversion, regularization model constraint, parallel source technique, random source strategy, source encoding strategy, combine inversion strategy
+\par
+\noindent
+Classification: P631
+
+\newpage
+\tableofcontents
+\titlecontents{section}
+              [1em]
+              {}%
+              {\contentslabel{1.5em}}%
+              {}%
+              {\titlerule*[1pc]{$\cdot$}\contentspage}%
+\newpage
+
+\pagenumbering{arabic}
+\setcounter{page}{1}
+\fancyhf{}
+\pagestyle{fancy}
+\renewcommand{\sectionmark}[1]{\markright{#1}}\renewcommand{\subsectionmark}[1]{}
+\lhead{\fancyplain{}{硕士学位论文}}
+\rhead{\fancyplain{}{\rightmark}} 
+\cfoot{\fancyplain{}{\thepage}}
+\section{绪论}
+\subsection{研究目的和意义}
+随着全球经济的快速发展和科学技术水平的逐渐进步，石油资源已经成为支撑各个行业发展的基础能源。世界各国也越来越重视油气资源的勘探问题\upcite{HeXijun2015}。随着中国经济的蓬勃发展，对于能源的消耗也日益加大，因此，油气资源短缺的问题也日益突出，然而油气资源的形成需要古生物经过漫长的时间演化而来，属于典型的非可再生能源，按照全国油气资源评价和探明储量通报，我国油气资源丰富，但资源探明程度不高，主要是由于油气储层的地质构造十分复杂，为油气勘探带来了巨大的困难，鉴于这个原因，发展高精度的地震勘探技术也逐渐成为科研工作者研究的重点。随着数学、物理理论的逐步提升和计算机硬件水平的快速更新，地震勘探的水平也随之提高，油气的探明率和开采率都得到了巨大的提升。地震波的数值模拟是许多地震处理程序的组成部分，地震勘探的主要问题涉及偏移成像、地震剖面数据处理、反演成像等。这些地震勘探的处理技术是在地面或井间布置检波器和震源，通过记录震源激发的地震波在地下介质中的传播规律得到相应的地震剖面数据来揭示地下介质的地质构造的，因此认识和了解弹性波在地球中的传播规律是研究地震勘探的基本工作，随着现代计算机的快速更新换代及硬件设施的飞速发展，采用更高精度的数值求解方法使得地震波高精度模拟问题得到了很好的解决，而解决偏移成像问题、数据处理问题和反演成像问题的基础是地震波场的高精度、高效率正演模拟，由此可见，研究高效且高精度的地震波动方程正演模拟方法成为地震勘探领域需要解决的首要问题。
+\par
+地震波动方程多参数全波形反演方法是利用布置的检波器接收到来自地下介质的所有信息来重建地下介质多参数结构的一种反演方法，全波形反演方法能够清晰地反映复杂地质模型构造及岩性细节特征。相对于传统的地震数据处理方法，它能够更加充分地利用地震波信息，速度、密度建模具有较高的重构精度，重构结果能够更加精确地反映地下细节信息。传统的地震数据处理方法需要更加频繁的人机交互，例如：提取初至波，分析速度谱等等，但这些处理方法没有充分利用地震波剖面信息，速度分析也仅能反演模型的速度信息，对于模型的其他参数信息并不明确，这些不利因素都推动着地震波多参数全波形反演方法的不断发展。随着计算机硬件水平的不断提高，地震波多参数全波形反演也得到了飞速发展，近年来成为了地震勘探研究领域的一个热点。
+\par
+由于地震数据具有很强的非线性且耗时巨大，因此使用传统的地震波多参数全波形反演得到的反演数据具有较大的震荡现象并且反演的效率也十分低下，从而发展了例如Tikhonov正则化模型约束、全变差正则化模型约束等反演策略，改善了全波形反演的结果，使异常体轮廓更加清晰，异常体边界更加明显，显著减小了震荡现象，提高了反演的精度。同时地震数据具有较多的震源个数且具有巨大的数据量，因此降低了全波形反演的效率，为了解决这一问题，发展了并行技术用于解决由于大量震源个数导致的全波形反演效率降低问题，同时发展了一些数据压缩算法，例如随机震源全波形反演策略、随机震源编码全波形反演策略等一系列全波形反演策略用于解决由于巨大数据量导致的全波形反演效率降低问题。通过结合使用以上全波形反演策略，从而达到高精度、高效率的反演目的。
+\subsection{国内外研究现状}
+\subsubsection{地震波正演模拟}
+常用的地震波动方程数值模拟方法分为频率域正演模拟和时间域正演模拟，本文主要讨论时间域正演模拟方法，常用的正演模拟方法有五种，分别为时域有限差分法、时域有限体积法、时域有限单元法、时域伪谱法和时域谱元法\upcite{HeXijun2015}。
+\par
+间断Galerkin方法(Discontinuous Galerkin-Finite Element Method,DG-FEM)与其他算法的一般性总结如表\ref{AlgoTab}所示。
+\begin{table}[H]
+\centering
+\caption{算法的一般性总结}\label{AlgoTab}
+\renewcommand\tabcolsep{1.5em}
+\begin{tabular}{cccc}
+\toprule
+{算法} & {复杂区域}  & {高精度和hp自适应} & {显式半离散格式} \\
+\midrule 
+FDTD & $\times$ & $\surd$ & $\surd$\\
+
+FVTD & $\surd$ & $\times$ & $\surd$\\
+
+FETD & $\surd$ & $\surd$ & $\times$\\
+
+PSTD & $\times$ & $\surd$ & $\surd$\\
+
+SETD & $\surd$ & $\surd$ & $\times$\\
+
+DGTD & $\surd$ & $\surd$ & $\surd$\\
+
+\bottomrule
+\end{tabular}
+\end{table}
+\par
+时域有限差分(Finite Difference Time Domain,FDTD)，是一种常用的求解微分方程近似解的数值方法，FDTD通过在Descartes坐标系中将模拟区域划分成有限个网格点，根据Taylor定理，使用Taylor展开式将微分方程的连续微分形式转化为离散的有限差分格式，达到将连续方程变为离散形式的目的，通过有限差分的形式来近似导数，从而寻求微分方程的近似解。有限差分算法由于其具有编程简单、内存消耗较低、计算速度较快等优点，并且通过提高有限差分格式的阶次可以很明显地提升算法的精度对计算速度不会造成显著地降低且只需修改系数即可达到提高阶次的目的，对复杂模型具有良好的适应性，计算速度与模型的复杂程度无关，因此被广泛用于地震波动方程的正演模拟中。
+\par
+Alterman. et al.(1968)首次给出了弹性波动方程的有限差分格式，并将其应用于层状半空间问题的求解中。获得了水平和垂直分量的完整地震剖面数据。并将结果与通过不同方法找到的结果进行比较，验证了有限差分方法对于弹性波动方程正演计算的有效性\upcite{Alterman1968}；Madariaga(1976)针对一阶速度-应力弹性波动方程提出了交错网格有限差分方法，并将其用于裂缝模型问题的求解中\upcite{Madariaga1976}
+；Virieux(1984,1986)将交错网格有限差分法用于对一阶速度-应力弹性波动方程模拟一般异构介质中的SH波和P-SV波的传播，避免了空间平滑的问题\upcite{Virieux1984,Virieux1986}；为了提高模拟精度，Lavander(1988)提出了空间四阶精度的交错网格有限差分格式\upcite{Lavander1988}；Igel et al.(1995)将交错网格有限差分法引入到各向异性介质的正演模拟当中\upcite{Igel1995}。有限差分方法虽是一种快速高效的方法，且有多种优良性质，但是区域几何形状不规则时，由于有限差分法不能与非结构化网格相结合，因此在边界处会产生虚假反射。
+\par
+时域有限体积法(Finite Volume Time Domain,FVTD)是一种常用的求解偏微分方程近似解的数值方法\upcite{LeVeque2002M,Toro2013}。与有限差分法或有限单元法类似，有限体积法在网格的离散位置上计算当前值，“有限体积”是指在网格上每个节点周围的小体积。在有限体积法中，使用散度定理将包含散度项的偏微分方程中的体积积分转换为表面积分，然后将这些项近似为每个有限体积表面的通量，由于进入给定体积的通量与离开相邻体积的通量相同，所以有限体积为保守形式。有限体积法的另一个优点是它允许使用非结构化网格，该方法多用于计算流体动力学中。
+\par
+Dormy. et al.(1995)首次将有限体积法用于弹性波的正演模拟中，与有限差分方法类似，有限体积法使用邻近点的几个位置处的场值计算出给定点处的场值导数近似值。该方法使用散度定理，考虑点周围的“有限体积”并对给定体积的表面进行离散化。当考虑的有限体积是正多面体时，得到对应于标准中心有限差分的表达式，使用不规则网格证明了有限体积法的稳定性和收敛性\upcite{Dormy1995}。LeVeque(2002)针对非均匀介质中的非线性弹性波动方程，提出了近似Riemann求解器，其中每个网格单元含有密度和应力-应变关系。非线性通量函数在空间上变化，并且使用跨越单元界面数值通量的波分解来近似Riemann解的波结构\upcite{LeVeque2002J}。Dumbser. et al.(2007)给出了二维和三维情况下任意高阶非结构化网格弹性波动方程有限体积算法框架，同时数值收敛性分析表明，在非结构化四面体网格上，所提出的方案得到了非常高的精度\upcite{Dumbser2007FVM}。
+\par
+时域有限单元法(Finite Element Time Domain,FETD)也是一种常用的近似求解微分方程的数值方法，该方法的提出主要用于解决复杂弹性和结构分析的问题。它的发展可以追溯到A. Hrennikoff和R. Courant在20世纪40年代早期的工作\upcite{Hrennikoff1941,Courant1943}。1973年，Strang和Fix给出了有限单元方法的严格数学基础\upcite{Strang1973}。此后，该方法被广泛用于各种物理系统的数值模拟工程学科，例如电磁学，传热学和流体动力学等领域\upcite{Zienkiewicz2005,Bathe2006}。有限单元法基于变分原理，首先将微分方程转化为等价的变分问题，然后将模拟区域划分为不同的单元，单元之间相互连接且互不重叠，再利用分片多项式函数逼近原问题，将原问题转化为一个大型稀疏代数方程组，至于时间积分的计算则使用Euler格式、蛙跳格式或Runge-Kutta格式进行求解。Lysmer. et al.(1972)和Smith(1975)将有限单元法引入到求解地震波动方程的数值模拟中\upcite{Lysmer1972,Smith1975}，Marfurt(1984)和Mullen. et al.(1982)等人针对二维波动方程，采用不同的时间离散方法，对低阶有限元方法进行了精度、稳定性和数值频散的分析\upcite{Marfurt1984,Mullen1982}。有限单元法根据变分原理将求解问题转化为求解一个大型稀疏方程组的问题，这将导致使用有限单元法进行数值模拟时需要消耗大量的内存，同时方程组的求解过程中会导致大量的计算，当进行大尺度的正演模拟时会消耗极大的物理内存，且每个单元上的自由度会大量增加，此时方程组的求解需要浪费大量的时间，因此在地震波正演模拟中很少采用有限单元法。
+\par
+时域伪谱法(Pseudo Spectral Time Domain,PSTD)，也被称为离散变量表示法(Discrete Variable Representation,DVR)，也是地震波正演模拟常用的一类数值方法(Kosloff. et al.1982,1984; Fornberg.1975,1998; Fornberg. et al.1994)。伪谱法类似于谱方法，但通过增加额外的伪谱允许方程在正交网格上表示，利用快速傅立叶变换(Fast Fourier Transform,FFT)方法来近似波场的空间导数，将时间域微分方程转化到波数域，则时间域中对空间的导数相应地转化为波数域中的数乘运算\upcite{Kosloff1982,Kosloff1984,Fornberg1975,Fornberg1998,Fornberg1994}，将时间域运算转化到波数域运算的优点在与使用较少的采样点即可重构波场信息，具有较高的数值精度和较小的数值频散，然而伪谱法对边界条件的要求极为苛刻，当边界条件不满足周期性时使用伪谱法处理边界条件将变得十分困难。
+\par
+时域谱元法(Spectral Element Time Domain,SETD)同时具有伪谱法和有限单元法的优点，谱元法同样也是基于变分原理，谱元法是使用高度分段多项式作为基函数的有限单元法的公式，谱元法的主要优点在于，谱元法选择高度分段多项式基函数，实现了非常高的模拟精度。这种多项式通常是在LGL(Legendre-Gauss-Lobatto)节点上的正交Chebyshev多项式或非常高阶的Lagrange多项式，进而利用Legendre-Gauss-Lobatto积分准则，使质量矩阵变成一个对角阵，避免了对大型矩阵的求逆运算。在谱元法中，计算误差随着近似多项式的阶数呈指数减小，因此与有限单元法相比具有更小的自由度，且实现了解与精确解的快速收敛。谱元法最早提出并应用于流体动力学领域的研究，Priolo. et al.(1991)首次将谱元法引入到弹性波动方程的正演计算问题中\upcite{Priolo1991}；随后，由于谱元法具有很高的模拟精度，因此被广泛应用于地震波大尺度问题的数值模拟中(Seriani. et al.1994; Komatitsch. et al.1998,1999,2002,2005)\upcite{Seriani1994,Komatitsch1998,Komatitsch1999,Komatitsch2002,Komatitsch2005}；Komatitsch, el al. (2001)和刘有山等(2014)使用三角形网格实现了二维弹性波动方程谱元法高精度正演模拟\upcite{Komatitsch2001,LiuYoushan2014}。
+\par
+间断Galerkin方法(Discontinuous Galerkin,DG)最早是由Reed. et al.(1973)提出并应用于中子输运方程问题的求解中\upcite{Reed1973}。经过几十年的不断研究，DG算法已经日渐成熟(Lesaint. et al.1974; Cockburn. et al.1989a,1989b,1989c,1990,1998,2000,2001; Li.2006; Hesthaven et al.2008; Arnold.1982; Arnold. et al.2002)\upcite{Lesaint1974,Cockburn1989a,Cockburn1989b,Cockburn1989c,
+Cockburn1990,Cockburn1998,Cockburn2000,Cockburn2001,
+Li2006,Hesthaven2008,Arnold1982,Arnold2002}。Cockburn, Shu(2001)研究了二维Runge-Kutta局部投影不连续Galerkin方法(Runge-Kutta Discontinuous Galerkin Method,RKDG)，并且在一维情况下进行了定义和分析。这些方案都是在一般三角测量中定义的，可以轻松处理边界条件，验证最大化原则。以上学者的工作为间断Galerkin算法提供了数学基础，RKDG算法中单元之间的信息使用数值通量函数来联系，在时间离散上可以使用各种方法的Runge-Kutta方法，例如基于全变差减小的Runge-Kutta(Total-Variation-Diminishing Runge-Kutta: TVDRK)时间离散格式、五级四阶低存储 Runge-Kutta(Low-Storage Five-Stage Fourth-Order Explicit Runge-Kutta,LSERK)时间离散格式等，数值通量函数的选取原则必须满足相容性，且数值通量还需要能够保证对低阶或有限体取极限时格式是单调的，这种基于数值通量的间断Galerkin方法被广泛应用于计算流体力学(Hesthaven et al.2008; Van der Vegt et al.2002)\upcite{Hesthaven2008,van2002}、计算电磁学(Hesthaven et al.2002; Lu et al.2004)\upcite{Hesthaven2002,Lu2004}以及计算声学(Atkins 1997; Dumbser et al., 2005)等领域\upcite{Atkins1997,Dumbser2005}。由于在求解双曲守恒方程时使用基于数值通量的间断Galerkin方法更为普遍，而一阶地震波动方程天然满足双曲守恒形式，因而基于数值通量的间断Galerkin方法广泛应用于地震波动方程的正演模拟中。Käser和Dumbser(2006,2007)发展了一种基于数值通量的使用Cauchy-Kovalewski时间积分的间断Galerkin方法(Arbitrary High-Order Derivatives Time Stepping Discontinuous Galerkin Method,ADER-DG)，用于解决非均匀介质中弹性波动方程的正演模拟问题，且在非结构化三角网格上具有任意高阶空间和时间精度 (Dumbser. et al.2006, 2007; Käser. et al.2006,2007,2008; de La Puente. et al.2007,2008,2009; Pelties. et al.2010,2012)\upcite{Dumbser2006,Dumbser2007,Käser2006,Käser2007,Käser2008,Pelties2010,Pelties2012}。
+\subsubsection{地震波全波形反演}
+全波形反演最早由Lailly(1983)和Tarantola(1984)提出\upcite{Lailly1983,Tarantola1984}，它综合利用观测记录中的振幅、走时和相位等信息，将正演记录与实际观测数据进行最优匹配，从而寻找最佳模型参数，它具有揭示复杂地质背景下构造与岩性细节信息的潜力，在油气勘探、开发和地球动力学等领域均得到了广泛的应用(Virieux, Operto.2009; Mora P, Wu Z.)\upcite{Virieux2009,Mora2018}。在常规的声波波动方程全波形反演中，通常假设介质密度为已知的常数值，仅反演声波速度。但实际上介质速度和介质密度在地震数据的定量解释及油气勘探解释中分别起到不同的作用，其中密度信息可预测储层流体饱和度(Zhang. et al.2016)\upcite{ZhangGuangzhi}。因此全波形反演中获取可靠的密度参数已成为迫切需求。随着大规模科学计算能力的提升，多参数FWI逐渐成为可能，并迅速成为FWI的一个重要研究方向。Operto. et al.(2013)从理论到实践全面探讨了几种物理特性的地震数据成像问题，并指出多参数全波形反演会存在参数间的串扰\upcite{Operto2013}，Chen K. et al.(2018)详细阐述了在弹性最小二乘逆时偏移中包含密度的重要性以及存在多参数串扰和收敛性问题的难点\upcite{Chen2018}。
+\par
+Asnaashari. et al.(2013)将Tikhonov正则化应用于地震波的全波形反演求解中，但由于光滑性的缘故，Tikhonov正则化方法易导致目标区域与背景区域边界模糊\upcite{Asnaashari2013}，Huang Y. et al.(2008)提出用于图像重建的快速全变差最小化方法\upcite{Huang2008}，Huang Y. et al.(2009)提出了用于图像去噪的改进全变差方法\upcite{Huang2009}，Lin Y. et al.(2014)首次将改进全变差方法应用于声波和弹性波反演\upcite{Lin2014}，对比了传统全变差正则化模型约束与改进全变差正则化模型约束对弹性波反演的影响，取得了良好的效果，M. Alrajawi. et al.(2017)提出了具有鲁棒性的Tikhonov-TV正则化模型约束，该方法能够抑制不稳定噪声并恢复模型的突变和平滑变化部分，得到了更优的反演结果\upcite{Alrajawi2007}，Xue. et al.(2017) 提出一种Seislet模型正则化新方法，它在每次反演迭代中对seislet域中的模型更新应用软阈值来施加稀疏性，额外增加的成本很低，通过抑制震源串扰与随机噪声，可以极大地提高全波形反演的鲁棒性\upcite{Xue2017}，Esser. et al.(2018)将全变差正则化策略应用于全波形反演中，通过去除与源编码相关的反演伪像，显著改善了反演结果\upcite{Esser2018}，Zhang. et al.(2017)认识到局部地震相信息可以提高反演参数的分辨率，提出了基于相约束的多参数弹性全波形反演新算法\upcite{Zhang2017}，Andrew. P. et al.(2018)提出了通过在分层贝叶斯框架内将正则化参数视为超参数获得正则化参数范围的解决方案\upcite{Andrew2018}。
+\par
+为了提高反演的效率，Romero L.A. et al.(1999)在处理地震波叠前偏移数据时提出了随机时移震源编码，提高了叠前偏移效率，取得了良好的偏移剖面\upcite{Romero1999}，Vigh, D. et al.(2008)使用平面波震源编码实现了地震数据的全波形反演\upcite{Vigh2008}，Krebs J. et al.(2009)在地震波动方程反演中提出了随机极性震源编码，与传统方法对比，取得了良好的反演效果\upcite{Krebs2009}，Schuster G T. et al.(2011)详细阐述了随机时移震源编码的理论\upcite{Schuster2011}，Clara Castellanos. et al.(2015)将震源编码与二阶优化方法相结合，降低全波形反演的计算成本\upcite{Castellanos2014}，Zhang Q. et al(2018)提出了一种基于时域有限差分和相位敏感检测方法的时频混合域同步源全波形反演算法，避免了由于串扰噪声降低反演结果质量的问题\upcite{ZhangQ2018}，Matharu, Sacchi(2018)通过检查多参数震源编码的Hessian矩阵来研究源编码和参数权衡之间的关系，实现了多参数全波形反演中的源编码，并提供了弹性各向同性反演的应用\upcite{Matharu2018}。
+\par
+然而，由于声波速度与介质密度参数之间存在的耦合串扰现象，使反演问题的性态变差，增加了多参数全波形反演的非线性程度，严重影响反演结果的精度。学者Forgues, Lambaré(1997)指出，声波速度的扰动所引起的波场变化不随角度的变化而变化，但是介质密度的扰动所引起的波场变化会随着角度的增加而减小，因此在进行全波形反演计算时对于声波速度的重构具有较高的精度，而介质密度仅能较好地重构大尺度的成分，对小尺度成分和部分中尺度成分却不能很好地重构\upcite{Forgues1997}。为了解决全波形反演中介质密度反演精度差的问题，Jeong et al.(2012)提出了一种频率域声波全波形分层策略来消除密度反演的低频伪像\upcite{Jeong2012}；Plessix(2013)等首先采用长偏移距数据反演声波速度，然后利用全偏移距数据反演声波速度和介质密度\upcite{Plessix2013}，Kun Xu, George A. McMechan.(2013)在弹性波全波形反演中提出了使用多步长方法改善参数反演结果的方法并取得了成功\upcite{XuK2013}，Raknes, Arntsen(2014)等从反演参数的组合方式的角度论述了弹性波动方程全波形反演过程，进而提出了逐个反演多参数的全波形反演策略\upcite{Raknes2014}。Pan. et al. (2017)将预条件共轭梯度算法加速的HF-GN(Hessian Free - Gauss Newton)方法用于速度和密度的多参数声波全波形反演中，预处理使问题具有良好的条件，减少了全波形迭代的次数，减轻了大规模多参数全波形反演的参数串扰\upcite{Pan2017}。
+\par
+目前全波形多参数反演在数学上常被抽象为一个二次型优化问题，它可以在时间域(Ernst. et al.2007; Wu, Alkhalifah.2016; Liang. et al.2018; Choi, Alkhalifah. T.2018)、频率域(Pratte. et al.1988; Pratte. 1998; Pratte \& Shipp.1999; Sirgue, Pratt.2004; Geng. et al.2018)\upcite{Ernst2007,Alkhalifah2006,Zhanyuan2018,Choi2018,Pratt1988,Pratt1998,Pratt1999,
+PrattShipp1999,Sirgue2004,Geng2018}。、Laplace域求解(Shin, Ho.2008,2009; Shin.2012; Kwon. et al.2017)\upcite{Shin2008,Shin2009,Shin2012,Kwon2017}。而从最优化求解角度可分为梯度引导类(Gudla, Ganguli.2005)与牛顿类解法(Ma, Hale.2012)\upcite{Gudla2005,MaHale2012}。梯度引导类算法应用较多的有最速下降法和共轭梯度法。最速下降法(Gradient Descent,GD)是一个一阶最优化算法，通常也称为梯度下降法。要使用梯度下降法找到一个函数的局部极小值，必须向函数上当前点对应梯度或者是近似梯度的反方向的规定步长距离点进行迭代搜索，但最速下降法的收敛速度较慢。共轭梯度法(Conjugate Gradient,CG)可以用于求解无约束的最优化问题。共轭梯度法是一个迭代方法，它适用于系数矩阵为稀疏矩阵的线性方程组，但共轭梯度法的收敛效果仍不理想(Li, Qu.2014)\upcite{LiMQuA2014}。
+\par
+牛顿类算法(Anagaw, Sacchi.2018)是通过利用目标函数的一阶偏导的梯度算子和二阶偏导的Hessian矩阵进行约束，具有二阶性，在理论上比梯度类算法的收敛速度更快，但是Hessian矩阵的存储和求取的空间复杂度较高\upcite{Anagaw2018}。针对牛顿算法中Hessian矩阵求取存在的问题，具有良好的数值效果和快速收敛性的BFGS算法被提出，但该算法的Hessian矩阵的存储量及计算量仍然较大。而有限内存BFGS(Limited-memory Broyden-Fletcher-Goldfarb-Shanno, L-BFGS)(Liu, Nocedal.1989; Al-Baali.1999)不需要显式形成Hessian矩阵及其逆矩阵，仅需要提供Hessian逆矩阵的一个初始近似矩阵，通过保存部分梯度算子和模型修正量的信息求取伪Hessian矩阵，大大减小了存储量和运算量，同时对多参数反演中参数反演精度具有一定的调节功能\upcite{Nocedal1989,Al‐Baali1999}。
+\subsection{论文结构及主要工作}
+本文主要采用声波方程对DGTD(Discontinuous Galerkin Time Domain)高精度正演模拟进行了研究，推导了相关公式，实现了基于完全匹配层的时域间断Galerkin法声波方程正演模拟，在高精度正演的基础上开展了声波方程全波形双参数反演的研究，实现了基于L-BFGS最优化算法的时间域声波方程全波形双参数反演，进而实现了正则化模型约束的加载，提高了声波方程全波形双参数反演的稳定性和精度，最后开展了对于声波方程全波形双参数反演效率的讨论，实现了随机震源全波形反演策略，对比了不同的震源编码全波形反演策略，提出了随机震源与震源编码全波形联合反演策略并在此基础上进行了改进，论文总体分为六章：
+\par
+第一章绪论部分介绍了课题研究的目的和意义，总结了声波方程正演、DGTD算法和全波形反演的研究现状，然后详细阐述了本文的章节安排及主要研究内容。
+\par
+第二章简单介绍了声波勘探的基本原理，阐述了声波传播的基本规律(一阶声压-速度声波方程)，推导了声波方程的双曲守恒形式，详细描述了DGTD算法的计算流程及理论推导，随后开展了完全匹配层吸收边界的加载，对时间积分进行了简单的说明，通过三个数值算例分别说明了DGTD算法相对FETD(Finite Element Time Domain)算法与FDTD(Finite Difference Time Domain)算法的优势和DGTD算法基函数选取对提高模拟精度的影响。
+\par
+第三章首先详细介绍了反演目标函数的构建并推导了反演目标函数的梯度计算公式，简单说明了L-BFGS最优化算法对于Hessian矩阵的处理，随后通过双“十”字型模型开展了多尺度串行全波形反演策略、多步长反演策略的研究，最后使用Marmousi-II国际标准模型\upcite{Marmousi22006}证明了多尺度串行全波形反演策略及多步长策略的适应性。
+\par
+第四章重点放在如何提高全波形反演的稳定性和精度上，通过加载正则化模型约束使反演更加稳定，并提升反演结果的质量，简单介绍了Tikhonov正则化模型约束策略，继而对几种全变差正则化模型约束策略进行详细推导，使用双“十”字型模型加载不同的正则化模型约束策略比较各种策略对反演结果改进，最后选取SEAM国际标准模型验证了正则化模型约束策略对复杂模型的适应性。
+\par
+第五章重点放在平衡反演精度和反演效率的问题上，提出了震源并行技术，改善了正演效率，随后阐述了随机震源全波形反演策略和震源编码全波形反演策略，提出了反演策略评价函数的概念，用于从反演精度和效率两个方面对反演方法进行综合评价，进而选取最优反演方法，接着说明了震源编码全波形反演策略的算法思路，比较了不同随机方法的震源编码策略，提出了动态随机震源编码全波形反演策略，利用BP1994国际标准模型对上述全波形反演策略进行验证，最后结合随机震源全波形反演策略和震源编码全波形反演策略的优点提出了随机震源与震源编码全波形联合反演策略，并对新的算法做了进一步的改进，提出了随机震源于动态随机震源编码全波形联合反演策略。
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\par
+第六章结论部分对以上研究成果进行了总结，对声波方程正演模拟、高效率高精度全波形反演领域中今后的研究方向进行了分析和展望。
+\newpage
+\section{声波方程DGTD正演模拟}
+用检波器接收声源激发的弹性波在地下介质中的传播情况，借以研究地下介质的物理性质和构造特征的勘探方法称为声波勘探，与地震勘探原理相同，二者的区别在与声波仅存在纵波，而地震波则包含横波、转换波等，相对声波而言接收到的信号更加复杂。地震勘探时使用的爆炸震源、空气枪震源和电火花震源在不考虑转换波的前提下，都可以近似地使用声波来描述地震波。
+\par
+本章将首先简单介绍声波动方程的理论基础和双曲守恒方程，具有的工作内容有：首先对声波方程进行了简单的介绍并给出了双曲守恒方程的形式，之后通过一系列的数学变换将声波方程转换为具有双曲守恒形式的方程组，目的是更好地对声波方程进行离散，更方便地阐述声波方程DGTD算法正演流程，进而从空间离散方式介绍DGTD算法的基本理论，重点包含有声波方程DGTD算法弱形式的推导计算，数值通量的概念，三角形映射关系的说明，基函数阶数及插值节点的关系，数值积分的求解，完全匹配层吸收边界的加载及时间积分的处理等方面。
+\subsection{声波方程双曲守恒形式}
+在不考虑转换波的前提下，使用爆炸震源、空气枪震源、电火花震源激发的地震勘探均可以由声波近似，基于这个前提，地震正演模拟中可以用声波方程描述地震波在地下介质中的传播规律，一阶声压-速度声波方程如下：
+\begin{equation}\label{2-1}
+\left\{ 
+\begin{aligned}
+\frac{\partial v_x}{\partial t} & = \frac{1}{\rho}\frac{\partial p}{\partial x}\\
+\frac{\partial v_z}{\partial t} & = \frac{1}{\rho}\frac{\partial p}{\partial z}\\
+\frac{\partial p}{\partial t} & = k(\frac{\partial v_x}{\partial x}+\frac{\partial v_z}{\partial z})
+\end{aligned}
+\right.
+\end{equation}
+\par
+其中$k=\rho v^2$，$\rho$表示介质密度，$v_x$、$v_z$表示质点速度分量，$p$代表声压。如果一个方程组可以写成如下形式：
+\begin{equation}\label{2-2}
+\begin{aligned}
+&\frac{\partial W}{\partial t}+\nabla \cdot F(W)=0,\quad \in \Omega \times (0,T)\\
+&W(X,0)=W_0(X),\quad \forall X \in \Omega\\
+&W(X,t)=\gamma(X,t),\quad \forall X \in \partial \Omega
+\end{aligned}
+\end{equation}
+\par
+其中，$\Omega \in R_d,W=(w_1,w_2,\cdots,w_m)^T$代表守恒变量组成的向量，而$F(W)=(F_1,F_2,\cdots,F_m)^T$代表关于$W$的矩阵，称为数值通量矩阵，则称该方程组满足双曲守恒形式。
+\par
+可以将声波方程写为行列式形式：
+\begin{equation}\label{2-3}
+\boldsymbol{A}\frac{\partial \boldsymbol{U}}{\partial t}+\nabla \cdot F(\boldsymbol{U})=0
+\end{equation}
+\par
+其中，
+\begin{equation*}
+\boldsymbol{A}=\left [ 
+\begin{array}{>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c}
+\rho & 0 & 0\\
+0 & \rho & 0\\
+0 & 0 & \frac{1}{k} 
+\end{array} 
+\right ],
+\boldsymbol{U}=(v_x,v_z,p)^T,F(\boldsymbol{U})=\left[ \begin{array}{>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c}
+-p & 0\\0 & –p\\v_x & v_z 
+\end{array} 
+\right]
+\end{equation*}
+\par
+这样，声波方程将自动满足双曲守恒形式。
+\subsection{DG算法描述}
+对于形如式(\ref{2-3})的声波方程组，从DGTD算法的空间离散方式来具体推导正演算法的基本理论，接下来重点从声波方程DGTD算法弱形式的推导计算，数值通量的概念，三角形映射关系的说明，基函数阶数及插值节点的关系，数值积分的求解等几个方面详细展开说明。
+\subsubsection{弱形式}
+DGTD算法类似于FETD方法，对于弱形式的构造使用Galerkin方法，为了保证几何灵活性，假设计算区域为$\Omega$，首先将$\Omega$划分为不重叠的单元$\Omega_h$，对于二维模型，假设$\Omega$可以用$K$个单元作三角剖分，
+\begin{equation}\label{2-4}
+\Omega \simeq \Omega_h = \bigcup_{k=1}^KD^k
+\end{equation}
+\par
+其中$D^k$为直边三角形，并且假设剖分是几何相容的，例如，$\partial \Omega$用分片线性多角形逼近，那么每个线段就是三角形的一个边。
+假设用下式逼近$\boldsymbol{U}$:
+\begin{equation}\label{2-5}
+\boldsymbol{U} \simeq \boldsymbol{U}_h=\bigoplus_{k=1}^K \in V_h=\bigoplus_{k=1}^K\{\psi_n(D^k)\}_{n=1}^{N_p}
+\end{equation}
+\par
+其中$\psi_n(D^k)$为定义在单元Dk上的二维多项式基。局部函数$\boldsymbol{U}_h^k$可以表示为：
+\begin{equation}\label{2-6}
+\boldsymbol{U}_h^k=\sum_{i=1}^{N_p}\boldsymbol{U}_h^k l_i^k,\quad x \in D^k
+\end{equation}
+\par
+其中$N_p$表示局部展开式的项数，$l_i$表示在单元$D^k$上的网格点处定义的高维Lagrange多项式。
+利用Galerkin方法求解弱形式，首先构造残量：
+\begin{equation}\label{2-7}
+\boldsymbol{R}_h=\boldsymbol{A}\frac{\partial \boldsymbol{U}_h}{\partial t}+\nabla \cdot F(\boldsymbol{U})
+\end{equation}
+然后必须决定这个参量以何种形式变为零。为此，引进由试验函数$\phi_h$定义的整体空间$V_h=\bigoplus_{k=1}^K V_h^k$，其中局部空间$V_h^k=\mathbf{span}\{\psi_n(D^k)\}_{n=1}^{N_p}$
+\par
+要求残量正交于所有$V_h$中的试验函数，导致局部表达式：
+\begin{equation}\label{2-8}
+\int_{D^k}\boldsymbol{R}_h \psi_n dD^k=0,\quad 1 \leq n \leq N_p
+\end{equation}
+对所有$K$单元都成立，此时每个单元上正好由$N_p$个方程对应于$N_p$个局部未知量。然而这里还没有对基函数或试验函数强加任何特殊限制，即忽略了如何强加边界条件以及如何由$K$个局部解来构造整体解的问题，方程\ref{2-8}还不能用于求解整体解。暂且假设试验函数$\psi_h$光滑但跨界面不连续，展开式(\ref{2-8})，得到：
+\begin{equation}\label{2-9}
+\int_{D^k}\boldsymbol{A}\frac{\partial \boldsymbol{U}_h}{\partial t}\psi_n+\nabla \cdot F(\boldsymbol{U})\psi_n dD^k=0
+\end{equation}
+对式(\ref{2-9})关于空间变量分部积分得到：
+\begin{equation}\label{2-10}
+\begin{split}
+\int_{D^k}\boldsymbol{A}\frac{\partial \boldsymbol{U}_h^k}{\partial t}\psi_n-F(\boldsymbol{U}) \cdot \nabla \psi_n dD^k & = -[F(\boldsymbol{U}) \psi_n]_{D^k}^{D ^{k+1}}\\
+& = -\int_{\partial D^k}\hat{\boldsymbol{n}} \cdot F(\boldsymbol{U}) \psi_n dD^k
+\end{split}
+\end{equation}
+\par
+这样导出总共$K \times N_p$个方程对应于同等数量的未知量，因此，构造了一种得到整体定义的解的方法。称这种经过一次分部积分得到的形式为弱形式。
+\subsubsection{数值通量}
+注意到式(\ref{2-10})中如果对局部解及试验函数不加任何条件，那么单元界面上的解将会多值，因此，必须选取一种正确的解，把这个解记作$(F(U))^*$，将其称之为数值通量，得到半离散格式：
+\begin{equation}\label{2-11}
+\int_{D^k}\boldsymbol{A}\frac{\partial \boldsymbol{U}_h^k}{\partial t}\psi_n-F(\boldsymbol{U}) \cdot \nabla \psi_n dD^k=-\int_{\partial D^k}\hat{\boldsymbol{n}} \cdot (F(\boldsymbol{U}) )^*\psi_n dD^k,\quad 1 \le n \le N_p
+\end{equation}
+\par
+根据Galerkin方法，方程(\ref{2-11})可以进一步写成局部半离散弱形式：
+\begin{equation}\label{2-12}
+\int_{D^k}\boldsymbol{A}\boldsymbol{M}^k \frac{d\boldsymbol{U}_h^k}{dt}-\boldsymbol{S}^T F(\boldsymbol{U}) dD^k=-\int_{\partial D^k}\hat{\boldsymbol{n}} \cdot (F(\boldsymbol{U}) )^*\psi_n dD^k,\quad 1 \le n \le N_p
+\end{equation}
+\par
+其中，$M_{i,j}^k=\int_{D^k}\psi_i^k \psi_j^k dD^k$，$S_{i,j}^k=\int_{D^k}\psi_i^k \nabla \psi_j^k dD^k$，分别为局部质量矩阵和局部刚度矩阵，方程\ref{2-12}表示的格式就是经典的弱形式下的DG-FEM方法。
+\par
+对于数值通量的计算方法是多样的，首选具有相容性、守恒性、单调性的数值通量计算方法，例如考虑沿着法向$\hat{n}$的Lax-Friedrichs通量：
+\begin{equation}\label{2-13}
+f^{LF}(a,b)=\frac{f(a)+f(b)}{2}+\frac{C}{2}\hat{n} \cdot (a-b)
+\end{equation}
+\par
+其中，$C\ge \max\limits_{\inf u_h(x)\le s \le \sup u_h(x)}\mid f_u(s) \mid$。
+\subsubsection{三角形映射关系}
+如图\ref{TriMapping}所示，引入联系一般直边三角形$D^k$与标准三角形$I$的映射$\Psi$，其中标准三角形定义为：
+\begin{equation}\label{2-14}
+I=\{\boldsymbol{r}=(r,s) \vert (r,s) \ge -1,r+s \le 0\}
+\end{equation}
+\par
+\begin{figure}[!htb]        
+\centerline{\includegraphics[width=5.5in]  {./Section2/TriMapping.png}}        
+\caption{\label{TriMapping} 三角形节点映射示意图}      
+\end{figure}
+\par
+为连接两个三角形，假设$D^k$是由三个顶点$(v^1,v^2,v^3)$组成的，这些顶点按照逆时针编号，定义重心坐标$(\lambda^1,\lambda^2,\lambda^3)$，它们具有性质：
+\begin{equation}\label{2-15}
+0 \le \lambda^i \le 1,\quad \lambda^1+\lambda^2+\lambda^3=1
+\end{equation}
+\par
+任何在这个三角形内的点都可以表示为：
+\begin{equation}\label{2-16}
+\boldsymbol{x}=\lambda^2 v^1+\lambda^3 v^2+\lambda^1 v^3
+\end{equation}
+\par
+类似地，可以表示$I$内的点为：
+\begin{equation}\label{2-17}
+\left(\begin{array}{c}r \\ s \end{array}\right)= \lambda^2 \left(\begin{array}{c}-1 \\ -1 \end{array}\right)+ \lambda^3 \left(\begin{array}{c}1 \\ -1 \end{array}\right)+ \lambda^1 \left(\begin{array}{c}-1 \\ 1 \end{array}\right)
+\end{equation}
+\par
+由式(\ref{2-16})及(\ref{2-17})可以得到：
+\begin{equation}\label{2-18}
+\lambda^1=\frac{s+1}{2},\lambda^2=-\frac{r+s}{2},\lambda^3=\frac{r+1}{2}
+\end{equation}
+\par
+从而得到映射关系：
+\begin{equation}\label{2-19}
+\boldsymbol{x}=-\frac{r+s}{2}v^1+\frac{r+1}{2}v^2+\frac{s+1}{2}v^3=\boldsymbol{\Psi}(\boldsymbol{r})
+\end{equation}
+\par
+这个映射线性依赖于$\boldsymbol{r}$。因此，任何两个直边三角形都可以由仿射映射相联系，由于
+\begin{equation}\label{2-20}
+\frac{\partial \boldsymbol{x}}{\partial \boldsymbol{r}}\frac{\partial \boldsymbol{r}}{\partial \boldsymbol{x}}=\left [ \begin{array}{cc}x_r & x_s \\ y_r & y_s \end{array}\right ] \left [ \begin{array}{cc}r_x & r_y \\ s_x & s_y \end{array}\right ] =\left [ \begin{array}{cc}1 & 0 \\ 0 & 1 \end{array}\right ]
+\end{equation}
+\par
+从而
+\begin{equation}\label{2-21}
+r_x=\frac{y_s}{J},\quad r_y=-\frac{x_s}{J},\quad s_x=-\frac{y_s}{J},\quad s_y=\frac{x_r}{J}
+\end{equation}
+\par
+其中Jacobian为$J=x_ry_s-x_sy_r$，考虑局部多项式逼近：
+\begin{equation}\label{2-22}
+\boldsymbol{U(r)}=\sum_{n=1}^{N_p}\hat{u}_n \psi_n(\boldsymbol{r})=\sum_{n=1}^{N_p}u(\boldsymbol{r}_i)l_i(\boldsymbol{r})
+\end{equation}
+\par
+定义$V\hat{u}=u$，其中$V$代表广义Vandermonde矩阵，$\hat{u}_n$为通过插值定义的展开稀疏，这样做的目的是为了避免高维积分引起的问题，$u(\boldsymbol{r})$表示节点上的值。
+\subsubsection{基函数及插值节点}
+这里首先考虑一维的情况，引出Legendre-Gauss-Lobatto节点的概念，再扩展到二维情况详细说明。在一维情况下假设局部解写成：
+\begin{equation}\label{2-23}
+u_h^k(x,t)=\sum_{n=1}^{N_p}\hat{u}_n^k(t)\psi_n(x)=\sum_{i=1}^{N_p}u_h^k(x_i^k,t)l_i^k(x),\quad x \in D^k=[x_l^k,x_r^k]
+\end{equation}
+\par
+首先引进线性映射：
+\begin{equation}\label{2-24}
+x(r)=x_l^k+\frac{1+r}{2}h^k,h^k=x_r^k-x_l^k
+\end{equation}
+\par
+其中参考变量$r \in I=[-1,1]$，对于$\hat{u}_n$的重构方法，使用$L^2$投影，要求：
+\begin{equation}\label{2-25}
+(u(r),\psi_m(r))_I=\sum_{n=1}^{N_p}\hat{u}_n(\psi_n(r),\psi_m(r))_I
+\end{equation}
+对每个基函数$\psi_n$都成立，这里引进区域$I$上的内积，从而有$M(\hat{\boldsymbol{u}})=\boldsymbol{u}$,
+\par
+其中，
+\begin{equation*}
+M_{ij}=(\psi_i,\psi_j)_I,\hat{\boldsymbol{u}}=[\hat{u}_1,\cdots,\hat{u}_{N_p},]^T,\hat{\boldsymbol{u}_i=(u,\psi_i)_I}
+\end{equation*}
+\par
+因此，得到$N_p$个方程带有$N_p$个位置展开系数$\hat{u}_i$，然而，随着$M$逼近阶$N$增加，$M$将导致很坏的条件数，这将不能精确计算$\hat{\boldsymbol{u}}$。一个自然的解决方法是寻找一个正交规范基作为一个更为合适且计算稳定的方法，简单取单项式基$r^n$，并利用基于$L^2$的Gram-Schmidt正交化方法来构造一个正交规范基。如此得到正交规范基\upcite{Szeg1939}：
+\begin{equation}\label{2-26}
+\psi_n(x)=\tilde{P}_{n-1}(r)=\frac{P_{n-1}}{\sqrt{\gamma_n-1}}
+\end{equation}
+其中$P_n(r)$为传统的$n$阶Legendre多项式，并且
+\begin{equation}\label{2-27}
+\gamma_n=\frac{2}{2n+1}
+\end{equation}
+为规范化系数，一种简单计算这种新基的方法是通过循环式
+\begin{equation}\label{2-28}
+r\tilde{P}_n(r)=a_n\tilde{P}_{n-1}(r)+a_{n+1}\tilde{P}_{n+1}(r),\quad
+a_n=\sqrt{\frac{n^2}{(2n+1)(2n-1)}}
+\end{equation}
+\par
+其中，
+\begin{equation*}
+\psi_1(r)=\tilde{P}_0(r)=\frac{1}{\sqrt{2}},\quad \psi_2(r)=\tilde{P}_1(r)=\sqrt{\frac{3}{2}}r
+\end{equation*}
+\par
+以此为基，则质量矩阵成为单位矩阵，从而解决了条件数的问题，关于$\hat{u}_n$的计算，则可以使用一个积分和来逼近，例如使用高斯数值积分：
+\begin{equation}\label{2-29}
+\hat{u}_n \simeq \sum_{i=1}^{N_p}u(r_i)\tilde{P}_{n-1}(r_i)\omega_i
+\end{equation}
+其中$r_i$为积分点，$\omega_i$为积分权，这个积分对$2N_p-1$阶多项式精确成立，考虑一个略微不同的方法而定义$\hat{u}_n$使得逼近是插值的，即
+\begin{equation}\label{2-30}
+u(\xi_i)=\sum_{n=1}^{N_p}\hat{u}_n\tilde{P}_{n-1}(\xi_i)
+\end{equation}
+其中$\xi_i$表示一组$N_p$个不同网格点，现在可以写成：
+\begin{equation}\label{2-31}
+V\hat{\boldsymbol{u}}=\boldsymbol{u}
+\end{equation}
+其中
+\begin{equation*}
+V_{ij}=\tilde{P}_{j-1}(\xi_i),\hat{\boldsymbol{u}}_i=\hat{u}_i,\boldsymbol{u}_i=u(\xi_i)
+\end{equation*}
+\par
+这里矩阵$V$是一个广义Vandermonde矩阵。下面说明选取网格点$\xi_i$来定义Vandermonde矩阵，对于插值定义的逼近，可以写为：
+\begin{equation}\label{2-32}
+u(r) \simeq u_h(r)=\sum_{n=1}^{N_p}u(\xi_i)l_i(r)
+\end{equation}
+其中
+\begin{equation*}
+l_i(r)=\prod_{j=1,j \neq i}\frac{r-\xi_j}{\xi_i-\xi_j}
+\end{equation*}
+是具有性质$l_i(r_j)=\delta_{ij}$的Lagrange插值多项式，只要$\xi_i$不同$l_i(r)$就存在且唯一，如果定义Lebesgue常数：
+\begin{equation}\label{2-33}
+\Lambda=\max_r\sum_{i=1}^{N_p}\vert l_i(r) \vert
+\end{equation}
+则有$\parallel u-u_h \parallel_\infty=\parallel u-u^*+u^*-u_h \parallel_\infty \le \parallel u-u^* \parallel_\infty+\parallel u^*-u_h \parallel_\infty \le (1+\Lambda)\parallel u-u^*\parallel_\infty$，其中$\parallel \cdot \parallel_\infty$指通常的最大模范数，$u^*$表示最佳$N$阶逼近多项式，因此，Lebesgue常数表示插值与最佳逼近$u^*$的最远距离，这里需要注意的是$\Lambda$完全由网格点$\xi_i$决定，为了得到一个最优逼近，应该设法找到那些使Lebesgue常数最小的网格点$\xi_i$。考虑到多项式插值的唯一性，则有：
+\begin{equation}\label{2-34}
+V^T \boldsymbol{l}(r)=\tilde{\boldsymbol{P}}(r)
+\end{equation}
+其中$\boldsymbol{l}=[l_1(r),\cdots,l_{N_p}(r)]^T$与$\tilde{\boldsymbol{P}}=[P_0(r),\cdots,P_N(r)]^T$。只对使得Lebesgue常数极小化的解$\boldsymbol{l}$感兴趣，利用求解线性方程组的Cramer法则有：
+\begin{equation}\label{2-35}
+l_i(r)=\frac{\det [V^T(:,1),\cdots,\tilde{\boldsymbol{P}}(r),\cdots,V^T(:,N_p)]}{\det(V^T)}
+\end{equation}
+这表明寻找使分母($V$的行列式)最大的$\xi_i$比较合理，对于一维情形，该问题的解已知并可以简单地表示成$f(r)=(1-r^2)\tilde{P}_N'(r)$的$N_p$个根。这些点与规范化的Legendre多项式紧密相关，称为Legendre-Gauss-Lobatto(LGL)积分点。
+\par
+对于二维情形，考虑如图\ref{NodeMapping}所示的对称等边三角形，在此三角形上，利用重心坐标：
+\begin{equation}\label{2-36}
+(\lambda^1,\lambda^2)=(\frac{i}{N},\frac{j}{N}),\quad \lambda^2=1-\lambda^1-\lambda^3,\quad (i,j)\geq 0,i+j \leq N
+\end{equation}
+定义一个等距网格，同样地，利用这些节点将导致质量矩阵的高度病态，然而可以利用一维映射函数$w(r)$来混合边映射到三角形中\upcite{Gordon1973}，从而类似一维映射来映射二维网格，为简单起见，利用重心坐标来表示所有函数，并沿边的法向来混合，因此对第一条边(连接顶点$v^1$和$v^2$)，定义法向扭曲函数式(\ref{2-37})及混合函数(\ref{2-38})：
+\begin{equation}\label{2-37}
+\boldsymbol{w}^1(\lambda^1,\lambda^2,\lambda^3)=w(\lambda^3-\lambda^2)\left(
+\begin{array}{c}
+1\\0
+\end{array}\right)
+\end{equation}
+\begin{equation}\label{2-38}
+b^1(\lambda^1,\lambda^2,\lambda^3)=(\frac{2 \lambda^3}{2 \lambda^3+\lambda^1})(\frac{2 \lambda^2}{2 \lambda^2+\lambda^1})
+\end{equation}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=2in]  {./Section2/NodeMapping.png}}        
+\caption{\label{NodeMapping} 等边三角形示意图}      
+\end{figure}
+注意到对$\lambda^3=\lambda^2=0$与$\lambda^2=\lambda^1=0$的明显奇性与使得$w(r)=0$的点恰好重合，为此，重新定义$w(r)$为：
+\begin{equation}\label{2-39}
+\tilde{w}(r)=\frac{w(r)}{1-r^2}
+\end{equation}
+\par
+从而定义式(\ref{3-40})为新的法向映射函数有：
+\begin{equation}\label{3-40}
+\begin{split}
+\boldsymbol{w}^1(\lambda^1,\lambda^2,\lambda^3)&=\tilde{w}(\lambda^3-\lambda^2)\left(
+\begin{array}{c}
+1\\0
+\end{array}\right) \\
+\boldsymbol{w}^2(\lambda^1,\lambda^2,\lambda^3)&=\tilde{w}(\lambda^1-\lambda^3)\frac{1}{2}\left(
+\begin{array}{c}
+-1\\ \sqrt{3}
+\end{array}\right) \\
+\boldsymbol{w}^3(\lambda^1,\lambda^2,\lambda^3)&=\tilde{w}(\lambda^2-\lambda^1)\frac{1}{2}\left(
+\begin{array}{c}
+-1\\ -\sqrt{3}
+\end{array}\right)
+\end{split}
+\end{equation}
+\par
+以及定义式(\ref{3-41})为新的混合函数有：
+\begin{equation}\label{3-41}
+\begin{split}
+b^1(\lambda^1,\lambda^2,\lambda^3)&=4 \lambda^3 \lambda^2\\
+b^2(\lambda^1,\lambda^2,\lambda^3)&=4 \lambda^3 \lambda^1\\
+b^3(\lambda^1,\lambda^2,\lambda^3)&=4 \lambda^2 \lambda^1\\
+\end{split}
+\end{equation}
+\par
+现在可以形成二维形式的$w(x)$，即$\boldsymbol{w}(\lambda^1,\lambda^2,\lambda^3)=b^1\boldsymbol{w}^1+b^2\boldsymbol{w}^2+b^3\boldsymbol{w}^3$作为将等距节点变换到LGL节点上的映射，考虑更一般的扭曲函数：
+\begin{equation}\label{2-42}
+\boldsymbol{w}(\lambda^1,\lambda^2,\lambda^3)=(1+(\alpha\lambda^1)^2)b^1 \boldsymbol{w}^1+(1+(\alpha\lambda^2)^2)b^2 \boldsymbol{w}^2+(1+(\alpha\lambda^3)^2)b^3 \boldsymbol{w}^3
+\end{equation}
+其中$\alpha$为节点优化系数。
+\par
+如同一维形式，一个描述插值质量的Lebesgue常数定义为：
+\begin{equation}\label{2-43}
+\Lambda=\max_{\boldsymbol{x}}\sum_{i=1}^{N_p}\vert l_i(\boldsymbol{x}) \vert
+\end{equation}
+并且通常自然地选择$\alpha$使其最小，图\ref{NodeOptimization}为等边三角形上优化后的节点示意图，对应基函数的阶数分别为$N=4,6,8,10,12,14$。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=5in]  {./Section2/NodeOptimization.png}}        
+\caption{\label{NodeOptimization} 等边三角形上优化后的节点示意图}      
+\end{figure}
+
+\subsubsection{数值积分}
+从声波方程的局部半离散弱形式(\ref{2-12})中可以发现，在实际中需要计算大量的积分，如果采用精确的方法直接对积分进行计算，那么当空间多项式的阶数较高时势必会增加极大的计算量，尤其是当数值通量$F(\boldsymbol{U})^*$较复杂的情况下，将导致计算效率大大降低。因此采用数值积分对积分进行近似，从而避免直接求解精确的积分将大大缩减计算所需的工作量。质量矩阵的计算方法为$\boldsymbol{M}_{ij}^k=\int_{D^k}l_i^k l_j^k dD^k=J^k\int_I l_i(\boldsymbol{r})^k l_j(\boldsymbol{r})^k d\boldsymbol{r}$，这里利用了变换Jacobian $J^k$为正常数的性质，因为广义Vandermonde矩阵$V$是用正交规范基构造的，于是有：
+\begin{equation}\label{2-44}
+M^k=J^k(VV^T)^{-1}
+\end{equation}
+\par
+对于刚度矩阵的估计，由链式法则得到：
+\begin{equation}\label{2-45}
+\frac{\partial}{\partial x}=\frac{\partial r}{\partial x}D_r+\frac{\partial s}{\partial x}D_s,\quad \frac{\partial}{\partial y}=\frac{\partial r}{\partial y}D_r+\frac{\partial s}{\partial y}D_s 
+\end{equation}
+\par
+为了定义微分矩阵$D_r$和$D_s$，需要定义：
+\begin{equation}\label{2-46}
+V_{r,(i,j)}=\frac{\partial \psi_j}{\partial r} \vert_{\boldsymbol{r_i}},\quad V_{s,(i,j)}=\frac{\partial \psi_j}{\partial s} \vert_{\boldsymbol{s_i}}
+\end{equation}
+\par
+结合正交规范基：
+\begin{equation}\label{2-47}
+\psi_m(\boldsymbol{r})=\sqrt{2}P_i(a)P_j^{(2i+1,0)}(b)(1-b)^i,\quad m \in [1,\cdots,N_p]
+\end{equation}
+其中$a=2\frac{1+r}{1-s}-1,b=s$，因此，
+\begin{equation}\label{2-48}
+\frac{\partial \psi_j}{\partial r}=\frac{\partial a}{\partial r}\frac{\partial \psi_j}{\partial a},\quad \frac{\partial \psi_j}{\partial s}=\frac{\partial a}{\partial s}\frac{\partial \psi_j}{\partial a}+\frac{\partial \psi_j}{\partial b}
+\end{equation}
+\par
+则微分矩阵由下式得到：
+\begin{equation}\label{2-49}
+D_r V=V_r,\quad D_s V=V_s
+\end{equation}
+\par
+并且对应的刚度矩阵为：
+\begin{equation}\label{2-50}
+S_r=MD_r,\quad S_s=MD_s
+\end{equation}
+\subsection{吸收边界的加载}
+考虑到计算机的内存和计算时间的限制，在进行声波方程数值模拟时，要对所研究介质模型的无限区域进行截取，令声波数值模拟在有限的区域内完成，即实现在有限区域中的声波数值模拟得到较高精度的无限空间解。为此，需要引入人工边界条件来达到此目的。如果仅对区域做截断处理，相当于引入自由边界条件，在自由边界处会产生全反射，若不消除或者压制这种虚假反射，会对声波数值模拟的结果和精度产生较大的影响。因此，在实现声波方程正演模拟算法时需要加入高效稳定的吸收边界。
+\par
+在电磁波模拟中Berenger提出了一种有效的吸收边界层方法，完全匹配层(Perfectly Matched Layer,PML)吸收边界适用于较大范围的入射角和频率\upcite{Berenger1994}。Chew和Hastings分别将PML方法有效地应用于弹性波的有限差分正演中形成了通常的基于坐标轴拉伸的场分裂PML方法\upcite{Chew1996,Hastings1996}。由于PML吸收边界对大角度入射的掠角波吸收效果较差，因此Drosseart提出了一种基于递归积分复频移PML算法(CPML)，有效地减少了大角度入射到PML界面上的掠角波以及低频损耗波的边界反射\upcite{Drossaert2007}。
+\par
+首先要通过引入一个复数因子将直角坐标扩展为复坐标进行伸展坐标变换，频率域的伸展坐标系定义为：
+\begin{equation}\label{2-51}
+\hat{p}(p)=\int_0^p S_p(p')dp'
+\end{equation}
+\par
+其中$S_p$为伸展函数，定义为：
+\begin{equation}\label{2-52}
+S_p=1+\frac{\sigma_p}{i\omega}\quad (p=x,z)
+\end{equation}
+\par
+$\sigma_p$为伸展坐标下的衰减因子。
+式(\ref{2-52})对应的微分算子为：
+\begin{equation}\label{2-53}
+\frac{\partial}{\partial \hat{p}}=\frac{1}{s_p}\frac{\partial}{\partial p}\frac{i\omega}{i\omega+\sigma_p}
+\end{equation}
+\par
+由式(\ref{2-1})可知，对于声波方程可改写为：
+\begin{equation}\label{2-54}
+\left\{ 
+\begin{aligned}
+i\omega v_x & = \frac{1}{\rho}\frac{i\omega}{i\omega+\sigma_x}\frac{\partial \hat{p}}{\partial x}\\
+i\omega v_z & = \frac{1}{\rho}\frac{i\omega}{i\omega+\sigma_z}\frac{\partial \hat{p}}{\partial z}\\
+i\omega p & = k(\frac{i\omega}{i\omega+\sigma_x}\frac{\partial \hat{v_x}}{\partial x}+\frac{i\omega}{i\omega+\sigma_z}\frac{\partial \hat{v_z}}{\partial z})
+\end{aligned}
+\right.
+\end{equation}
+\par
+将速度场和声压场变量沿坐标轴方向分解，有：
+\begin{equation}\label{2-55}
+\left\{ 
+\begin{aligned}
+v_x & = v_x\\
+v_z & = v_z\\
+p & =p^x+p^z
+\end{aligned}
+\right. 
+\end{equation}
+\par
+于是，对式(\ref{2-1})分解得到：
+\begin{equation}\label{2-56}
+\left\{ 
+\begin{aligned}
+\frac{\partial v_x}{\partial t} & = \frac{1}{\rho}\frac{\partial p}{\partial x}\\
+\frac{\partial v_z}{\partial t} & = \frac{1}{\rho}\frac{\partial p}{\partial z}\\
+\frac{\partial p^x}{\partial t} & = k\frac{\partial v_x}{\partial x}\\
+\frac{\partial p^z}{\partial t} & = k\frac{\partial v_z}{\partial z}
+\end{aligned}
+\right.
+\end{equation}
+\par
+对式(\ref{2-56})进行Fourier变换，得到：
+\begin{equation}\label{2-57}
+\left\{ 
+\begin{aligned}
+i\omega \hat{v}_x & = \frac{1}{\rho}\frac{\partial \hat{p}}{\partial x}\\
+i\omega \hat{v}_z & = \frac{1}{\rho}\frac{\partial \hat{p}}{\partial z}\\
+i\omega \hat{p}^x & = k\frac{\partial \hat{v}_x}{\partial x}\\
+i\omega \hat{p}^z & = k\frac{\partial \hat{v}_z}{\partial z}
+\end{aligned}
+\right.
+\end{equation}
+\par
+对式(\ref{2-57})进行伸展坐标变换，得到：
+\begin{equation}\label{2-58}
+\left\{ 
+\begin{aligned}
+i\omega \hat{v}_x & = \frac{1}{\rho}\frac{1}{s_x}\frac{\partial \hat{p}}{\partial x}\\
+i\omega \hat{v}_z & = \frac{1}{\rho}\frac{1}{s_z}\frac{\partial \hat{p}}{\partial z}\\
+i\omega \hat{p}^x & = k\frac{1}{s_x}\frac{\partial \hat{v}_x}{\partial x}\\
+i\omega \hat{p}^z & = k\frac{1}{s_z}\frac{\partial \hat{v}_z}{\partial z}
+\end{aligned}
+\right.
+\end{equation}
+\par
+对式(\ref{2-58})进行移项和Fourier反变换，即可得到应用PML边界条件的声波一阶速度-声压方程的时域形式：
+\begin{equation}\label{2-59}
+\left\{ 
+\begin{aligned}
+\frac{\partial v_x}{\partial t}+\sigma_x v_x & = \frac{1}{\rho}\frac{\partial p}{\partial x}\\
+\frac{\partial v_z}{\partial t}+\sigma_z v_z & = \frac{1}{\rho}\frac{\partial p}{\partial z}\\
+\frac{\partial p^x}{\partial t}+\sigma_x p^x & = k\frac{\partial v_x}{\partial x}\\
+\frac{\partial p^z}{\partial t}+\sigma_z p^z & = k\frac{\partial v_z}{\partial z}
+\end{aligned}
+\right.
+\end{equation}
+式中衰减因子$\sigma_p$的确定如下式：
+\begin{equation}\label{2-60}
+\sigma_p=\frac{(m+1)v_{max}}{2d_{PML}}\ln{\frac{1}{R}}(\frac{x}{d_{PML}})^m
+\end{equation}
+\par
+其中$d_{PML}$为吸收层厚度，$x$是PML内计算点到PML内边界的距离，$R$为理论反射系数，$m$为多项数的阶数，在交界面上的衰减因子为零，$v_{max}$为最大的声波速度。
+\par
+在加载PML吸收边界情况下的声波方程双曲守恒形式可写为：
+\begin{equation}\label{2-61}
+\boldsymbol{A}\frac{\partial \boldsymbol{U}}{\partial t}+\nabla \cdot F(\boldsymbol{U})=\boldsymbol{f}
+\end{equation}
+\par
+其中，
+\begin{equation*}
+\begin{split}
+&\boldsymbol{A}=\left [ 
+\begin{array}{>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c}
+\rho & 0 & 0 & 0\\0 & \rho & 0 & 0\\0 & 0 & \frac{1}{k} & 0\\0 & 0 & 0 & \frac{1}{k} 
+\end{array} 
+\right ],
+\boldsymbol{U}=(v_x,v_z,p^x,p^z)^T,F(\boldsymbol{U})=\left[ \begin{array}{>{\displaystyle}c>{\displaystyle}c}
+-p & 0\\0 & –p\\-v_x & 0\\0 & -v_z 
+\end{array} 
+\right],\\
+&\boldsymbol{f}=[-\rho \sigma_x v_x,-\rho \sigma_z v_z,-\frac{\sigma_x}{k}p^x,-\frac{\sigma_z}{k}p^z]
+\end{split}
+\end{equation*}
+\par
+在加载PML吸收边界情况下的声波方程弱形式可写为：
+\begin{equation}\label{2-62}
+\int_{D^k}\boldsymbol{A}\frac{\partial \boldsymbol{U}_h^k}{\partial t}l_n-F(\boldsymbol{U})\cdot \nabla l_n-\boldsymbol{f}l_n dD^k=-\int_{\partial D^k}\hat{\boldsymbol{n}}\cdot (F(\boldsymbol{U}))^*l_n dD^k,\quad 1 \le n \le N_p
+\end{equation}
+\subsection{时间积分的处理}
+到目前为止，讨论的重点仅局限于空间及其离散化表示，在此，分别离散空间与时间，利用一些标准的时间离散格式实现时间的递推计算即可求解声波方程，这里介绍显式五级四阶低存储Runge-Kutta(Low-Storage Five-Stage Fourth-Order Explicit Runge-Kutta,LSERK)方法对时间积分进行离散\upcite{Carpenter1994}，为了求解半离散问题
+\begin{equation}\label{2-63}
+\frac{d\boldsymbol{U}_h}{dt}=\mathfrak{L}_h(\boldsymbol{U}_h,t)
+\end{equation}
+其中，$\boldsymbol{U}_h$为未知向量，则标准显式五级四阶低存储Runge-Kutta(Low-Storage Five-Stage Fourth-Order Explicit Runge-Kutta,LSERK)离散方法如下式：
+\begin{equation}\label{2-64}
+\begin{split}
+\boldsymbol{p}^{(0)}&=\boldsymbol{u}^n \\ 
+\boldsymbol{k}^{(i)}&=a_i\boldsymbol{k}^{(k-1)}+\Delta t \mathfrak{L}_h(\boldsymbol{p}^{(i-1)},t^n+c_i\Delta t),\quad i \in [1,\cdots,5] \\
+\boldsymbol{p}^{(i)}&=\boldsymbol{p}^{(i-1)}+b_i\boldsymbol{k}^{(i)}\\
+\boldsymbol{U}_h^{n+1} &= \boldsymbol{p}^{(5)}
+\end{split}
+\end{equation}
+\par
+LSERK所需的系数给定在表\ref{LSERKTab}中，
+\begin{table}[H]
+\centering
+\caption{LSERK方法的系数}\label{LSERKTab}
+\renewcommand\tabcolsep{2em}
+\begin{tabular}{cccc}
+\toprule
+{$i$} & {$a_i$}  & {$b_i$} & {$c_i$} \\
+\midrule 
+1 & $0$ & $\frac{1432997174477}{9575080441755}$ & $0$\\
+
+2 & $-\frac{567301805773}{1357537059087}$ & $\frac{5161836677717}{13612068292357}$ & $\frac{1432997174477}{9575080441755}$\\
+
+3 & $-\frac{2404267990393}{2016746695238}$ & $\frac{1720146321549}{2090206949498}$ & $\frac{2526269341429}{6820363962896}$\\
+
+4 & $-\frac{3550918686646}{2091501179385}$ & $\frac{3134564353537}{4481467310338}$ & $\frac{2006345519317}{3224310063776}$\\
+
+5 & $-\frac{1275806237668}{842570457699}$ & $\frac{2277821191437}{14882151754819}$ & $\frac{2802321613138}{2924317926251}$\\
+\bottomrule
+\end{tabular}
+\end{table}
+\par
+对于数值稳定性条件，模拟使用的时间步$\Delta t$不能选取得太大，这样会造成正演的不稳定，导致数值发散问题，经过推导得出，高阶的RKDG(Runge-Kutta Discontinuous Galerkin)方法满足以下数值稳定性条件：
+\begin{equation}\label{2-65}
+\Delta t \le C\frac{\min_k h_k}{(N+2)(N+1)}
+\end{equation}
+\par
+其中$h_k$表示三角形单元内嵌圆的半径，$C$是一个常数。
+\subsection{数值算例}
+下面首先对FDTD算法、FETD算法、DGTD算法的计算精度进行对比，说明DGTD算法相对于FDTD算法的模型适应性和，且DGTD算法相对于FETD算法可以使用更少的网格仅需提高基函数阶数即可实现更高精度的声波方程正演模拟；并且对比了DGTD算法使用不同阶数的基函数对声波方程正演模拟的精度影响。
+\subsubsection{DGTD算法、FETD算法与FDTD算法对比}
+为了说明DGTD算法相比FETD算法具有更高的精度，对网格具有更低的依赖性，并且消耗更低的内存空间，因此建立一个2000m$\times$2000m的均匀介质模型，介质密度为$\rho=2000kg/m^3$，声波速度为$v=2000m/s$，记录时长为0.5s，震源位于介质中心，使用30Hz零相位Ricker子波，震源坐标为($1000m,1000m$)，在坐标为($1200m,1200m$)处设置一个检波器用来接收声波信号，介质模型如图\ref{DGMDGMFDMModel}所示，其中DGTD算法模拟使用的节点数为40257个，单元数为79872个，采用的基函数阶数为$N=2$，使用粗网格的FETD算法模拟使用的节点数与单元数均与DGTD算法相同，使用细网格的FETD算法模拟使用的节点数为160385个，单元数为319488个，FDTD算法模拟使用的网格为400$\times$400。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=3in]  {./Section2/DGMDGMFDMModel.png}}        
+\caption{\label{DGMDGMFDMModel} 均匀介质模型示意图}      
+\end{figure}
+\par
+接收到的单道信号如图\ref{FEMDGMFDM}所示，图\ref{FEMDGMFDM}中可见，当FETD算法使用与DGTD算法相同网格时，声波单道信号出现较大的波动，且存在较大的误差，这是由于网格过于稀疏而导致正演精度的降低，当使用细网格时单道信号与DGTD算法基本重合，说明FETD算法对网格的要求十分严苛，而FDTD算法与DGTD算法单道信号基本重合。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=3in]  {./Section2/FEMDGMFDM.png}}        
+\caption{\label{FEMDGMFDM} 均匀介质模型单道信号对比示意图}      
+\end{figure}
+
+\subsubsection{DGTD算法与FDTD算法对比}
+为了说明由于FDTD(Finite Difference Time Domain)算法不能与非结构化网格相结合，在介质分界面部分由于网格存在锯齿将导致出现异常绕射，从而降低正演模拟精度降低的问题，建立一个断层模型，其中上层断层参数为$\rho=2500kg/m^3,v=3000m/s$，下层断层参数为$\rho=2000kg/m^3,v=2500m/s$，当采用FDTD算法时，断层模型的网格剖分方式如图\ref{FDTDModel}所示，左图表示介质密度，右图表示声波速度，选取模拟区域大小为$200 \times 200$，网格间距为10m，记录时长为1s，采用地表激发、地表接收的观测方式，图\ref{FDTDModel}中，“$\centerdot$”代表检波器，“$\times$”代表激发点。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/FDTDModel.png}}        
+\caption{\label{FDTDModel} FDTD算法断层模型网格剖分图}      
+\end{figure}
+\par
+采用FDTD算法的断层模型正演模拟如图\ref{FDTDResult}所示，取300ms及350ms时刻画出波场快照，从波场快照中可以看出，当声波传至介质分界面时，由于网格选择十分稀疏，边界处存在锯齿，因此将导致异常绕射波的存在；从正演剖面的结果也可以看出，正演剖面中除了直达波和反射波，还存在较多的绕射波，这与实际情况是不符的。因此，当选择FDTD算法对大倾角断层进行正演模拟时网格对正演精度的影响十分明显。
+\par
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/FDTDResult.png}}        
+\caption{\label{FDTDResult} FDTD算法断层模型波场快照及正演剖面}      
+\end{figure}
+\par
+为了说明DGTD算法能够很好地与非结构化网格相结合，从而提高正演精度，依然使用上述断层模型，当采用DGTD算法时，断层模型的网格剖分方式如图\ref{DGTDModel}所示，左图表示介质密度，右图表示声波速度，选取模拟区域节点数为6973个，模拟使用的单元数为13644个，基函数阶数为$N=3$，记录时长为1s，采用地表激发、地表接收的观测方式，图\ref{DGTDModel}中，“$\centerdot$”代表检波器，“$\times$”代表激发点。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDModel.png}}        
+\caption{\label{DGTDModel} DGTD算法断层模型网格剖分图}      
+\end{figure}
+\par
+采用DGTD算法的断层模型正演模拟如图\ref{DGTDResult}所示，取300ms及350ms时刻画出波场快照，从波场快照中可以看出，当声波传至介质分界面时，由于三角形网格与边界能够很好地相容，边界处不存在锯齿，因此仅存在反射波；从正演剖面的结果也可以看出，与FDTD算法得到的正演模拟结果相比，DGTD算法得到的正演剖面中消除了由于网格影响而产生的绕射波，与实际情况相符。因此，当选择DGTD算法对大倾角断层进行正演模拟时不需要考虑网格剖分方式带来的影响，DGTD算法具有较FDTD算法更强的适应性。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDResult.png}}        
+\caption{\label{DGTDResult} DGTD算法断层模型波场快照及正演剖面}      
+\end{figure}
+\subsubsection{DGTD算法基函数阶数对比}
+为了说明基函数的阶数对DGTD算法精度的影响，建立一个复杂模型，模型大小为2000m $\times$ 1500m，模型参数及网格剖分方式如图\ref{DGTDComplexModel}所示，左图表示介质密度，右图表示声波速度，分别选取基函数阶数为$N=1,2,3,4$，选取模拟区域节点数为5542个，模拟使用的单元数为10872个，记录时长为2s，采用地表激发、地表接收的观测方式，图\ref{DGTDComplexModel}中，“$\centerdot$”代表检波器，“$\times$”代表激发点。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDComplexModel.png}}        
+\caption{\label{DGTDComplexModel} DGTD算法复杂模型参数及网格剖分图}      
+\end{figure}
+\par
+图\ref{DGTDResultN=1}、图\ref{DGTDResultN=2}、图\ref{DGTDResultN=3}和图\ref{DGTDResultN=4}分别代表基函数阶数$N=1,2,3,4$时对应的DGTD算法声波方程正演模拟得到的波场快照及正演剖面，波场快照对应的时刻分别为250ms及500ms，并画出当前基函数阶数对应参与计算的所有节点。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDResultN=1.png}}        
+\caption{\label{DGTDResultN=1} 基函数阶数N=1时波场快照及正演剖面}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDResultN=2.png}}        
+\caption{\label{DGTDResultN=2} 基函数阶数N=2时波场快照及正演剖面}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDResultN=3.png}}        
+\caption{\label{DGTDResultN=3} 基函数阶数N=3时波场快照及正演剖面}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section2/DGTDResultN=4.png}}        
+\caption{\label{DGTDResultN=4} 基函数阶数N=4时波场快照及正演剖面}      
+\end{figure}
+\par
+从上述四幅图的结果可以看出，随着基函数阶数的提高，所参与计算的插值节点也会更多，通过观察图\ref{DGTDResultN=1}所示的波场快照发现波前面存在振荡现象，且在波传播的过程中明显可以发现存在绕射现象，这是由于参与计算的节点较少而导致的各向异性，从而导致了绕射波的存在，图\ref{DGTDResultN=2}所示的波场快照较图\ref{DGTDResultN=1}的各向异性现象有明显改观，但依然存在绕射现象，而当基函数阶数提高至3阶和4阶时，如图\ref{DGTDResultN=3}、图\ref{DGTDResultN=4}所示，可以看出波场明显更加精细，且消除了节点较少引起的各向异性；从正演剖面图依然能够看出，随着基函数阶数的不断提高，剖面数据具有更高的信噪比，且在使用4阶基函数时震荡现象被完全消除，剖面结果最为清晰。
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\newpage
+\section{时间域声波方程全波形双参数反演}
+本章重点介绍时间域声波方程全波形双参数反演基本理论，首先说明了时间域声波方程双参数反演目标函数的构建方法，推导了目标函数梯度的求取公式，简单介绍了L-BFGS最优化算法，然后通过一个双“十”字型模型说明多尺度串行全波形策略并且引出由于声波方程双参数之间存在耦合而导致同步反演时介质密度的反演精度降低的问题，进而通过加载多步长策略改善介质密度的反演精度，最后通过对Marmousi-II国际标准模型的计算验证反演策略对复杂模型的适应性。
+\subsection{反演目标函数的构建}
+二维一阶声压-速度声波方程可写为行列式形式$\boldsymbol{LV=S}$，$\boldsymbol{L}$为正演算子,$\boldsymbol{V}$表示场分量,$\boldsymbol{S}$表示场源：
+\begin{equation}\label{3-1}
+\begin{split}
+\boldsymbol{L}=\boldsymbol{A}\partial_x+\boldsymbol{B}\partial_z-\boldsymbol{F}\partial_t \\
+\boldsymbol{V}=(P,V_x,V_z)^T \\
+\boldsymbol{S}=(0,0,0)^T
+\end{split}
+\end{equation}
+\par
+上标$T$表示转置，$P$表示声压，$V_x,V_z$为速度分量，系数矩阵$\boldsymbol{A},\boldsymbol{B},\boldsymbol{F}$为：
+\begin{equation}\label{3-2}
+\boldsymbol{A}=
+\left[
+\begin{array}{>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c}
+0 & 1 & 0\\
+\frac{1}{\rho} & 0 & 0\\
+0 & 0 & 0 	  
+\end{array}
+\right] \quad
+\boldsymbol{B}=
+\left[
+\begin{array}{>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c}
+0 & 0 & 1\\ 
+0 & 0 & 0\\
+\frac{1}{\rho} & 0 & 0 	  
+\end{array}
+\right] \quad
+\boldsymbol{F}=
+\left[
+\begin{array}{>{\displaystyle}c>{\displaystyle}c>{\displaystyle}c}
+-\frac{1}{k} & 0 & 0\\ 
+0 & -1 & 0\\
+0 & 0 & -1 	  
+\end{array}
+\right] 
+\end{equation}
+\par
+其中$k=\rho v^2$，由于声波反演中需要多次调用声波方程正演，因此，正演模拟的精度及效率非常关键，为此，本文选用基于时间域间断Galerkin方法(DGTD)进行声波方程正演模拟，采用LSERK方法进行时间离散，截断边界处采用完全匹配层吸收边界。声波全波形反演实质是利用已知的实测数据来重构地下介质中的模型参数：介质密度$\rho$和声波速度$v$的空间分布，根据正演模拟数据与实测数据之间的拟合最优，数据目标函数可以定义为：
+\begin{equation}\label{3-3}
+Q(\boldsymbol{p})=\frac{1}{2}\sum_{m=1}^{M}\sum_{n=1}^{N}\int_{0}^{T} |U_m(\boldsymbol{p};\boldsymbol{r}_n,t)-\tilde{U}_m(\boldsymbol{r}_n,t)|^2dt
+\end{equation}
+\par
+式中$M$为源的个数，$N$为检波器的个数，$\boldsymbol{r}_n$表示第$n$个检波器空间坐标向量，$\tilde{U}_m(\boldsymbol{r}_n,t)$是第$m$个源的入射信号相对于初始模型正演模拟得到的数据(观测数据)，$U_m(\boldsymbol{p};\boldsymbol{r}_n,t)$是第$m$个源相对于猜测模型正演模拟得到的数据，模型介质参数向量$\boldsymbol{p}$：
+\begin{equation}\label{3-4}
+\boldsymbol{p}=\big(\rho(\boldsymbol{r}),v(\boldsymbol{p})\big)^T
+\end{equation}
+\par
+全波形反演就是寻求目标函数的$Q(\boldsymbol{p})$极小值的模型介质参数向量$\boldsymbol{p}$。由于全波形反演计算量太大，为了减小计算量，本文采用局部求导类的有限内存BFGS法(L-BFGS)求解，其目标函数的Fr$\acute{\mathrm{e}}$chet导数为：
+\begin{equation}\label{3-5}
+Q(\boldsymbol{p})' \delta\boldsymbol{p}=\sum_{m=1}^{M}\sum_{n=1}^{N} \int_{0}^{T} U^T_m(\boldsymbol{p};\boldsymbol{r}_n,t)\delta U_m(\boldsymbol{r}_n,t)dt
+\end{equation}
+将$U_m(\boldsymbol{p};\boldsymbol{r}_n,t)$和$\partial U_m(\boldsymbol{p};\boldsymbol{r}_n,t)$看作$\boldsymbol{p}$的函数记为$U(\boldsymbol{p})$和$\partial U(\boldsymbol{p})$，代入$\boldsymbol{LV=S}$，得：
+\begin{equation}\label{3-6}
+\boldsymbol{L_p}\boldsymbol{U}_{(\boldsymbol{p})}=\boldsymbol{S}
+\end{equation}
+\begin{equation}\label{3-7}
+\boldsymbol{L}_{\boldsymbol{p}+\delta \boldsymbol{p}}[\boldsymbol{U}_{(\boldsymbol{p})}+\delta\boldsymbol{U}_{(\boldsymbol{p})}]=\boldsymbol{S}
+\end{equation}
+\par
+将算子$\boldsymbol{L}$分别代入式(\ref{3-6})、(\ref{3-7})，展开得到：
+\begin{equation}\label{3-8}
+\boldsymbol{A}\partial_x \boldsymbol{U}+\boldsymbol{B}\partial_z \boldsymbol{U}-\boldsymbol{F}\partial_t \boldsymbol{U}=\boldsymbol{0}
+\end{equation}
+\begin{equation}\label{3-9}
+\begin{split}
+&(\boldsymbol{A}+\delta\boldsymbol{A})\partial_x (\boldsymbol{U}+\delta\boldsymbol{U})+(\boldsymbol{B}+\delta\boldsymbol{B})\partial_z (\boldsymbol{U}+\delta\boldsymbol{U})-\\
+&(\boldsymbol{F}+\delta\boldsymbol{F})\partial_t (\boldsymbol{U}+\delta\boldsymbol{U})=\boldsymbol{0}
+\end{split}
+\end{equation}
+\par
+式(\ref{3-9})减去式(\ref{3-8})且忽略高次项写成算子形式有：
+\begin{equation}\label{3-10}
+\boldsymbol{L_p}\delta\boldsymbol{U}=\delta\boldsymbol{F}\partial_t \boldsymbol{U}-\delta\boldsymbol{A}\partial_x \boldsymbol{U}-\delta\boldsymbol{B}\partial_z \boldsymbol{U}
+\end{equation}
+\par
+为了使目标函数的梯度可以显式表达，引入伴随场$\boldsymbol{W}=(P^*,V_x^*,V_z^*)^T$，定义算子$\boldsymbol{L}^*$为算子$\boldsymbol{L}$的伴随算子，根据伴随作用：
+\begin{equation}\label{3-11}
+\langle\boldsymbol{L}^*\boldsymbol{W},\delta\boldsymbol{U}\rangle=\langle\boldsymbol{W},\boldsymbol{L}\delta\boldsymbol{U}\rangle
+\end{equation}
+\par
+式(\ref{3-11})中
+\begin{equation}\label{3-12}
+\boldsymbol{L}^*=-\boldsymbol{A}^T\partial_x-\boldsymbol{B}^T\partial_z+\boldsymbol{F}^T\partial_t
+\end{equation}
+\par
+定义伴随方程如下：
+\begin{equation}\label{3-13}
+\boldsymbol{L}^*\boldsymbol{W}_{mn}=U_m(\boldsymbol{p};\boldsymbol{r}_n,t)\delta(\boldsymbol{r-r_n})
+\end{equation}
+\par
+式(\ref{3-13})中$\delta(\boldsymbol{r-r_n})$为Dirac函数，将式(\ref{3-13})和式(\ref{3-10})代入式(\ref{3-11})两端，得：
+\begin{equation}\label{3-14}
+\begin{split}
+&\langle U_m(\boldsymbol{p};\boldsymbol{r}_n,t)\delta(\boldsymbol{r-r_n}),\delta\boldsymbol{U}\rangle=\\
+&\langle\boldsymbol{W},\delta\boldsymbol{F}\partial_t \boldsymbol{U}-\delta\boldsymbol{A}\partial_x \boldsymbol{U}-\delta\boldsymbol{B}\partial_z \boldsymbol{U}\rangle
+\end{split}
+\end{equation}
+\par
+将上式展开成积分形式，对展开式的左端的广义积分求体积积分并带入式(\ref{3-5})，得：
+\begin{equation}\label{3-15}
+Q(\boldsymbol{p})' \delta\boldsymbol{p}=\sum_{m=1}^{M} \int_U \int_{0}^{T} W^T_{mn}(\boldsymbol{p};\boldsymbol{r}_n,t)
+[\delta\boldsymbol{F}\partial_t \boldsymbol{U}-\delta\boldsymbol{A}\partial_x \boldsymbol{U}-\delta\boldsymbol{B}\partial_z \boldsymbol{U}]dtdU
+\end{equation}
+\par
+将式(\ref{3-15})右端项展开，并写成内积形式有：
+\begin{equation}\label{3-16}
+Q(\boldsymbol{p})' \delta\boldsymbol{p}=\langle g_{\rho},\delta\rho\rangle+\langle g_v,\delta v\rangle
+\end{equation}
+\par
+式(\ref{3-16})中：
+\begin{equation}\label{3-17}
+g_{v}=\sum_{m=1}^M \int_0^T \frac{2}{\rho v^3}\frac{\partial p}{\partial t}p^*dt
+\end{equation}
+\begin{equation}\label{3-18}
+g_{\rho}=\sum_{m=1}^M \int_0^T (\frac{1}{\rho^2 v^2}\frac{\partial p}{\partial t}p^*+\frac{1}{\rho^2}\frac{\partial p}{\partial x}v_x^*+\frac{1}{\rho^2}\frac{\partial p}{\partial z}v_z^*)dt
+\end{equation}
+\par
+式(\ref{3-17})和式(\ref{3-18})分别为声波方程声波速度和介质密度关于目标函数的梯度求取公式，至此，利用梯度引导类算法即可求解全波形反演问题。
+\subsection{L-BFGS最优化算法}
+声波方程时间域全波形反演问题的实质为非线性最优化问题，声波方程全波形反演的目的是寻找一个对应的模拟剖面记录与实际观测剖面记录能够获得最优匹配的最优参数模型，因此，最优化方法的选取对全波形反演的精度及效率都起着极大的作用，最优化算法的一般原理是利用目标函数的梯度与Hessian阵来确定搜索方向，并利用线搜索方法来求取迭代步长，进而对参数模型进行反演迭代更新，当达到终止条件时输出最优的参数模型。根据Born近似理论，更新后的模型参数可以由初始模型与扰动模型求和得到：
+\begin{equation}\label{3-19}
+\boldsymbol{p}=\boldsymbol{p}_0+\Delta \boldsymbol{p}
+\end{equation}
+\par
+使用Taylor展开式将目标函数在初始模型$m_0$处展开，得到：
+\begin{equation}\label{3-20}
+E(\boldsymbol{p}_0+\Delta \boldsymbol{p})=E(\boldsymbol{p}_0)+\sum_{j=1}^M\frac{\partial E(\boldsymbol{p}_0)}{\partial \boldsymbol{p}_j}\Delta \boldsymbol{p}_j+\frac{1}{2}\sum_{j=1}^M \sum_{k=1}^M\frac{\partial E^2(\boldsymbol{p}_0)}{\partial \boldsymbol{p}_j \partial \boldsymbol{p}_k}\Delta \boldsymbol{p}_j\Delta \boldsymbol{p}_k+O(\boldsymbol{p}^3)
+\end{equation}
+\par
+将式(\ref{3-20})两端同时对参数$\boldsymbol{p}_l$求导可得：
+\begin{equation}\label{3-21}
+\frac{\partial E(\boldsymbol{p})}{\partial \boldsymbol{p}_l}=\frac{\partial E(\boldsymbol{p}_0)}{\partial \boldsymbol{p}_l}+\sum_{j=1}^M\frac{\partial E^2(\boldsymbol{p}_0)}{\partial \boldsymbol{p}_j \partial \boldsymbol{p}_l}\Delta \boldsymbol{p}_j
+\end{equation}
+\par
+目标函数在$\boldsymbol{p}_0$附近取得极小值时有$\frac{\partial E(\boldsymbol{p})}{\partial \boldsymbol{p}}=0$，这时模型更新量$\Delta \boldsymbol{p}$的表达式为：
+\begin{equation}\label{3-22}
+\Delta \boldsymbol{p}=-[\frac{\partial E^2(\boldsymbol{p}_0)}{\partial \boldsymbol{p}^2}]^{-1}\frac{\partial E(\boldsymbol{p}_0)}{\partial \boldsymbol{p}}
+\end{equation}
+\par
+式(\ref{3-22})的右端第一项为Hessian阵，也就是目标函数在$\boldsymbol{p}_0$处对模型参数的二阶导数，记作$H$，第二项则为参数梯度，记作$g$，也就是目标函数对模型参数的一阶导数，上式简化为：
+\begin{equation}\label{3-23}
+\Delta \boldsymbol{p}=-H^{-1}\nabla_{\boldsymbol{p}} E=-H^{-1}g
+\end{equation}
+\par
+对于式(\ref{3-23})中Hessian阵和梯度阵的不同求取方法可将最优化算法分为牛顿算法和梯度算法，对于梯度法的求解，实质为将Hessian阵的逆矩阵简化为沿着梯度反方向搜索的步长，本文采用L-BFGS算法作为最优化算法求解全波形反演问题，L-BFGS算法是拟牛顿算法中的一种最优化算法，使用有限的内存来近似Hessian矩阵，由于Hessian阵一般是对角占优的主对称阵，那么Hessian阵的逆矩阵也是对称阵，这样就可以尝试用许多个对称阵来近似表达Hessian阵的逆矩阵，首先给定一个初始的对称正定矩阵$H_k$，然后在每次反演迭代的过程中，不断校正这个对称正定矩阵，使$H_k$矩阵接近真实Hessian阵的逆矩阵值，对于L-BFGS方法，不断迭代的Hessian阵的逆矩阵表达式为：
+\begin{equation}\label{3-24}
+H_{k+1}=(I-\rho_k y_k s_k^T)H_k(I-\rho_k s_k y_k^T)+\rho_k s_k s_k^T
+\end{equation}
+其中，$I$为单位阵，$s_k=\boldsymbol{p}_{k+1}-\boldsymbol{p}_k,\rho_k=\frac{1}{s_k^T},y_k=g_{k+1}-g_k$。
+\par
+对于个固定的$k$，定义一系列向量$q_{k-m},\cdots,q_k$，如$q_k=g_k$且$q_i=(I-\rho_i y_i s_i^T)q_{i+1}$，然后递归地计算$q_i$，定义$\alpha=\rho_i s_i^T q_{i+1}$且$q_i=q_{i+1}-\alpha_i y_i$，同时定义另一个向量序列$z_{k-m},\cdots,z_k$，这里$z_i=-H_i q_i$，使用另一个递归算法用于计算定义的向量$z_{k-m}=-H_k^0 q_{k-m}$，然后递归定义$\beta_i=\rho_i y_i^T$且$z_{i+1}=z_i+(\alpha_i-\beta_i)$，则$z_k$为下降方向，因此，计算下降方向时的步骤如算法\ref{AlgoLBFGS}所示。
+\begin{algorithm}[H]
+\caption{L-BFGS算法计算下降方向流程}
+\label{AlgoLBFGS}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$g,\boldsymbol{p}$
+\Ensure
+$z$
+\State Initialization $s_k=\boldsymbol{p}_{k+1}-\boldsymbol{p}_k,\rho_k=\frac{1}{s_k^T},y_k=g_{k+1}-g_k$
+\For{$i\ in\ k-1,k-2,\cdots,k-m$}
+\State $\alpha_i=\rho_i s_i q$
+\State $q-=\alpha_i y_i$
+\EndFor
+\State $\gamma_k=\frac{s_{k-1}^T y_{k-1}}{y_{k-1}^T y_{k-1}}$
+\State $H_k^0=\gamma_k I$
+\State $z=-H_k^0 q$
+\For{$i\ in\ k-m,k-m+1,\cdots,k-1$}
+\State $\beta_i=\rho_i y_i^T z$
+\State $z+=s_i(\alpha_i-\beta_i)$
+\EndFor
+\State \Return $z$
+\end{algorithmic}
+\end{algorithm}
+从式算法\ref{AlgoLBFGS}中得出，在构造Hessian阵的逆矩阵的过程中，只用到了目标函数的梯度和更新的模型，相对于传统的直接求解Hessian阵的逆矩阵的牛顿类最优化方法，L-BFGS算法降低了计算量，避免了可能对病态矩阵求逆矩阵的问题，且大大提高了收敛速度，同时具有很强的稳定性，在求解大型非线性最优化问题时十分高效。
+\subsection{声波方程多参数全波形同步反演算例}
+为了证明声波方程多参数全波形同步反演的正确性，建立如图\ref{TrueCrossModel}一个双十字模型，模型背景为均匀介质，介质密度和声波速度分别为 $\rho=2000kg/m^3$和$v=3000m/s$，在该均匀介质中包含了两个形状相同的“十”字型异常体，左边异常体的介质密度为$\rho=2500kg/m^3$，声波速度为$v=3500m/s$，而右边异常体的介质密度为$\rho=1000kg/m^3$ ，声波速度为$v=2000m/s$，为了消除观测系统的影响，采用四周观测方式，使得目标在各个方向的照明均匀，模拟区域大小为500m $\times$ 500m，边界设有40个“$\times$”型激发源和400个“$\centerdot$”型检波器，检波器采用均匀等间距布置，其中1-100道、101-200道、201-300道、301-400道的接收点分别为上边界$z=0m$、下边界$z=500m$、左边界$x=0m$、右边界$x=500m$处。震源采用主频为30Hz的Ricker子波，记录时长为0.5s，反演中采用均匀背景介质作为反演初始模型。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/TrueCrossModel.png}}        
+\caption{\label{TrueCrossModel} 双“十”字真实模型}      
+\end{figure}
+\subsubsection{多尺度串行全波形反演策略}
+采用局部最优化算法求解时，会很容易陷入局部极小值，因此，提出了多尺度串行全波形反演策略，由于声波数据中的低频分量主要包含地下较大的构造体信息，而高频分量包含较小构造体的细节信息。因此，首先反演声波数据中的低频分量从而得到一个较好的反演模型，然后将这个反演模型当作声波数据中高频分量的反演初始模型，最终得到高频分量的反演结果，这样，将高、低频分量结合起来进行多尺度串行全波形反演，能够有效提高反演结果的精确性。本文采用多尺度串行反演策略(Boonyasiriwat.2009, Sirgue.2004)\upcite{Boonyasiriwat2009,Sirgue2004}，它将反演问题分解为不同的频率尺度，并采用Wiener低通滤波器\upcite{Hansen1989,Portilla2001,King1984}，对观测数据与震源子波滤波得到低频带信息，采用2-4个低频带到高频带的逐频带反演，根据不同频率尺度上的反演目标函数的特征去求解反演问题，从而逐步搜索到全局极值点，避免陷入局部极值。采用的Wiener低通滤波器为：
+\begin{equation}\label{3-25}
+f_{wiener}(\omega)=\frac{W_{target}(\omega)W^*_{original}(\omega)}{|W_{original}(\omega)|^2+\delta^2}
+\end{equation}
+\par
+其中$f_{wiener}$为频率域Wiener低通滤波器，$W_{target}$为目标震源子波频谱，$W_{original}$为原始震源子波频谱，上标$*$表示共轭，$\delta$为一个防止分母为零的常量小数，如果该值选取过大，会导致滤波子波形态与目标子波不同，这里设$\delta=10^{-4}$。这里需要注意的是，震源函数应与观测数据同时进行低通滤波处理，首先将数据变换到频率域，然后通过低通滤波的方法将数据转换为目标频段，最后将得到的结果反变换到时间域。
+\par
+为了计算目标函数中的残差及多尺度串行全波形反演中的高低频声波数据，对图\ref{TrueCrossModel}中的预设模型开展正演模拟。正演模拟时将主频为30Hz的Ricer子波震源置于($250m,0.0m$)位置处，图\ref{ResidualData}(a)与图\ref{ResidualData}(b)分别为“十”字型真实模型和初始均匀模型的正演剖面图，图\ref{ResidualData}(c)为图\ref{ResidualData}(a)与图\ref{ResidualData}(b)两者相减的初始残差，它是由双“十”字型模型异常体将直达波剪切之后形成的剖面记录。图\ref{FilteredWavelets}(a)蓝色点划线表示主频为30Hz的原始Ricker子波，黑色实线表示主频为10Hz的目标Ricker子波，红色虚线表示经Wiener低通滤波器滤波后所得的10Hz子波，图中可见，红色虚线与黑色实线较好地重合，说明Wiener滤波达到了期望效果。图\ref{FilteredWavelets}(b)为图\ref{FilteredWavelets}(a)中的时域共炮点声波剖面记录经过Wiener滤波后得到10Hz数据，从而得到了两个频率尺度下的剖面数据，为多尺度串行全波形反演策略的实施奠定了基础。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/ResidualData.png}}        
+\caption{\label{ResidualData} 双“十”字模型共炮点记录及数据残差}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/FilteredWavelets.png}}        
+\caption{\label{FilteredWavelets} Ricker子波经过Wiener低通滤波器的结果对比}      
+\end{figure}
+首先分析多尺度串行策略的影响，以双“十”字型模型为例进行单尺度和多尺度全波形反演计算。为了提高反演效率，单尺度和多尺度全波形同步反演都在8核CPU的微机上采用震源并行技术进行计算，即每次计算时将需要计算的单道数据加入并行池中，使每道数据单独且同步计算，从而提高全波形反演效率。单尺度全波形反演是指直接对主频为30Hz的原始数据进行全波形反演，其介质密度与声波速度的反演结果分别如图\ref{MFWISFWIResult}中左侧上下两图所示；利用多尺度串行全波形反演时，分别采用10Hz起始频率和30Hz最终频率进行全波形反演。数据首先在低频带进行迭代反演；然后再进行高频带反演，直至达到反演终止条件。多尺度串行全波形反演的仅低频反演结果如图\ref{MFWISFWIResult}中部上下两图所示，多尺度串行全波形反演的最终结果如图\ref{MFWISFWIResult}右侧上下两图所示。在图\ref{MFWISFWIResult}中所示的单尺度全波形反演得到的介质密度、声波速度重构剖面中，由于左上方高密度、高速度异常体的形态重构较准确，反演效果较好，而右下方低密度、低速度异常体的重构存在较大扭曲，幅值存在很大偏差，重构结果畸变非常严重。而图\ref{MFWISFWIResult}中所示的多尺度串行全波形反演策略下的仅低频重构剖面都能刻画出双“十”字型异常体的大致轮廓，由于本身频率较低，因此反演结果分辨率较低，异常体形态出现了一定程度的畸变，分界面不够明显且存在震荡现象，然而幅值对应较单尺度全波形反演结果更加准确。从图\ref{MFWISFWIResult}中所示的多尺度串行全波形反演最终结果可以看出，介质密度和声波速度两个参数都能很好地重构出双“十”字型异常体，异常体的形态、幅值大小、空间位置都能准确反映，且分界面更加明显，非物理震荡现象相对减小。对比单尺度全波形反演、多尺度串行全波形反演策略的仅低频反演结果和最终反演结果可以发现：多尺度串行全波形反演策略由于充分结合了高、低频的信息，对异常体的形态、幅值大小、空间位置重构更准确，分界面更加明显，异常体的轮廓更清晰可辨，反演出的背景及异常体的物性参数与真实模型基本一致。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MFWISFWIResult.png}}        
+\caption{\label{MFWISFWIResult} 单尺度全波形反演与多尺度串行全波形反演策略效果对比}      
+\end{figure}
+\par
+为了更精确地对比2种反演方式的精度，在模型图\ref{TrueCrossModel}中截取一条对角剖面(图中紫色虚线所示)。图\ref{MFWIProfile}分别为介质密度单道反演切线图和声波速度单道反演切线图。图中可见，紫色虚线表示的单尺度密度全波形反演曲线与黑色实线的真实模型幅值存在较大的偏差，曲线更尖细，重构不准确，而蓝色点划线表示的Wiener低通滤波后的仅低频下的多尺度串行密度全波形反演曲线，其波峰位置与黑色实线表示的真实模型能较好地吻合，但是异常体分界面较为模糊且存在剧烈震荡，说明异常体大概位置反演比较准确但异常体轮廓、幅值存在一定偏差，介质密度重构结果仍有待提高。而红色实线表示的多尺度串行密度反演曲线与黑色实线的真实模型曲线能较好地拟合，曲线拐点位置能较好地对应，异常体位置反演比较准确且异常体分界面更加明显，震荡现象也相对减小，但幅值大小对应较差，说明多尺度串行密度全波形反演具有较高的精度但密度的摄动对反演结果影响并不敏感。总体来看，声波速度的反演精度较介质密度的反演精度更高。从图\ref{MFWIProfile}曲线可以看出，声波速度反演结果与密度反演类似，但精度更高。综上，说明多尺度串行全波形反演的精度能够得到有效保证，并且介质密度的摄动对反演结果影响并不敏感，声波速度的摄动对反演结果影响十分敏感。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MFWIProfile.png}}        
+\caption{\label{MFWIProfile} 单道反演切线结果对比图}      
+\end{figure}
+\par
+为了定量说明全波形双参数反演的精度，定义如下所示的模型重构误差
+\begin{equation}\label{3-26}
+\varepsilon(\boldsymbol{p})=\frac{\parallel \boldsymbol{p}_k-\boldsymbol{p}_{Ture} \parallel^2}{\parallel \boldsymbol{p}_0-\boldsymbol{p}_{Ture} \parallel^2}
+\end{equation}
+\par
+其中，$\boldsymbol{p}_k$代表第$k$次全波形反演迭代得到的模型，$\boldsymbol{p}_0$代表全波形反演使用的反演初始模型，$\boldsymbol{p}_{True}$代表真实模型。
+\par
+图\ref{MFWISFWILine}(a)为单尺度全波形反演与多尺度串行全波形反演模型重构误差的对比图，图\ref{MFWISFWILine}(b)为单尺度全波形反演与多尺度串行全波形反演目标函数拟合误差的对比图，通过对比发现，单尺度全波形反演的模型重构误差是逐渐增大而不是逐步减小的，结合图\ref{MFWISFWIResult}可知，较大的模型重构误差是由于低密度、低速度部分的错误反演导致的，而多尺度串行全波形反演的模型重构误差是逐步减小的，并且声波速度的模型重构误差小于介质密度的模型重构误差，同样说明了介质密度的摄动与声波速度的摄动对反演结果影响具有不同的敏感程度，声波速度反演相较于介质密度反演更加精确；通过目标函数拟合误差对比发现多尺度串行全波形反演的拟合误差远远小于单尺度反演的拟合误差，进而说明了多尺度串行全波形反演可以提高参数反演的准确性。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MFWISFWILine.png}}        
+\caption{\label{MFWISFWILine} 模型重构误差与目标函数拟合误差对比图}      
+\end{figure}
+\subsubsection{全波形双参数反演及多步长策略}
+密度是岩石物性参数的重要组成部分，如果能通过全波形反演同时得到比较可靠的声波速度、介质密度资料，将对储层评价、岩性解释和油藏描述等都具有重要作用。为了从多个方面充分挖掘声波波场中蕴含信息，达到多参数评估与相互验证，提高对地下岩石物性参数认识的目的，本文采用介质密度与声波速度双参数反演。然而，由于介质密度与声波速度两个参数之间的相互耦合，增加了全波形双参数反演的非线性程度。为了获得更高的全波形双参数反演精度，分析不同参数之间的相互关系，研究不同参数化方式对反演的影响程度，是建立双参数反演策略的有效途径。Forgues和Lambar$\acute{\mathrm{e}}$(1997)在Ray+Born近似条件下推导出了变密度声波方程各种参数化方式对应的辐射模式的数学表达式\upcite{Forgues1997}，并通过对Hessian矩阵的特征值分解分析指出，介质密度的全波形反演比较困难。在Ray+Born近似条件下，速度、密度参数化方式对应的辐射模式如图\ref{PolarLine}所示。
+\par
+\begin{figure}[H]        
+\centerline{\includegraphics[width=2.5in]  {./Section3/PolarLine.png}}        
+\caption{\label{PolarLine} 速度、密度参数化方式对应的辐射模式}      
+\end{figure}
+\par
+从图\ref{PolarLine}可以看出：(1)速度对应的辐射模式是各向同性的，密度只有在中小角度情况下散射能量，在大角度情况下几乎不散射能量，这说明速度对各种角度信息的数据都比较敏感，但密度只对中小角度的数据敏感；(2)在中小角度情况下，速度、密度的辐射模式基本一致，在这种情况下，速度、密度是耦合在一起的。因此当观测数据中只含有中小角度信息时，即使可以获得较好的阻抗信息，但要将速度和密度完全区分开来仍比较困难。前人的研究结果也表明(Choi. et al., 2008;Prieux. et al., 2013)\upcite{Choi2008,Prieux2013a,Prieux2013b}，直接对反射地震数据进行速度、密度同时反演，虽然可以得到比较可靠的速度反演结果，但密度反演结果较差。
+\par
+结合图\ref{MFWIProfile}可知在全波形双参数反演的过程中，由于介质密度的摄动对反演结果的影响不敏感，而声波速度摄动对反演结果的影响十分敏感，从而导致介质密度的反演精度并不准确，主要体现在介质密度的幅值对应较差且具有更剧烈的震荡现象，因此采用多步长方法(Xu K.,McMechan G.A.,2013)，为同步反演的总步长分配不同的权重来实现步长的渐变\upcite{XuK2013}，场更新表达式为：
+\begin{equation}\label{3-27}
+\boldsymbol{p}^{(k+1)}(\rho,v)=\boldsymbol{p}^{(k)}(\rho,v)-\alpha^{(k)}(\beta_{\rho}^{(k)}g_{\rho}^{(k)}+\beta_v^{(k)}g_v^{(k)})
+\end{equation}
+\par
+其中$\boldsymbol{p}(\rho,v)$为包含两个参数$\rho,v$的模型参数矩阵，$k+1,k$表示迭代数，$\alpha^{(k)}$为第$k$次迭代的总步长，$\beta_{\rho}^{(k)},\beta_v^{(k)}$分别为第$k$次迭代中$\rho,v$相关的步长权重。
+\par
+与Pica. et al.(1990)和Meles. et al.(2010)的方法类似\upcite{Crase1990,Meles2010a,Meles2010b}，评估单个 模型参数权重$\beta_{\rho},\beta_v$的最优值，通过分别沿着它们自己的梯度方向$g_{\rho},g_v$对当前迭代模型参数给出相应扰动。多步长全波形反演策略原理如图\ref{Multistep}所示，由于模型参数$\rho,v$的敏感程度不同，所以使用独立的权重不能保证反演的收敛，因此进一步使用总步长因子$\alpha$来调整复合梯度$(\beta_{\rho}^{(k)}g_{\rho}^{(k)}+\beta_v^{(k)}g_v^{(k)})$，以保证更新的目标函数在每次迭代时最小。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=2.5in]  {./Section3/Multistep.png}}        
+\caption{\label{Multistep} 多步长策略原理示意图}      
+\end{figure}
+\par
+全波形双参数同步反演中，采用为同步反演的总步长分配不同的步长权重的多步长方法，可以改善由于参数的摄动对反演敏感程度不同而导致的介质密度反演精度较差的问题。因此，最优的参数步长权重值$\beta_{\rho}$和$\beta_v$的选取十分重要，根据Xu K., McMechan G.A.(2013)的结果，参数步长权重值应控制在$0.7-1.3$区间内以达到最优结果\upcite{XuK2013}。由于当前参数步长权重值下的声波速度反演精度已达到要求，因此仅考虑改变介质密度步长权重值，以达到提高介质密度反演精度的目标。为了方便讨论参数步长权重值$\beta_{\rho}$对反演效果的影响，采用多尺度串行全波形反演策略及相同的终止条件，以图\ref{TrueCrossModel}中模型为例，分别取$\beta_{\rho}=1.0$(相同的步长权重)，$\beta_{\rho}=1.2$和$\beta_{\rho}=2.0$，进行声波方程全波形双参数反演，得到的双参数反演结果剖面结果如图\ref{MultistepBetaCompare}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MultistepBetaCompare.png}}        
+\caption{\label{MultistepBetaCompare} 不同$\beta_{\rho}$取值的单道反演切线结果图}      
+\end{figure}
+\par
+从图\ref{MultistepBetaCompare}的反演结果可以看出，当介质密度步长权重值$\beta_{\rho}=1.0$时，由于介质密度的摄动对反演结果影响并不敏感，因此，介质密度的反演结果在幅值上存在较大偏差；当介质密度步长权重值$\beta_{\rho}=1.2$时，由于对介质密度的步长进行了权重调节，放大了由于介质密度的摄动产生的梯度影响，因此，介质密度的反演结果在幅值上的偏差明显改善，主要体现在介质密度的幅值与真实结果相差明显减小；当介质密度步长权重值$\beta_{\rho}=2.0$时，此时介质密度但反演结果在幅值上不仅没有明显改观反而较真实模型产生了更大的幅值偏离，且出现了明显的非物理震荡，在低密度区域的分界面附近存在剧烈的震荡现象。
+\par
+在图\ref{MultistepBetaCompare}中可见，由于声波速度的摄动对反演结果影响更为敏感，反演结果较为准确。与设想一致，由于声波速度反演与真实模型十分接近，因此取声波速度步长权重值$\beta_v=1.0$可以满足声波速度反演的精确度要求，并且介质密度步长权重值的加载对声波速度反演结果几乎没有影响，介质密度步长权重值的加载并没有影响到声波速度的反演结果。
+\par
+为了说明参数步长权重的加载对于反演收敛性的影响，并定量说明加载参数步长权重的
+重构效果，表\ref{ErrorTab}为三组不同参数步长权重值加载方案反演结果参数，当$\beta_{\rho}=1.2$时较$\beta_{\rho}=1.0$时具有更少的反演迭代次数和更低的模型重构误差，说明合理的参数步长权重值加载能够提高反演的稳定性和收敛性，同时能够大幅降低了介质密度模型重构误差且对声波速度反演结果没有任何影响；而$\beta_{\rho}=2.0$时，对于低频反演的结果，导致了更多的反演迭代次数，降低了反演的收敛性，对于高频反演的最终结果，导致了更少的反演迭代次数，然而介质密度模型重构误差不仅没有降低反而增加，得到了很差的重构模型，因此降低了反演的稳定性，且从表中还能够发现不论介质密度的参数步长权重取值是否合理都不会影响声波速度的反演结果。
+\par
+\begin{table}[H]
+\centering
+\caption{不同参数步长权重值选取方案反演结果参数表}\label{ErrorTab}
+\renewcommand\tabcolsep{1em}
+\begin{tabular}{cccc}
+\toprule
+{策略} & {迭代次数} & {模型重构误差$\rho$} & {模型重构误差$v$}\\
+\midrule 
+$\beta_{\rho}=1.0$ & 42(L)+199(H) & 0.3370 & 0.2272\\
+$\beta_{\rho}=1.2$ & 53(L)+131(H) & 0.3142 & 0.2288\\
+$\beta_{\rho}=2.0$ & 61(L)+164(H) & 0.4317 & 0.2567\\
+\bottomrule
+\end{tabular}
+\end{table}
+\subsubsection{Marmousi-II国际标准模型试算}
+为了验证多尺度串行全波形反演策略及多步长全波形反演策略对复杂模型的适应性，因此，将这种反演策略应用于复杂的Marmousi-II国际标准模型进行试算，Marmousi-II国际标准模型是对Marmousi模型的改进，Marmousi-II模型完全封装了原始的Marmousi模型\upcite{Marmousi22006}，该模型基于安哥拉Quanza盆地的北Quenguela海岸线设计，岩性包括砂岩，页岩，石灰岩和泥灰岩，使得模型地层比其前身更复杂，Marmousi-II国际标准模型如图\ref{MarmousiTrueModel}所示，由于低频情况下只能反演出模型的大体轮廓而不能反演出模型的细节部分，因此为了提高反演效率，采用网格多尺度的方法，即在低频情况下Marmousi-2模型使用稀疏网格仅突出模型的大体形态，随着频率的逐步提高，进而采用更加密集的网格，采用地面激发地面接收的观测方式，共激发33炮，炮间距为160m，地面使用712个检波器全孔径接收，采用主频为20Hz的零相位雷克子波，记录时长为2.88s。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MarmousiTrueModel.png}}        
+\caption{\label{MarmousiTrueModel} Marmousi-II国际标准模型}      
+\end{figure}
+\par
+初始模型使用经过高斯滤波平滑后的Marmousi-II模型，如图\ref{MarmousiInitial}所示
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MarmousiInitial.png}}        
+\caption{\label{MarmousiInitial} Marmousi-II反演初始模型}      
+\end{figure}
+采用多尺度串行全波形反演策略，使用频率分别为3.5Hz、7Hz、12Hz和20Hz的4个频率尺度，图\ref{MarmousiInversion}为每个频率尺度下的全波形反演结果，通过对比发现，当频率范围比较低时得到的反演结果界面信息不明显，只能得到大概的结构轮廓，这是由于当频率使用3.5Hz和7Hz时全波形反演一方面具有较低的主频，本身不具有很高的分辨率，对细节部分的重构能力较差，另一方面采用的网格也较稀疏，也不具备较高的分辨率，然而随着频率范围的不断增加，反演结果也更加突出了界面信息，高频成分变得越来越多，反演的最终结果与真实模型大体相似，此时使用的12Hz和20Hz频率本就具有较高的分辨率，而且反演时对网格进行了加密处理，因此细节部分便能够得到较好的重构，从图中还可以明显发现，介质在深层的反演结果较浅部位置较差，主要体现在深层位置的反演结果分界面模糊，细节没有得到很好地体现，这是由于采用地面观测方式，地面检波器接收到来自浅层的信息要远多于来自深层的信息。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MarmousiInversion.png}}        
+\caption{\label{MarmousiInversion} Marmousi-II各频率尺度下的反演结果}      
+\end{figure}
+\par
+为了更好地比较各频率尺度下的反演结果，选取图\ref{MarmousiTrueModel}中黑色虚线所示的$x=2848m$处的纵向单道切线，单道切线结果如图\ref{MarmousiLine}所示，比较发现，低频反演结果只能反映出大概的模型趋势，与真实结果相差很大，界面信息严重不足，中高频反演结果可以很好地突出模型的界面信息，但是由于采用地面观测方式，因此检波器接收到的深层的信息较浅层信息较少，导致反演结果出现了深层信息的反演精度较浅层信息的反演精度差的问题，然而反演结果十分逼近真实结果，整体上已经达到了很高的反演精度。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section3/MarmousiLine.png}}        
+\caption{\label{MarmousiLine} Marmousi-II模型各频率尺度下的单道切线结果对比图}      
+\end{figure}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{algorithm}{0}
+\newpage
+\section{正则化模型约束策略}
+本章简单介绍Tikhonov正则化模型约束方法，重点介绍传统全变差正则化、修正全变差正则化和考虑高阶项的修正全变差正则化模型约束方法，不加载模型约束时全波形反演结果较差，主要体现在界面不清晰，分界面存在非物理震荡现象；通过加载模型约束可以时全波形反演更加稳定，且获得更高分辨率的模型重构结果。
+\par
+求解全波形反演不适定问题最常用的方法为Tikhonov正则化模型约束方法，该方法通过加入先验模型约束的正则化项使反问题更加稳定，但由于光滑性的缘故，Tikhonov正则化方法易导致目标区域与背景区域边界模糊；而传统全变差正则化模型约束方法能有效改善Tikhonov正则化模型约束方法反演结果边界值的过度光滑，使异常体区域与背景区域的区别更加明显，重构的目标体边缘轮廓更加清晰，但由于传统全变差正则化方案的全波形反演可能产生反演伪像，并且由于数据拟合项和全变差正则化项引起的非线性以及反演的收敛对平滑参数的高度敏感，将导致反演问题十分不稳定，且不能保证反演的收敛；在传统全变差正则化模型约束方法的基础上提出了修正全变差正则化模型约束方法，该方法将反演最优化问题转化为两个交替最小化问题，利用先验模型约束与全变差正则化模型约束相结合，从而保证反演的收敛性及稳定性，并且进一步提高反演结果的分辨率和精确度，最后引入考虑高阶项的修正全变差正则化模型约束方法，该方法在修正全变差模型约束的基础上在求取全变差问题时考虑高阶项，提高异常体边界细节部分的分辨率。
+\subsection{Tikhonov正则化模型约束}
+Tikhonov正则化模型约束方法是由苏联科学家Tikhonov提出的，最初用于求解不适定问题，对于全波形反演问题，通过引入Tikhonov正则化模型约束来获得数值解，这里选取$u$为空间函数变量，则Tikhonov正则化项可写为
+\begin{equation}\label{4-1}
+\parallel \boldsymbol{p} \parallel_{Tikhonov}=\int_{\Omega}\parallel L \boldsymbol{p} \parallel^2d \Omega,\boldsymbol{p} \in C_0^{\infty}
+\end{equation}
+\par
+其中$L$为光滑算子，对空间函数$\boldsymbol{p}$起到光滑作用，Tikhonov正则化模型约束可以通过以下最小化问题定义：
+\begin{equation}\label{4-2}
+\Phi(\boldsymbol{p})=\Phi_d(\boldsymbol{p})+\lambda \parallel \boldsymbol{p} \parallel_{Tikhonov}
+\end{equation}
+\par
+式(\ref{4-2})中，$\boldsymbol{p}=(\rho(\boldsymbol{r}),v(\boldsymbol{p}))$为模型参数，$\Phi_d(\boldsymbol{p})$为数据目标函数等同于式(\ref{3-3})，$\lambda$为正则化因子。
+\par
+Tikhonov正则化算子的梯度可表示为：
+\begin{equation}\label{4-3}
+\nabla\parallel \boldsymbol{p} \parallel_{Tikhonov}=\int_{\Omega} 2 L^T L \boldsymbol{p} d \Omega
+\end{equation}
+\par
+则式(\ref{4-2})中新目标函数的目标梯度可写为：
+\begin{equation}\label{4-4}
+\nabla \Phi(\boldsymbol{p})=g(\boldsymbol{p})+\lambda \nabla \parallel \boldsymbol{p} \parallel_{Tikhonov}
+\end{equation}
+\subsection{近似全变差正则化模型约束}
+全变差方法首先提出并用于图像处理，Rudin. et.(1992)提出并用于图像去燥中，该算法通过求解全变差约束的非线性最小化问题实现信号或图像的去噪效果。
+\par
+为了解决Tikhonov正则化模型约束方法由于光滑性的缘故而导致的目标区域与背景区域边界模糊问题，从而引入全变差正则化模型约束方法来改善反演结果边界值的过度光滑，使得异常体区域与背景区域的区别更加明显，重构的目标体边缘轮廓更加清晰。引入了一个全变差正则化后,形成新的目标函数为
+引入了全变差正则化后，形成新的目标函数为
+\begin{equation}\label{4-5}
+\Phi(\boldsymbol{p})=\Phi_d(\boldsymbol{p})+\lambda\Phi_m(\boldsymbol{p})
+\end{equation}
+\par
+式(\ref{4-5})中，$\boldsymbol{p}=\big(\rho(\boldsymbol{r}),v(\boldsymbol{p})\big)^T$为模型参数，$\Phi_d(\boldsymbol{p})$为数据目标函数等同于(\ref{3-3})式，$\lambda$为正则化因子，$\Phi_m(\boldsymbol{p})$为模型参数目标函数，可表示为：
+\begin{equation}\label{4-6}
+\Phi_m(\boldsymbol{p})=R(\rho)+R(v)
+\end{equation}
+\par
+式(\ref{4-6})中$R$为全变差正则化算子
+\begin{equation}\label{4-7}
+R(f)=\int_\Omega \sqrt{\nabla f\cdot \nabla f+\delta}d\Omega
+\end{equation}
+\par
+其中$\delta$为平滑参数，平滑参数的引入是为了避免$\nabla \Phi_d(\boldsymbol{p})$在$\boldsymbol{p}=0$处不可微，该参数取值应尽可能接近于0，若平滑参数的取值过大，则会导致反演不稳定，在此，$\delta=10^{-6}$。
+\par
+全变差正则化算子的梯度可表示为：
+\begin{equation}\label{4-8}
+\nabla R(f)=-\nabla \cdot \Big(\frac{\nabla f}{|\nabla f|+\delta}\Big)
+\end{equation}
+\par
+则式(\ref{4-5})中新目标函数的梯度可写为：
+\begin{equation}\label{4-9}
+\nabla\Phi(\boldsymbol{p})=g(\boldsymbol{p})+\lambda\nabla\Phi_m(\boldsymbol{p})
+\end{equation}
+\subsection{修正全变差正则化模型约束}
+近似全变差正则化模型约束方法由于数据拟合项和全变差正则化项引起的非线性以及反演的收敛对平滑参数$\delta$高度敏感，因此将导致全波形反演结果可能产生反演伪像，并且还将导致反演问题十分不稳定，且不能保证反演的收敛\upcite{Lin2014}。鉴于这个原因，提出使用修正全变差方案提高全波形反演的精度和收敛性，修正全变差正则化模型约束策略使用变量分裂(Variable Splitting)方法得到新的目标函数，使用交替方向乘数方法(Alternating Direction Method of Multipliers,ADMM)计算全变差正则化项。
+\par
+\subsubsection{变量分裂(Variable Splitting)}
+加载全变差正则化模型约束项的目标函数如式(\ref{4-5})所示，可以理解为一个无约束的优化问题，其中目标函数是两个函数的和，变量分裂是一个非常简单的过程，简单概括为创建一个新的变量$\tilde{\boldsymbol{u}}$在$\boldsymbol{p}=\tilde{\boldsymbol{u}}$的约束下作为$\Phi_m$的参数，从而导致无约束的优化问题变为约束的优化问题：
+\begin{equation}\label{4-10}
+\begin{aligned}
+&\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\lambda \Phi_m(\tilde{\boldsymbol{u}})\}\\
+&\text{subject to} \quad \boldsymbol{p}=\tilde{\boldsymbol{u}}
+\end{aligned}
+\end{equation}
+\par
+式(\ref{4-10})可重写为以下形式：
+\begin{equation}\label{4-11}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\lambda \Phi_m(\tilde{\boldsymbol{u}})+\frac{1}{\alpha} \parallel \boldsymbol{p}-\tilde{\boldsymbol{u}} \parallel_2^2\}
+\end{equation}
+\par
+令$\lambda_1=\frac{1}{\alpha}$，$\lambda_2=\lambda$，其中$\Phi_m(\tilde{\boldsymbol{u}})=\parallel \tilde{\boldsymbol{u}} \parallel_{TV}$，则式(\ref{4-11})可重写为：
+\begin{equation}\label{4-12}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\lambda_1 \parallel \boldsymbol{p}-\tilde{\boldsymbol{u}} \parallel_2^2 +\lambda_2 \Phi_m(\tilde{\boldsymbol{u}})\}
+\end{equation}
+\par
+由于$\boldsymbol{p}$为多参数，因此，展开可写为：
+\begin{equation}\label{4-13}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\lambda_{1,p}\parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p \parallel_2^2+\lambda_{2,p}\parallel \tilde{\boldsymbol{u}}_p \parallel_{TV}\}
+\end{equation}
+\par
+式(\ref{4-13})中，$\lambda_1$和$\lambda_2$均为正的正则化参数，其中$\tilde{\boldsymbol{u}}$为辅助变量，$N_p$为参数个数，可将问题分解为两个交替最小化问题：
+\begin{equation}\label{4-14}
+\boldsymbol{p}^{(k)}=\arg\min_{\boldsymbol{p}}\{E_1(\boldsymbol{p})\}=\arg\min_{\boldsymbol{p}}
+\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\lambda_{1,p}\parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p^{(k-1)}\parallel_{2}^{2}\}
+\end{equation}
+\par
+\begin{equation}\label{4-15}
+\tilde{\boldsymbol{u}}_p^{(k)}=\arg\min_{\tilde{\boldsymbol{u}}}\{E_2(\tilde{\boldsymbol{u}}_p)\}=\arg\min_{\tilde{\boldsymbol{u}}_p}\{\parallel \boldsymbol{p}_p^{(k)}-\tilde{\boldsymbol{u}}_p\parallel_2^2+\lambda_{2,p}\parallel\tilde{\boldsymbol{u}}_p\parallel_{TV}\}
+\end{equation}
+\par
+式(\ref{4-15})即为式(\ref{4-5})的等价形式，即将一个最小化问题分解为两个最小化子问题，对于这两个子问题可以理解为：第一个子问题使用基于Tikhonov正则化和先验模型$\tilde{\boldsymbol{u}}_p^{(k-1)}$的全波形反演，第二个子问题使用$L_1$全变差最小化方法求解$\tilde{\boldsymbol{u}}_p^{(k)}$以保持反演结果中$\boldsymbol{u}_p^{(k)}$的分界面清晰。
+\par
+\subsubsection{求解TV问题的交替方向乘数方法}
+对于形如式(\ref{4-16})的最小化问题
+\begin{equation}\label{4-16}
+\begin{aligned}
+&\min_{X,Z}\frac{1}{2}\parallel Y-X \parallel_2^2+\lambda\mathfrak{F}(Z)\\
+&\text{subject to} \quad X=Z
+\end{aligned}
+\end{equation}
+\par
+其中$\mathfrak{F}(Z)=\parallel Z \parallel_{TV}$，式(\ref{4-16})的增广Lagrangian形式为：
+\begin{equation}\label{4-17}
+\mathfrak{L}(X,Z,U)=\frac{1}{2}\parallel Y-X \parallel_2^2+\lambda \mathfrak{F}(Z)+\langle U,Z-X \rangle+\frac{1}{\rho}\parallel Z-X \parallel_2^2
+\end{equation}
+\par
+其中，$\langle \cdot \rangle$表示内积，这里采用交替求解$X$和$Z$的最小化问题的方法求解$\mathfrak{L}(X,Z,U)$，求解步骤如下：
+\par
+首先使用固定的$Z^k$，$U^k$更新$X^{k+1}$：
+\begin{equation}\label{4-18}
+X^{k+1}=\arg\min_X \frac{1}{2}\parallel Y-X \parallel_2^2- \langle U^k,Z^k-X \rangle+\frac{\rho}{2}\parallel Z^k-X \parallel_2^2
+\end{equation}
+\par
+式(\ref{4-18})的最优解可以表示为：
+\begin{equation}\label{4-19}
+X^{k+1}=\frac{Y+(U^k+\rho Z^k)}{1+\rho}
+\end{equation}
+\par
+然后使用式(\ref{4-19})求解得到的$X^{k+1}$和固定的$U^k$更新$Z^{k+1}$，则
+\begin{equation}\label{4-20}
+Z^{k+1}=\arg\min_Z \frac{\rho}{2}\parallel Z-X^{k+1} \parallel_2^2+\langle U^k,Z \rangle+\lambda\mathfrak{F}(Z)
+\end{equation}
+\par
+式(\ref{4-20})可以等价写为：
+\begin{equation}\label{4-21}
+Z^{k+1}=\arg\min_Z \frac{1}{2}\parallel Z-\tau \parallel_2^2+\frac{\lambda}{\rho}\mathfrak{F}(Z)
+\end{equation}
+\par
+其中$\tau=-\frac{1}{\rho}U^k+X^{k+1}$，最后使用式(\ref{4-19})及式(\ref{4-21})求解得到的$X^{k+1}$及$Z^{k+1}$更新$U^{k+1}$，则有：
+\begin{equation}\label{4-22}
+U^{k+1}=U^k+\rho(Z^{k+1}-X^{k+1})
+\end{equation}
+\par
+一个简单的交替方向乘数方法(Alternating Direction Method of Multipliers,ADMM)计算全变差正则化项的算法流程如算法\ref{AlgoMTVADMM}所示。
+\begin{algorithm}[H]
+\caption{TV问题ADMM算法流程}
+\label{AlgoMTVADMM}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Y,\lambda,\rho,Iteration$
+\Ensure
+$X$
+\State Initialization $Z^0=X^0 \gets Y,U^0=0,Num=0$
+\While{$Num<Iteration$ or Not $Convergence$}
+\State Update $X^{k+1}$ according to Eq.\ref{4-19}
+\State Update $Z^{k+1}$ according to Eq.\ref{4-21}
+\State Update $U^{k+1}$ according to Eq.\ref{4-22}
+\State $Num+=1$
+\EndWhile
+\State \Return $X$
+\end{algorithmic}
+\end{algorithm}
+\par
+对于式(\ref{4-15})的求解方法可用ADMM方法进行求解，为简化表达式，将修正全变差正则化项写为：
+\begin{equation}\label{4-23}
+\parallel \boldsymbol{p} \parallel_{MTV}=\sum_p^{N_p}\lambda_{1,p}\parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p \parallel_2^2+\lambda_{2,p}\parallel\tilde{\boldsymbol{u}}_p\parallel_{TV}
+\end{equation}
+\par
+将基于修正全变差正则化的全波形反演目标函数重写为：
+\begin{equation}\label{4-24}
+\Phi(\boldsymbol{p})=\min_{\boldsymbol{p}_p}\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\parallel\boldsymbol{p}_p\parallel_{MTV}\}
+\end{equation}
+\par
+目标函数的梯度求取如下式：
+\begin{equation}\label{4-25}
+\nabla\Phi(\boldsymbol{p})=g(\boldsymbol{p})+2\sum_p^{N_p}\lambda_{1,p}(\boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p^{(k-1)})
+\end{equation}
+\subsection{考虑高阶项的修正全变差正则化模型约束}
+为了进一步提高全波形反演的精度和收敛性，引入MCTV(Minmax-concave total variation)方法，该方法由Huiqian Du \& Yilin Liu.(2018)提出并应用于一维和二维信号及图像的去噪中\upcite{DuHLiuY2018}，与修正全变差正则化方法相比，对信号的细节部分具有更高的去噪效果，这是由于MCTV方法采用了高阶全变差方法，考虑了一阶导数，因此对噪声具有更高的压制作用，提高重构的目标体边缘轮廓清晰度，使异常体边界与背景区域区别更加突出，结合动态随机震源编码方法，在提升全波形反演效率的同时使用MCTV方法更加有效地压制串扰噪声和非物理震荡，提高全波形反演的精度。
+\subsubsection{变量分裂(Variable Splitting)}
+与修正全变差正则化模型类似，考虑高阶项的修正全变差模型约束的目标函数如式(\ref{4-5})所示，可以理解为一个无约束的优化问题，其中目标函数是两个函数的和，变量分裂是一个非常简单的过程，简单概括为创建一个新的变量$\tilde{\boldsymbol{u}}$在$\boldsymbol{p}=\tilde{\boldsymbol{u}}$的约束下作为$\Phi_m$的参数，从而导致无约束的优化问题变为约束的优化问题：
+\begin{equation}\label{4-26}
+\begin{aligned}
+&\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\lambda \Phi_m(\tilde{\boldsymbol{u}})\}\\
+&\text{subject to} \quad \boldsymbol{p}=\tilde{\boldsymbol{u}}
+\end{aligned}
+\end{equation}
+\par
+式(\ref{4-26})可重写为以下形式：
+\begin{equation}\label{4-27}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\lambda \Phi_m(\tilde{\boldsymbol{u}})+\frac{1}{\alpha} \parallel \boldsymbol{p}-\tilde{\boldsymbol{u}} \parallel_2^2\}
+\end{equation}
+\par
+令$\lambda_1=\frac{1}{\alpha}$，$\lambda_2=\lambda$，其中$\Phi_m(\tilde{\boldsymbol{u}})=\parallel \tilde{\boldsymbol{u}} \parallel_{MCTV}$，则式(\ref{4-27})可重写为：
+\begin{equation}\label{4-28}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\lambda_1 \parallel \boldsymbol{p}-\tilde{\boldsymbol{u}} \parallel_2^2 +\lambda_2 \Phi_m(\tilde{\boldsymbol{u}})\}
+\end{equation}
+\par
+由于$\boldsymbol{p}$为多参数，因此，展开可写为：
+\begin{equation}\label{4-29}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\lambda_{1,p}\parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p \parallel_2^2+\lambda_{2,p}\parallel \tilde{\boldsymbol{u}}_p \parallel_{TV}\}
+\end{equation}
+\par
+式(\ref{4-29})中，$\lambda_1$和$\lambda_2$均为正的正则化参数，其中$\tilde{\boldsymbol{u}}$为辅助变量，$N_p$为参数个数，可将问题分解为两个交替最小化问题：
+\begin{equation}\label{4-30}
+\boldsymbol{p}^{(k)}=\arg\min_{\boldsymbol{p}}\{E_1(\boldsymbol{p})\}=\arg\min_{\boldsymbol{p}}
+\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\lambda_{1,p}\parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p^{(k-1)}\parallel_{2}^{2}\}
+\end{equation}
+\par
+\begin{equation}\label{4-31}
+\tilde{\boldsymbol{u}}_p^{(k)}=\arg\min_{\tilde{\boldsymbol{u}}}\{E_2(\tilde{\boldsymbol{u}}_p)\}=\arg\min_{\tilde{\boldsymbol{u}}_p}\{\parallel \boldsymbol{p}_p^{(k)}-\tilde{\boldsymbol{u}}_p\parallel_2^2+\lambda_{2,p}\parallel\tilde{\boldsymbol{u}}_p\parallel_{MCTV}\}
+\end{equation}
+\par
+式(\ref{4-31})即为式(\ref{4-5})的等价形式，这里与修正全变差正则化的唯一区别在与求解全变差正则化项时使用的方法为MCTV方法，与修正全变差正则化模型约束类似，即将一个最小化问题分解为两个最小化子问题，对于这两个子问题可以理解为：第一个子问题使用基于Tikhonov正则化和先验模型$\tilde{\boldsymbol{u}}_p^{(k-1)}$的全波形反演，第二个子问题使用$L_1$全变差最小化方法求解$\tilde{\boldsymbol{u}}_p^{(k)}$以保持反演结果中$\boldsymbol{u}_p^{(k)}$的分界面清晰，由于使用了考虑高阶项的全变差正则化模型约束，因此在细节方面较修正全变差正则化模型约束更加精确。
+\subsubsection{求解MCTV问题的交替方向乘数方法}
+对于形如式(\ref{4-32})的最小化问题
+\begin{equation}\label{4-32}
+\begin{aligned}
+&\min_{X,Z}\frac{1}{2}\parallel Y-X \parallel_2^2+\lambda\mathfrak{F}(Z)\\
+&\text{subject to} \quad X=Z
+\end{aligned}
+\end{equation}
+\par
+其中$\mathfrak{F}(Z)=\parallel Z \parallel_{MCTV}$，定义如式(\ref{4-33}):
+\begin{equation}\label{4-33}
+\parallel Z \parallel_{MCTV}=\parallel DX \parallel_1-\min_U\{\frac{\alpha}{2}\parallel DX-U \parallel_2^2+\parallel U \parallel_1\}
+\end{equation}
+\par
+其中，$D$表示差分矩阵，当$X$为一维数据时，$DX_i=(x_{i+1}-x_i)$，当$X$为二维数据时，$DX_{i,j}=(X_{i+1,j}-X_{i,j},X_{i,j+1}-X_{i,j})$。
+\par
+式(\ref{4-32})的增广Lagrangian形式为：
+\begin{equation}\label{4-34}
+\mathfrak{L}(X,Z,U)=\frac{1}{2}\parallel Y-X \parallel_2^2+\lambda \mathfrak{F}_{\alpha}(Z)+\lambda U^T(Z-DX)+\frac{\lambda \rho}{2}\parallel Z-DX \parallel_2^2
+\end{equation}
+\par
+其中，$\mathfrak{F}_{\alpha}(Z)$的定义如式(4-35)所示：
+\begin{equation}\label{4-35}
+\mathfrak{F}_{\alpha}(Z)=\parallel X \parallel_1-\min_U\{\frac{\alpha}{2}\parallel X-U \parallel_2^2=\parallel U \parallel_1\}
+\end{equation}
+\par
+根据交替方向乘数方法(Alternating Direction Method of Multipliers,ADMM)，最小化问题的求解步骤如下：
+\par
+首先使用固定的$Z^k$，$U^k$更新$X^{k+1}$：
+\begin{equation}\label{4-36}
+X^{k+1}=\arg\min_X \frac{1}{2}\parallel Y-X \parallel_2^2-\lambda(U^k)^TDX+\frac{\lambda\rho}{2}\parallel Z^k-DX \parallel_2^2
+\end{equation}
+\par
+式(\ref{4-36})的最优解可以表示为：
+\begin{equation}\label{4-37}
+(I+\lambda\rho D^TD)X^{k+1}=Y+\lambda\rho D^T Z^k-\lambda D^T U^k
+\end{equation}
+\par
+由于$D^T DX=4X_{i,j}-X_{i,j-1}-X_{i,j+1}-X_{i-1,j}-X_{i+1,j}$，使用Gauss-Seidel方法进行迭代计算，则式(\ref{4-37})可以写为：
+\begin{equation}\label{4-38}
+\begin{aligned}
+X_{i,j}^{k+1}&=\frac{\lambda\rho}{1+4\lambda\rho}(X_{i,j-1}^k+X_{i,j+1}^k+X_{i-1,j}^k+X_{i+1,j}^k+2Z_{i,j}^k-Z_{i+1,j}^k-Z_{i-1,j}^k)\\
+&-\frac{1}{1+4\lambda\rho}(2U_{i,j}^k-U_{i+1,j}^k-U_{i,j1}^k)+\frac{1}{1+4\lambda\rho}Y_{i,j}
+\end{aligned}
+\end{equation}
+\par
+然后使用式(\ref{4-38})求解得到的$X^{k+1}$和固定的$U^k$更新$Z^{k+1}$，则
+\begin{equation}\label{4-39}
+Z^{k+1}=\arg\min_Z \lambda\mathfrak{F}_\alpha(Z)-\lambda(U^k)^TZ+\frac{\lambda\rho}{2}\parallel Z-DX^{k+1} \parallel_2^2
+\end{equation}
+\par
+式(\ref{4-39})可以等价写为：
+\begin{equation}\label{4-40}
+Z^{k+1}=\arg\min_Z \mathfrak{F}_\alpha(Z)+\frac{\rho}{2}\parallel Z-(DX^{k+1}+\frac{U^k}{\rho})\parallel_2^2
+\end{equation}
+\par
+式(\ref{4-40})中的参数$\alpha$控制目标函数的凸性。最后使用式(\ref{4-38})及式(\ref{4-40})求解得到的$X^{k+1}$及$Z^{k+1}$更新$U^{k+1}$，则有：
+\begin{equation}\label{4-41}
+U^{k+1}=U^k+(DX^{k+1}-Z^{k+1})
+\end{equation}
+\par
+一个简单的交替方向乘数方法(Alternating Direction Method of Multipliers,ADMM)计算考虑高阶项的全变差正则化项的算法流程如算法\ref{AlgoMCTVADMM}所示。
+\begin{algorithm}[H]
+\caption{MCTV问题ADMM算法流程}
+\label{AlgoMCTVADMM}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Y,\lambda,\rho,Iteration$
+\Ensure
+$X$
+\State Initialization $Z^0=X^0 \gets Y,U^0=0,Num=0$
+\While{$Num<Iteration$ or Not $Convergence$}
+\State Update $X^{k+1}$ according to Eq.\ref{4-38}
+\State Update $Z^{k+1}$ according to Eq.\ref{4-40}
+\State Update $U^{k+1}$ according to Eq.\ref{4-41}
+\State $Num+=1$
+\EndWhile
+\State \Return $X$
+\end{algorithmic}
+\end{algorithm}
+\par
+这里给出MCTV正则化方法ADMM算法的核心代码：
+\begin{python}
+import numpy as np
+from numba import jit
+
+def denoising_2D_MCTV(data):
+    M,N=np.shape(data)
+    data_max=np.max(data)
+    data=data/data_max
+    X0=np.zeros((M+2,N+2))
+    X0[1:M+1,1:N+1]=data
+    Y0=np.zeros((M+2,N+2))
+    Y0[1:M+1,1:N+1]=data
+    X=np.zeros((M+2,N+2))
+    Zx=np.zeros((M+2,N+2))
+    Zy=np.zeros((M+2,N+2))
+    Ux=np.zeros((M+2,N+2))
+    Uy=np.zeros((M+2,N+2))
+    lamda=0.02
+    rho_=1
+    num=200
+    err=1e-5
+    alpha_ratio=0.5
+    return_data=denoising_2D_MCTV_\
+    (num,X,X0,err,M,N,Zx,Zy,Ux,Uy,Y0,lamda,rho_,alpha_ratio)
+    return return_data*data_max
+
+@jit(nopython=True)
+def denoising_2D_MCTV_(num,X,X0,err,M,N,\
+                       Zx,Zy,Ux,Uy,Y0,lamda,rho,alpha_ratio):
+    K=0
+    while K<num and np.linalg.norm(X-X0,2)>err:
+        #更新X
+        X0=X
+        Dxt_Zx=np.zeros((M+2,N+2))
+        Dxt_Zx[:,0:N+1]=Zx[:,0:N+1]-Zx[:,1:N+2]
+        Dxt_Zx[:,N+1]=Zx[:,N+1]-Zx[:,0]
+        Dxt_Ux=np.zeros((M+2,N+2))
+        Dxt_Ux[:,0:N+1]=Ux[:,0:N+1]-Ux[:,1:N+2]
+        Dxt_Ux[:,N+1]=Ux[:,N+1]-Ux[:,0]    
+        Dyt_Zy=np.zeros((M+2,N+2))
+        Dyt_Zy[0:M+1,:]=Zy[0:M+1,:]-Zy[1:M+2,:]
+        Dyt_Zy[M+1,:]=Zy[M+1,:]-Zy[0,:]
+        Dyt_Uy=np.zeros((M+2,N+2))
+        Dyt_Uy[0:M+1,:]=Uy[0:M+1,:]-Uy[1:M+2,:]
+        Dyt_Uy[M+1,:]=Uy[M+1,:]-Uy[0,:]
+        RHS=Y0+lamda*rho*(Dxt_Zx+Dyt_Zy)-lamda*(Dxt_Ux+Dyt_Uy)
+        X=np.zeros((M+2,N+2))
+        
+        for i in range(1,M+1):
+            for j in range(1,N+1):
+                X[i,j]=((X0[i+1,j]+X0[i-1,j]+X0[i,j+1]+X0[i,j-1])*\
+                lamda*rho+RHS[i,j])/(1+4*lamda*rho)
+                
+        #更新Z
+        Dx_X=np.zeros((M+2,N+2))
+        Dx_X[:,1:N+2]=X[:,1:N+2]-X[:,0:N+1]
+        Dx_X[:,0]=X[:,0]-X[:,N+1]
+        Dy_X=np.zeros((M+2,N+2))
+        Dy_X[1:M+2,:]=X[1:M+2,:]-X[0:M+1,:]
+        Dy_X[0,:]=X[0,:]-X[M+1,:]
+        Tx=Ux/rho+Dx_X
+        Ty=Uy/rho+Dy_X
+        X_shrink_mctv=np.zeros((M+2,N+2))
+        U_shrink_mctv=np.ones((M+2,N+2))
+        K_shrink_mctv=0
+        alpha_shrink_mctv=alpha_ratio*rho
+        while K_shrink_mctv<num and\
+        np.linalg.norm(X_shrink_mctv-U_shrink_mctv,2)>err*10:
+            U_shrink_mctv=X_shrink_mctv
+            shrink=np.fmax(np.fabs(X_shrink_mctv)-\
+            1/alpha_shrink_mctv,0)*np.sign(X_shrink_mctv)
+            W_shrink_mctv=Tx+alpha_shrink_mctv/rho\
+            *(X_shrink_mctv-shrink)
+            shrink=np.fmax(np.fabs(W_shrink_mctv)-\
+            1/rho,0)*np.sign(W_shrink_mctv)
+            X_shrink_mctv=shrink
+            K_shrink_mctv+=1
+        Zx=X_shrink_mctv
+        X_shrink_mctv=np.zeros((M+2,N+2))
+        U_shrink_mctv=np.ones((M+2,N+2))
+        K_shrink_mctv=0
+        alpha_shrink_mctv=alpha_ratio*rho
+        while K_shrink_mctv<num and\
+        np.linalg.norm(X_shrink_mctv-U_shrink_mctv,2)>err*10:
+            U_shrink_mctv=X_shrink_mctv
+            shrink=np.fmax(np.fabs(X_shrink_mctv)-\
+            1/alpha_shrink_mctv,0)*np.sign(X_shrink_mctv)
+            W_shrink_mctv=Ty+alpha_shrink_mctv/rho\
+            *(X_shrink_mctv-shrink)
+            shrink=np.fmax(np.fabs(W_shrink_mctv)-\
+            1/rho,0)*np.sign(W_shrink_mctv)
+            X_shrink_mctv=shrink
+            K_shrink_mctv+=1
+        Zy=X_shrink_mctv
+        #更新U
+        Dx_X=np.zeros((M+2,N+2))
+        Dx_X[:,1:N+2]=X[:,1:N+2]-X[:,0:N+1]
+        Dx_X[:,0]=X[:,0]-X[:,N+1]
+        Dy_X=np.zeros((M+2,N+2))
+        Dy_X[1:M+2,:]=X[1:M+2,:]-X[0:M+1,:]
+        Dy_X[0,:]=X[0,:]-X[M+1,:]
+        Ux=Ux+(Dx_X-Zx)
+        Uy=Uy+(Dy_X-Zy)
+        K+=1
+    return X[1:M+1,1:N+1]
+\end{python}
+\par
+基于MCTV方法正则化的全波形反演的目标函数可以写为：
+\begin{equation}\label{4-42}
+\Phi(\boldsymbol{p},\tilde{\boldsymbol{u}})=\min_{\boldsymbol{p},\tilde{\boldsymbol{u}}}\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\lambda_{1,p} \parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p \parallel_2^2+\lambda_{2,p}\parallel \tilde{\boldsymbol{u}}_p \parallel_{MCTV}\}
+\end{equation}
+\par
+为简化表达式，将考虑高阶项的MCTV正则化项写为：
+\begin{equation}\label{4-43}
+\begin{aligned}
+\parallel \boldsymbol{p} \parallel_{MCTV}=&\sum_p^{N_p}\lambda_{1,p} \parallel \boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p \parallel_2^2\\
+&+\lambda_{2,p}\{\parallel D\boldsymbol{p}_p \parallel_1-\parallel D\boldsymbol{p}_p-\tilde {\boldsymbol{u}}_p \parallel_2^2+\parallel \tilde{\boldsymbol{u}} \parallel_1\}
+\end{aligned}
+\end{equation}
+\par
+将基于考虑高阶项的MCTV正则化的全波形反演目标函数重写为：
+\begin{equation}\label{4-44}
+\Phi(\boldsymbol{p})=\min_{\boldsymbol{p}_p}\{\Phi_d(\boldsymbol{p})+\sum_p^{N_p}\parallel\boldsymbol{p}_p\parallel_{MCTV}\}
+\end{equation}
+\par
+目标函数的梯度求取如下式：
+\begin{equation}\label{4-45}
+\nabla\Phi(\boldsymbol{p})=g(\boldsymbol{p})+\sum_p^{N_p}\lambda_{1,p}(\boldsymbol{p}_p-\tilde{\boldsymbol{u}}_p^{(k-1)})
+\end{equation}
+\par
+通过对比修正全变差正则化算法的计算流程，可以发现二者的区别在于对先验模型的计算方法不同，该算法考虑了高阶项，在细节部分较修正全变差正则化模型约束方法具有更高的分辨率。
+\subsection{正则化模型约束全波形反演算例}
+\subsubsection{正则化模型约束策略对比}
+通过加载正则化模型约束求解声波全波形反演，可以使反演更稳定，由于正则化参数控制着模型范数$\Phi_m$和数据拟合残差范数$\Phi_d$在目标函数中所占的比例，它的选取对解的性态起着关键的作用。如果正则化参数$\lambda$取的太小，则意味着模型范数在代价函数中所占的比例少，对反演结果平滑程度的影响也小，此时噪声得不到很好的抑制，解的不稳定性仍然存在;如果$\lambda$选取的太大，噪声将会得到很好的抑制，稳定性得到了保证，却使反演结果过于平滑，细节不易突出，加大了原问题与新问题之间的偏离程度，所求的根本不是原问题的解了，因此，一个好的全变差正则化参数能合理的平衡两者之间的关系。
+\par
+常用的$\lambda$值取值方案有两种:(a)固定全变差正则化参数，譬如取$\lambda=1.0$；(b)设定一个自适应全变差正则化参数，如设$\lambda=\lambda_0 \Phi_d/(\Phi_m+\Phi_d)$，$\lambda_0$为初始全变差正则化因子，$\Phi_d$为模型数据的拟合残差范数，$\Phi_m$为目标函数中模型范数。考虑到声波反演开始于给定的初始模型，此时，目标函数中模型范数$\Phi_m$较小，甚至可能为$0$，而模型数据的拟合残差范数$\Phi_d$一般都很大，随着反演迭代的进行，$\Phi_m$会逐渐增加而$\Phi_d$逐渐下降，在这个过程中全变差正则化因子$\lambda$需要平衡目标函数中的两部分$\Phi_m$和$\Phi_d$，使两者不至于相差过大。因此，选取方案(b)中所述的自适应全变差正则化参数更为合理。
+\par
+为了对比不同的正则化模型约束方法的效果，仍以如图\ref{TrueCrossModel}所示的双“十”字型模型为例，设置四组双参数反演实验，(S1)Tikhonov正则化模型约束;(S2)采用自适应全变差正则化因子策略的传统近似全变差正则化模型约束;(S3)采用自适应全变差正则化因子策略的修正全变差正则化模型约束;(S4)采用自适应全变差正则化因子策略的考虑高阶项的修正全变差正则化模型约束。
+\par
+图\ref{RegularizationRho}为四组不同正则化模型约束方法下的介质密度反演剖面图从上到下依次为Tikhonov正则化模型约束、传统近似全变差正则化模型约束、改进全变差正则化模型约束策略，图\ref{RegularizationVp}为四组不同正则化模型约束方法下的声波速度反演剖面图从上到下依次为Tikhonov正则化模型约束、传统近似全变差正则化模型约束、改进全变差正则化模型约束策略，综合对比八幅反演结果图可知，S1策略加载了Tikhonov正则化模型约束，可以发现相较于不加载正则化模型约束的全波形反演结果，Tikhonov正则化模型约束并没有提高反演图像的清晰度，异常体分界面模糊且存在非物理震荡现象，这是由于Tikhonov正则化模型约束会使异常体分界面过度平滑导致的；S2策略通过加载传统近似全变差正则化方法，一定程度上改善了反演图像的清晰度，提高了异常体分界面的分辨率，降低了背景的非物理震荡现象，然而由于平滑参数$\epsilon$的存在，使得异常体分界面比较平滑，没有很好地突出分界面的位置；
+S3策略、S4策略全波形反演结果相似，仅从重构结果上看反演图像最清晰，异常体分界面最为明显，背景几乎不存在非物理震荡，异常体重构效果最好。综上所述，通过加载一个使用自适应的正则化因子的正则化模型约束，使数据拟合与模型约束之间达到更好的平衡，在一定程度上确实可以压制背景的非物理振荡，提高反演剖面的分辨率，使得分界面更加明显。
+\par
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/RegularizationRho.png}}        
+\caption{\label{RegularizationRho} 不同正则化模型约束的介质密度反演结果}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/RegularizationVp.png}}        
+\caption{\label{RegularizationVp} 不同正则化模型约束的声波速度反演结果}      
+\end{figure}
+\par
+为了更好地对比四种不同反演策略下的反演结果并且直观反映修正全变差正则化模型约束及考虑高阶项的修正全变差正则化模型约束的反演细节，通过对比四组不同正则化模型约束方法下的单道切线剖面，如图\ref{RegularizationLine}，可以发现，黄色点线代表的加载Tikhonov正则化模型约束的反演结果存在较大的非物理震荡现象，异常体边界十分模糊，介质内部均一区域存在震荡现象；蓝色点划线代表的加载传统近似全变差正则化模型约束的反演结果在一定程度下降低了非物理震荡现象，提高了异常体分界面的分辨率，但降低了介质密度反演幅值的精确度，且没有改善介质内部均一区域存在的震荡现象；紫色虚线代表的加载修正全变差正则化模型约束的反演结果在不降低反演幅值精确度的同时，不仅有效地降低了非物理震荡现象，提高了异常体分界面的分辨率，而且减小了介质内部均一区域存在的震荡现象，但在异常体分界面处存在不可忽视的震荡现象；绿色实线代表的加载考虑高阶项的修正全变差正则化模型约束的反演结果在不降低反演幅值精确度的同时，不仅有效地降低了非物理震荡现象，提高了异常体分界面的分辨率，而且消除了介质内部均一区域和异常体分界面处存在的振荡现象，且在分界面的细节部分更加接近真实模型，在细节方面较使用修正全变差正则化模型约束策略具有更高的分辨率。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/RegularizationLine.png}}        
+\caption{\label{RegularizationLine} 不同正则化模型约束的单道反演切线结果对比图}      
+\end{figure}
+\par
+为了定量比较不同正则化模型约束方法对反演结果的影响，加载不同正则化模型约束方法的正则化参数选取及反演迭代数如表\ref{RegularizationTab}，其中L代表多尺度反演中的低频反演，H代表多尺度反演中的高频反演。从表中可见，Tikhonov正则化模型约束的双参数反演将导致较大的模型重构误差，且介质密度的模型重构误差大于声波速度的模型重构误差；通过加载传统近似全变差正则化模型约束，可以降低介质密度和声波速度的模型重构误差，但是由于数据拟合项和全变差正则化项引起的非线性以及反演的收敛对平滑参数$\delta$高度敏感，将导致反演问题十分不稳定，大大增加了反演迭代次数，降低了反演效率；通过加载修正全变差正则化模型约束，显著降低了介质密度和声波速度的模型重构误差，并且提高了反演的稳定性，降低了低频反演的迭代次数，提高了反演效率；通过加载考虑高阶项的修正全变差正则化模型约束，进一步降低了介质密度和声波速度的模型重构误差，并且提高了反演的稳定性，降低了低频反演的迭代次数，提高了反演效率。综上所述，传统近似全变差正则化模型约束虽然能够在一定程度上降低了模型重构误差，但是也降低了反演问题的稳定性，从而降低反演效率，修正全变差正则化和考虑高阶项的修正全变差正则化模型约束在大幅降低模型重构误差的同时保持了反演问题的稳定性，并且考虑高阶项的修正全变差正则化模型约束得到了最好的重构效果，大幅提高了反演的精度。
+\begin{table}[H]
+\centering
+\caption{不同正则化模型约束反演参数表}\label{RegularizationTab}
+\renewcommand\tabcolsep{0.5em}
+\begin{tabular}{ccccc}
+\toprule
+{策略} & {$\lambda_0$取值} & {迭代次数} & {模型重构误差$\rho$} & {模型重构误差$v$}\\
+\midrule 
+S1 & $1e^{-2}(\rho)+1e^{-2}(v)$ & 42(L)+199(H) & 0.2503 & 0.2252\\
+S2 & $1e^{-2}(\rho)+1e^{-2}(v)$ & 78(L)+199(H) & 0.2374 & 0.2179\\
+S3 & $2e^{-4}(\rho)+2e^{-4}(v)$ & 27(L)+63(H) & 0.2180 & 0.1123\\
+S4 & $2e^{-4}(\rho)+2e^{-4}(v)$ & 27(L)+63(H) & 0.2063 & 0.1031\\
+\bottomrule
+\end{tabular}
+\end{table}
+\par
+\subsubsection{SEAM国际标准模型试算}
+为了验证正则化模型约束策略对复杂模型的适应性，因此，将考虑高阶项的修正全变差正则化模型约束应用于复杂的SEAM国际标准模型进行试算，SEAM国际标准模型如图\ref{SeamTrueModel}所示，该模型具有复杂多变的地质薄层和盐丘状的突变面，对全波形反演而言具有一定的挑战，反演使用初始模型如图\ref{SeamInitialModel}所示，采用地面激发地面接收的观测方式，共激发40炮，炮间距为50m，地面使用400个检波器全孔径接收，采用主频为30Hz的零相位雷克子波，记录时长为1s。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/SeamTrueModel.png}}        
+\caption{\label{SeamTrueModel} SEAM国际标准模型}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/SeamInitialModel.png}}        
+\caption{\label{SeamInitialModel} SEAM反演初始模型}      
+\end{figure}
+\par
+图\ref{SeamNoMTV}与图\ref{SeamMTV}分别为SEAM国际标准模型不加载正则化模型约束与SEAM国际标准模型加载正则化模型约束的反演结果。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/SeamNoMTV.png}}        
+\caption{\label{SeamNoMTV} SEAM不加载正则化模型约束的反演结果}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/SeamMTV.png}}        
+\caption{\label{SeamMTV} SEAM加载正则化模型约束的反演结果}      
+\end{figure}
+\par
+从图\ref{SeamNoMTV}与图\ref{SeamMTV}的对比可以看出，不加载正则化模型约束时反演结果与真实模型较为接近，由于选取地面观测方式，因此对深层的信息反演结果相对浅层较差，深层部分的介质分界面较为模糊，细节信息不足，介质的分界面比较模糊，分层结构明显被平滑并没有得到良好的分层体现，且盐丘突变面与背景介质被明显虚化，突变构造没有得到良好的突出，但整体反演结果仍达到预期，加载了考虑高阶项的修正全变差正则化模型约束的全波形反演结果在分界面处更加突出，介质的分界面也更为清晰，模型的分层更加明显，修正了传统反演带来的平滑问题，突变面也得到了更好地体现，在一定程度上证明了正则化模型约束对于复杂模型的适应性，为了使比较更为直观，选取图\ref{SeamTrueModel}中黑色虚线处的单道切线结果对比，如图\ref{SeamLine}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section4/SeamLine.png}}        
+\caption{\label{SeamLine} SEAM模型正则化约束策略的单道切线结果对比图}      
+\end{figure}
+\par
+从上图可以明显看出，两种全波形反演策略都能够较好地与真实模型相吻合，但是在细节方面加载了考虑高阶项的修正全变差正则化模型约束的全波形反演策略较不加载正则化模型约束的反演结果更为良好，主要体现在分界面更加突出，而不加载正则化模型约束的分界面处较为平滑，不能很好地体现出模型的明显分层情况，从曲线的细节可以观察到，在薄层地质构造集中的位置，加载了考虑高阶项的修正全变差正则化模型约束的全波形反演策略在细节上能够很好地与真实模型相吻合，曲线形态并没有像传统全波形反演得到的结果一样在微小突变面处曲线明显平滑的效果，而是与真实模型一致，在微小突变面处曲线同样出现了明显的差异，这也从另一个角度验证了正则化模型约束策略对复杂模型的适应性。
+\par
+为了定量比较两种全波形反演算法对反演结果的影响，SEAM国际标准模型反演参数如表\ref{SEAMTab}所示，为简化描述，将传统全波形反演策略称为S1策略，将加载考虑高阶项的修正全变差正则化模型约束的全波形反演策略称为S2策略。从表中可见，加载了考虑高阶项的修正全变差正则化模型约束的全波形反演策略得到了更低的模型重构误差，且使用了较少次数的反演迭代，这是由于加载了正则化模型约束在细节方面与真实模型更加接近，正则化模型约束策略对于细节有着很大的修正，并且提高了全波形反演的稳定性，获得了更低的反演迭代次数，进而验证了正则化模型约束对于复杂模型的适应性。
+\begin{table}[H]
+\centering
+\caption{不同正则化模型约束反演参数表}\label{SEAMTab}
+\renewcommand\tabcolsep{1em}
+\begin{tabular}{cccc}
+\toprule
+{策略} & {迭代次数} & {模型重构误差$\rho$} & {模型重构误差$v$}\\
+\midrule 
+S1 & 64(L)+117(H) & 0.3591 & 0.3500\\
+S2 & 55(L)+83(H) & 0.3330 & 0.3194\\
+\bottomrule
+\end{tabular}
+\end{table}
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{algorithm}{0}
+\newpage
+\section{时间域声波全波形双参数高效反演策略}
+大尺度模型的全波形反演往往会消耗很长的时间，而时间的消耗主要体现在三个方面，一是正演模拟对时间的消耗，二是使用的震源数量对时间的消耗，三是计算目标函数的梯度时对时间的消耗。那么针对提高全波形反演效率的反演策略也应运而生，本章主要介绍四种提高全波形双参数反演效率的方法，分别为震源并行技术(针对正演模拟)、随机震源全波形反演策略(针对震源数量)、震源编码全波形反演策略(针对震源数量和目标函数梯度的计算)和随机震源与震源编码全波形联合反演策略(针对震源数量和目标函数梯度的计算)。
+\par
+震源并行技术是指由于在梯度计算时需要计算每一炮数据并在计算完成后进行叠加形成总体梯度，这个过程需要进行两次正演计算，这将消耗巨大的时间，当震源的个数很大时则导致反演效率很低，然而将多个炮数据使用并行方法同时计算将极大地减少正演耗时，从而提高反演的效率；随机震源全波形反演策略是指将震源进行分块处理，每次从震源块中随机抽取独立震源，用较少的震源进行反演，当达到反演终止条件时再增加独立震源，然后重复上述过程，最终使用全部震源或使用与原始震源数相近的震源数进行较少次数的反演迭代；震源编码全波形反演策略是指首先随机生成时域震源编码序列，然后通过随机选取独立震源与时域震源编码序列作卷积运算并叠加形成超级炮，最后将超级炮剖面当作震源来进行全波形反演；随机震源与震源编码全波形联合反演策略是将上述两个全波形反演策略的思路相结合，首先对震源进行分块处理，组合成超级炮剖面，反演开始时使用个数较少的超级炮进行反演，当达到反演终止条件时增加超级炮个数，然后重复上述过程，最终使用与总炮数相同的超级炮进行较少次数的反演迭代。
+\subsection{震源并行技术}
+如式(\ref{3-17})和式(\ref{3-18})所示，在计算目标函数的梯度时需要正演波场及伴随波场参与计算，这需要进行两次正演计算，并且在计算总梯度时需要叠加各个震源所计算的梯度，因此，每个炮点震源需要进行两次正演计算，最终叠加得到目标函数的梯度，假设震源的个数为M，则需要进行2M次正演计算，在每次全波形反演迭代时，最耗时的部分为正演计算。
+\par
+目标函数梯度的计算步骤如下：
+\par
+首先计算出每个位置的震源激发得到式(\ref{3-3})中的真实模型正演剖面数据$\tilde{U}_m$，之后根据给出的全波形反演初始模型计算出式(\ref{3-3})中的猜测模型正演剖面数据$U_m$，并且得到猜测模型的正演波场数据，然后通过两个正演剖面相减得到残差数据，并使用得到的残差数据当作震源传入伴随方程，得到猜测模型的伴随波场数据，最后根据式(\ref{3-17})和式(\ref{3-18})计算出目标函数梯度。
+\par
+计算流程如算法\ref{AlgoMultyProcessing}所示：
+\begin{algorithm}[H]
+\caption{震源串行计算目标函数梯度}
+\label{AlgoMultyProcessing}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$\rho,v,\rho_{initial},v_{initial},Source$
+\Ensure
+$g_{\rho},g_{v}$
+\For{all $Source$}
+\State Compute $\tilde{U}_m \gets$\Call{FORWARD}{$\rho,v,Source$}
+\State Compute $U_m,\boldsymbol{P} \gets$\Call{FORWARD}{$\rho_{initial},v_{initial},Source$}
+\State Compute $Residual=\tilde{U}_m-U_m$
+\State Compute $\boldsymbol{P^*} \gets$\Call{FORWARD}{$\rho_{initial},v_{initial,Residual}$}
+\State Compute $g(\rho)_m,g(v)_m$ according to Eq.\ref{3-17} and Eq.\ref{3-18} 
+\EndFor
+\State $g(\rho),g(v)=\sum_{m=1}^{M}g(\rho)_m,g(v)_m$ 
+\State \Return $g_{\rho},g_{v}$
+\end{algorithmic}
+\end{algorithm}
+\par
+从算法\ref{AlgoMultyProcessing}中可以看出，在计算目标函数梯度时，需要对猜测模型进行两次正演计算，对于传统的串行计算，每次计算一个震源产生的目标函数梯度，且需要将所有震源迭代计算一次，因此将在计算正演模拟时浪费大量的时间。
+\par
+基于计算目标函数的梯度时串行计算每个震源的正演将消耗大量的时间，并且具有每个震源所激发的波场相互独立的特点，因此可以考虑使用CPU(Central Processing Unit)多进程并行地将多个震源所激发的正演计算同时进行，这样就能够大大缩减目标函数梯度计算所消耗的时间。
+\par
+多进程编程具有彼此独立的进程，没有全局解释锁(Global Interpreter Lock,GIL)的限制,这样可以有更好的资源利用率；同时，使用多个进程的另一个优点是它们不共享内存上下文，因此,很难破坏数据也难以形成死锁\upcite{Oliphant2007,Lutz2001,VanRossum1995}。通过以上描述可以得出结论，CPU多进程并行方法与计算目标函数梯度的过程相容，由于具有波场独立的特性，所以声波的正演计算本身就不需要数据共享内存上下文，声波方程全波形反演目标函数梯度计算的多进程并行计算流程如图\ref{MultiProcessing}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4in]  {./Section5/MultiProcessing.png}}        
+\caption{\label{MultiProcessing} 声波全波形反演多进程并行计算流程图}      
+\end{figure}
+\par
+震源并行计算目标函数梯度计算流程如算法(\ref{AlgoCPUProcessing})所示：
+\begin{algorithm}[H]
+\caption{震源并行计算目标函数梯度}
+\label{AlgoCPUProcessing}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$\rho,v,\rho_{initial},v_{initial},Source,Pool_1,Pool_2$
+\Ensure
+$g_{\rho},g_{v}$
+\For{all $Source$}
+\State Add to $Pool_1 \gets$\Call{FORWARD}{$\rho,v,Source$}
+\EndFor
+\For{all $Source$}
+\State Add to $Pool_2 \gets$\Call{FORWARD}{$\rho_{initial},v_{initial},Source$}
+\EndFor
+\For{all $Source$}
+\State Compute $\tilde{U}_m \gets Pool_1$
+\State Compute $U_m,\boldsymbol{P} \gets Pool_2$
+\State Compute $Residual=\tilde{U}_m-U_m$
+\State Compute $\boldsymbol{P}^* \gets$\Call{FORWARD}{$\rho_{initial},v_{initial},Residual$}
+\State Compute $g(\rho)_m,g(v)_m$ according to Eq.\ref{3-17} and Eq.\ref{3-18} 
+\EndFor
+\State $g(\rho),g(v)=\sum_{m=1}^{M}g(\rho)_m,g(v)_m$ 
+\State \Return $g_{\rho},g_{v}$
+\end{algorithmic}
+\end{algorithm}
+\par
+下面给出传统的震源串行和震源并行Python3.X核心代码，震源串行代码如下所示：
+\begin{python}
+...
+g_rho=0.0
+g_vp=0.0
+rhs=[]
+res_l=[]
+#将所有震源遍历计算
+for index,value in enumerate(para.source_site):
+    #calculate_gradient函数中包含两次正演计算
+    result=calculate_gradient(rho,vp,index,CPML_Params,para)
+    rhs.append(result[0])
+    g_rho+=result[1]
+    g_vp+=result[2]
+...
+\end{python}
+\par
+从上述代码可见，震源串行代码严格按照目标函数梯度的计算公式编写，对所有的震源进行了遍历计算，其计算时间是线性的，而震源并行代码如下所示：
+\begin{python}
+from multiprocessing import Pool
+...
+g_rho=0.0
+g_vp=0.0
+rhs=[]
+#进程池中的进程数，8表示进程池中同时具有8个进程参与计算
+pool=Pool(processes=8)
+res_l=[]
+#将所有震源添加到进程池
+for index,value in enumerate(para.source_site):
+    #calculate_gradient函数中包含两次正演计算
+    res=pool.apply_async(calculate_gradient,args=(rho,vp,index,\
+    CPML_Params,para))
+    res_l.append(res)
+####启动进程池
+pool.close()
+pool.join()
+####取得数据并计算
+for res in res_l:
+    result=res.get()
+    rhs.append(result[0])
+    g_rho+=result[1]
+    g_vp+=result[2]
+    del result
+del res_l
+pool.terminate()
+...
+\end{python}
+\par
+对比发现，震源并行相对震源串行代码在计算流程上完全一致，但是在计算目标函数梯度时增加了进程池，将多个源放入进程池中同时参与计算，计算时间不再是线性的，从而大大提高了计算效率。
+\par
+为了说明震源多进程并行程序对正演效率的提升，以图\ref{TrueCrossModel}所示的双“十”字型模型为例，进行正演计算，设置不同个数的震源(取CPU核心数的正整数倍)，使用1000个时间步迭代，计算耗时及加速比如图\ref{Speedup}所示，正演计算使用的计算机配置为Intel Core(R) i7-6700K CPU 4.00GHz$\times$8，RAM Memory 15.6GiB，系统环境为Linux Ubuntu18.04.2 TLS，Gnome 3.28.2，编成环境为Anaconda3 Spyder4 Python3.6.2。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4.5in]  {./Section5/Speedup.png}}        
+\caption{\label{Speedup} 不同策略下的正演耗时及加速比对比图}      
+\end{figure}
+\par
+从图\ref{Speedup}中能够得到以下结论：随着震源个数的增加，两种策略的正演耗时都是趋近于线性增加的，多进程并行程序较串行程序计算耗时大大降低，多进程并行程序的加速比以对数形式提高，且逐渐趋近于一个定值。导致这种现象的原因在于串行程序仅仅利用了CPU的一个核心来计算，因此随着震源个数的增加，正演耗时也将线性增加；多进程并行程序可以充分利用CPU的全部核心，在震源个数小于进程池中进程的个数时由于计算时的进程频繁切换和内存调用等操作使得加速比较低，当进程池处于满载的情况下，进程池中的进程被充分利用，若某个进程结束当次计算，则立刻开始下一个计算任务，不会存在空闲进程的情况，因此获得了更高的加速比；随着震源个数远大于进程池中的进程数，进程池被充分利用，每个进程都处于满载状态，因此也就导致了加速比上限。
+\subsection{随机震源全波形反演策略}
+在声波全波形反演问题中，通常能够得到使用很多震源激发波场得到剖面数据，这些震源虽然能够很好地反映地下介质的细节信息，但是过多的震源可能导致地下介质信息的重合，造成信息冗余的情况，这种信息冗余的问题虽然不会导致全波形反演的精度出现偏差，但是对于全波形反演的计算效率却具有很大的影响。 
+\subsubsection{随机震源全波形反演算法}
+为了解决信息冗余的问题，可以考虑随机震源全波形反演策略，随机震源全波形反演最先采用样本平均近似方法(Sample Average Approximation,SAA)\upcite{Shapiro2005}，即使用足够大的固定数量的震源来近似反演目标函数，SAA算法的优点在于可以使用任何最优化算法来进行全波形反演的计算，另一种随机震源全波形反演策略则采用随机近似(Stochastic Approximation)方法，这种方法每次迭代仅使用一个震源，且在每次反演迭代计算完成后重新进行震源选取，由于每次反演迭代使用的目标函数都将改变，因此SA策略仅能够采用梯度引导类算法进行全波形反演的计算\upcite{Nemirovski2009}，但是相比SAA策略SA策略具有更高的反演效率，目前SA策略已经被引入到了全波形反演计算中\upcite{Krebs2009,Moghaddam2010}。
+\par
+这里考虑一个混合随机震源全波形反演策略\upcite{van2011,Aravkin2012,van2013}，即首先将震源进行分块处理，然后从每个震源块中随机抽取独立震源，利用抽出的独立震源进行全波形反演，当达到当次反演的终止条件时再从每个震源块中随机抽取独立震源，加入到上次的震源组合中，再进行全波形反演，进而重复上述过程直至将震源块中的震源全部抽取或抽取接近全部震源数量的独立震源，最后使用逼近全部震源个数的震源进行较少次数的全波形反演对模型细节部分进行修正，从而达到高效率全波形反演的目的。
+\par
+使用混合随机震源全波形反演策略，需要首先重新定义式(\ref{3-3})所示的目标函数：
+\begin{equation}\label{5-1}
+Q(\boldsymbol{p})=\frac{1}{2}\sum_{k=1}^K\sum_{n=1}^N\int_0^T |U_k(\boldsymbol{p};\boldsymbol{r}_n,t-\tilde{U}_k(\boldsymbol{r}_n,t|^2 dt
+\end{equation}
+式(\ref{5-1})中$K$为所选震源的个数，$N$为检波器的个数，$\boldsymbol{r}_n$表示第$n$个检波器空间坐标向量，$\tilde{U}_k(\boldsymbol{r}_n,t)$式第$k$个源的入射信号相对于初始模型正演模拟得到的数据(观测数据)，$U_k(\boldsymbol{p};\boldsymbol{r}_n,t)$是第$k$个源相对于猜测模型正演模拟得到的数据。
+\par
+这时，对应的目标函数梯度变为：
+\begin{equation}\label{5-2}
+g_{v}=\sum_{k=1}^K \int_0^T \frac{2}{\rho v^3}\frac{\partial p}{\partial t}p^*dt
+\end{equation}
+\begin{equation}\label{5-3}
+g_{\rho}=\sum_{k=1}^K \int_0^T (\frac{1}{\rho^2 v^2}\frac{\partial p}{\partial t}p^*+\frac{1}{\rho^2}\frac{\partial p}{\partial x}v_x^*+\frac{1}{\rho^2}\frac{\partial p}{\partial z}v_z^*)dt
+\end{equation}
+\par
+随机震源的算法步骤如下：
+\par
+首先将全部震源划分为$K$个震源块(本文采用平均划分的方法)，并且在每个震源块中随机抽取一个独立震源，从而形成一个具有$K$个独立震源的初始震源序列，然后计算目标函数的梯度，利用L-BFGS最优化算法进行全波形反演计算，当满足收敛条件后返回模型参数，进而在每个震源块中随机抽取一个独立震源，与添加至初始震源序列中，利用返回的模型参数计算目标函数的梯度，利用L-BFGS最优化算法进行全波形反演计算，重复此过程，得到一个最终的模型参数作为全波形反演的最终结果。
+\par
+随机震源的算法流程如算法\ref{AlgoRandomSource1}所示：
+\begin{algorithm}[H]
+\caption{随机震源算法流程}
+\label{AlgoRandomSource1}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Source$
+\Ensure
+$\rho,v$
+\State Initialization $Source\ Block \gets Source,SList=[\ ]$
+\For{all Iterations}
+\State Select \Call{RANDOM}{$Source\ Bolck$} Add to $SList$
+\State Calculate Gradient by $SList$ according to Eq.\ref{5-2} and Eq.\ref{5-3} 
+\State Update $\rho$ and $v$ by Optimization algorithms
+\EndFor
+\State \Return $\rho,v$
+\end{algorithmic}
+\end{algorithm}
+\par
+下面对算法\ref{AlgoRandomSource1}流程进行详细说明：
+\par
+算法\ref{AlgoRandomSource1}第1行将原始震源数据进行分块处理，目的在于尽可能分散震源位置，使选取的震源能够完整覆盖地下介质，避免震源选取过于集中导致局部信息冗余、局部信息缺失的情况，也避免了震源选取过于分散导致的部分位置地下信息缺失的情况，震源分块的依据是根据声波双程走时和震源与检波器位置大体估计震源的作用域，保证能够接收到完整的地下信息，随机震源分块依据如图\ref{RandomSourceBlock}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=3in]  {./Section5/RandomSourceBlock.png}}        
+\caption{\label{RandomSourceBlock} 随机震源分块示意图}      
+\end{figure}
+\par
+图\ref{RandomSourceBlock}中S1，S2分别代表两个震源，首先采用震源与检波器位置关系进行分析，则橘色的R1区域为震源S1的单独作用域，浅蓝色的R2区域为震源S2的单独作用域，粉色的R3区域则为震源S1和震源S2的共同作用域，然后以震源S1为例，半圆形区域为声波考虑双程走时的作用域，最后综合考虑则分析得到震源S1的真实作用域为震源S1的单独作用域与半圆形区域叠加的部分。
+\par
+算法\ref{AlgoRandomSource1}第3行随机在震源块中抽取独立震源，并将独立震源添加至震源序列$SList$，并以震源序列$SList$作为震源计算出目标函数的梯度，进而更新模型参量，当不满足收敛条件时则将计算得到的模型参量当作初始模型，并继续在震源块中抽取独立震源，然后添加至震源序列$SList$中，使用得到的$SList$作为震源计算目标函数的梯度并更新模型参量，最后重复该过程，直至反演结束，图\ref{RandomSourceAddition}详细描述了这一过程，其中填充点为已使用震源，未填充点为未使用震源。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4in]  {./Section5/RandomSourceAddition.png}}        
+\caption{\label{RandomSourceAddition} 随机震源震源更新示意图}      
+\end{figure}
+\par
+但从算法\ref{AlgoRandomSource1}的描述中可以发现一个问题，即由于每次全波形反演迭代使用的目标函数不同(参与计算的震源个数不同)，将导致使用L-BFGS最优化算法更新模型参数时会导致目标函数不收敛，为了保证L-BFGS最优化算法的收敛性，将算法\ref{AlgoRandomSource1}稍作修改，不是在每次反演迭代时改变$SList$，而是将$SList$在一定的迭代次数中保持恒定，因此，可以得到如算法\ref{AlgoRandomSource2}所示的能够保证目标函数收敛的随机震源反演策略：
+\begin{algorithm}[H]
+\caption{随机震源算法流程(修改后)}
+\label{AlgoRandomSource2}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Source$
+\Ensure
+$\rho,v$
+\State Initialization $Source\ Block \gets Source,SList=[\ ]$
+\For{all $Source\ Block$}
+\State Select \Call{RANDOM}{$Source\ Bolck$} Add to $SList$\For{all Iterations}
+\State Calculate Gradient by $SList$ according to Eq.\ref{5-2} and Eq.\ref{5-3} 
+\State Update $\rho$ and $v$ by L-BFGS
+\EndFor
+\EndFor
+\State \Return $\rho,v$
+\end{algorithmic}
+\end{algorithm}
+\par
+随机震源算法的核心代码如下所示：
+\begin{python}
+import Create_Model
+import Calculate_Gradient_NoSave_Pool
+import numpy as np
+import random
+from pathlib import Path
+from Optimization import para,options,Optimization
+
+...
+
+#获得真实模型数据(观测数据)
+para_data=[]
+for i in range(len(para.source_site)):
+    data=np.load('./ForwardData.npy')
+    para_data.append(data)
+#建立原始震源索引
+Original_Source=np.arange(0,source_number,\
+single_random_source_number).tolist()
+#初始化震源添加次数，2代表每个震源块中随机抽取2个独立震源
+for Inner_Iteration in range(2):
+    para.Inner_Iteration=Inner_Iteration
+    para.random_source_info.source_site=[]
+    para.data=[]
+    #划分震源块并随机抽取，建立初始随机震源序列
+    Start_Source=Original_Source*(Inner_Iteration+1)
+    Start_Source.sort()
+    Add_original_source=[]
+    for i in range(random_source_number):
+        Add_original_source+=random.sample\
+        (np.arange(single_random_source_number).\
+        tolist(),Inner_Iteration+1)
+    #更新随机震源序列  
+    random_source_index_list=np.add\
+    (Start_Source,Add_original_source).tolist()
+    random_source_index_list.sort()
+    for random_source_idx in random_source_index_list:
+        para.data.append\
+        (para_data[random_source_idx])
+        para.random_source_info.source_site.append\
+        (list(para.source_site[random_source_idx]))
+          
+    #如果使用初始频率反演则需要建立一个反演初始模型
+    if idx_freq==0 and Inner_Iteration==0:
+        irho,ivp=Create_Model.Initial_BP94(rho,vp,30)
+    #如果使用非初始频率，则将上一频率反演数据作为反演初始模型
+    elif idx_freq!=0 and Inner_Iteration==0:
+        dir_path='./%sHz_imodel_file'%frequence[idx_freq-1]
+        file_num=int(len(list(Path(dir_path).iterdir()))/2)-1
+        data=np.load('./%sHz_imodel_file/%s_imodel.npy'%\
+        (frequence[idx_freq-1],file_num))
+        irho=data[:int(len(data)/2)].\
+        reshape((para.xl+2*8+2*para.CPML,-1))
+        ivp=data[int(len(data)/2):].\
+        reshape((para.xl+2*8+2*para.CPML,-1))
+    #如果非初始震源序列，则使用上一震源序列反演数据作为反演初始模型
+    else:
+        dir_path='./%sHz_imodel_file'%frequence[idx_freq]
+        file_num=int(len(list(Path(dir_path).iterdir()))/2)-1
+        data=np.load('./%sHz_imodel_file/%s_imodel.npy'%\
+        (frequence[idx_freq],file_num))
+        irho=data[:int(len(data)/2)].\
+        reshape((para.xl+2*8+2*para.CPML,-1))
+        ivp=data[int(len(data)/2):].\
+        reshape((para.xl+2*8+2*para.CPML,-1))
+
+    #建立目标函数梯度计算的匿名函数
+    fh=lambda x,y:Calculate_Gradient_NoSave_Pool.misfit(x,y,para)    
+    #L-BFGS最优化算法参数设置
+    options.method='lbfgs'
+    options.tol=1e-4
+    #每个震源序列的反演次数设置，当前设置初始震源序列反演5次，
+    #添加震源后均反演10次
+    if Inner_Iteration==0:
+        options.maxiter=5
+        Optimization_=Optimization(fh,irho,ivp,1e-3)
+        imodel,info=Optimization_.optimization()
+    elif Inner_Iteration!=0 and\
+         Inner_Iteration!=single_random_source_number-1:
+        options.maxiter=10
+        Optimization_=Optimization(fh,irho,ivp,1e-3)
+        imodel,info=Optimization_.optimization()
+    else:
+        options.maxiter=10
+        Optimization_=Optimization(fh,irho,ivp,1e-3)
+        imodel,info=Optimization_.optimization()
+\end{python}
+\par
+\subsubsection{随机震源全波形反演算例}
+选取1994BP地形偏移国际标准模型\upcite{BP19941995}，该模型是由Sam Gray和Gary Maclean使用John Etgen的有限差分代码编写的加拿大推覆体合成数据集(Gray S. H., Marfurt Kurt J., 1995)。1994BP地形偏移国际标准模型如图\ref{BP1994TrueModel}所示，“$\times$”和“$\centerdot$”符号代表炮点和检波器位置，全波形反演使用的初始模型如图\ref{BP1994InitialModel}所示，设置1994BP地形偏移模型大小为2000m $\times$ 1500m，震源为30Hz的零相位Ricker子波，
+在地面激发21炮，地面布置400个检波点，全孔径接收，记录时长为1.25s，模型采样间隔为dt=5ms，采用多尺度串行全波形反演方法，分为10Hz低频反演频率与30Hz高频反演频率。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994TrueModel.png}}        
+\caption{\label{BP1994TrueModel} BP1994地形偏移国际标准模型}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994InitialModel.png}}        
+\caption{\label{BP1994InitialModel} BP1994模型反演初始模型}      
+\end{figure}
+\par
+为了更好地比较全波形双参数反演策略的计算精度及加速比，首先使用传统的全波形双参数反演方法对BP1994模型进行试算，反演策略采用多步长全波形反演策略，为简化书写命名为S1策略，S1策略没有加载正则化模型约束，这样做的原因在于对于复杂模型加载正则化模型约束将大幅增加反演耗时，图\ref{BP1994SingleSource}为传统全波形反演方法得到的双参数反演结果。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994SingleSource.png}}        
+\caption{\label{BP1994SingleSource} BP1994模型传统全波形反演策略反演结果}      
+\end{figure}
+从图\ref{BP1994SingleSource}可见，由于仅地面位置激发和接收，因此在深部区域反演效果相对浅层较差，并且由于模型两侧源点较少，因此得到的信息较模型中部少，推覆体反演效果相对中部较差，大角度推覆体反演结果出现中断现象，其原因在于当推覆体角度过大时地面观测接收到的反射信息严重不足。但模型反演结果与真实模型已经足够接近，总体反演效果达到预期。
+\par
+接下来考虑随机震源全波形双参数反演策略，将其命名为S2策略，将震源等距地划分为3个震源块，每个震源块中有7个独立震源，初始反演迭代选择的震源数量为3个独立震源，每次反演迭代均向初始震源中随机添加3个独立震源，最终反演使用了其中的15个独立震源，反演策略采用多步长全波形反演策略，首先不加载正则化模型约束进行全波形反演，反演结果如图\ref{BP1994RandomSource}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomSource.png}}        
+\caption{\label{BP1994RandomSource} BP1994模型随机震源全波形反演策略反演结果}      
+\end{figure}
+\par
+从图\ref{BP1994RandomSource}的全波形反演结果可知，采用随机震源全波形反演策略减少了震源数量，剔除了冗余数据，得到了于传统全波形反演策略类似的结果，但在对模型细节的刻画反演分辨率较传统全波形反演策略较差。最后引入S3策略，即加载考虑高阶项的修正全变差模型约束的随机震源全波形双参数反演策略，得到的反演结果如图\ref{BP1994RandomSourceMTV}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomSourceMTV.png}}        
+\caption{\label{BP1994RandomSourceMTV} 加载考虑高阶项的修正全变差正则化模型约束策略的BP1994模型随机震源全波形反演策略反演结果}      
+\end{figure}
+通过对比图\ref{BP1994RandomSource}与图\ref{BP1994RandomSourceMTV}发现，加载了考虑高阶项的修正全变差正则化模型约束策略后的随机震源全波形反演策略较不加载模型约束的反演结果具有更高的反演分辨率，主要体现在介质分界面更加清晰，模型细节更加突出，震荡现象被明显压制。
+为了更直观地体现三种算法的精度差异，选取图\ref{BP1994TrueModel}中紫色虚线所示的单道切线剖面进行对比，结果如图\ref{BP1994RandomSourceSchemeLine}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomSourceSchemeLine.png}}        
+\caption{\label{BP1994RandomSourceSchemeLine} 对比三种策略的全波形反演单道切线结果图}      
+\end{figure}
+\par
+图\ref{BP1994RandomSourceSchemeLine}中可以更加直观地看出，由于S1策略将所有震源都加入计算，因此具有精度很高的反演结果，在模型浅部能够很好地与实际模型匹配，由于模型深部信息较少，因此反演结果较浅部较差，但是反映了模型的总体趋势，达到了反演的要求；由于S2策略剔除了部分震源，因此反演结果较S1策略较差，主要体现在较S1策略曲线具有很明显的震荡，反演精度较差，但是也基本达到了反演的要求；S3策略由于加载了正则化模型约束，因此较S2策略具有更加明显的介质分界面且曲线形态也更加平滑，振荡现象具有明显的改善，模型总体精度较S1策略有所提高。
+\par
+综合考量各种全波形双参数反演策略的效率及精度，以便为选择合适的全波形双参数反演策略提供依据，因此定义一个反演策略评价函数：
+\begin{equation}\label{5-4}
+\phi_{Evaluation}=\ln((50\sigma+1)(Error_{\rho}+Error_v)^{\frac{1}{\sigma+0.1}}\frac{\ln(T_i)}{\ln(T_0)}+1)
+\end{equation}
+其中$\phi_{Evaluation}$为反演策略评价函数值，$\sigma$为介质密度模型重构误差与声波速度模型重构误差的标准差，$Error_{\rho}$和$Error_v$分别为介质密度和声波速度的模型重构误差，$T_i$为反演策略总耗时，$T_0$为参考反演策略总耗时，即传统单炮反演策略总耗时，当模型重构误差为零时，评价函数值为零，说明全波形反演结果与真实模型完全一致，具有最好的反演效果；当$T_i$很小时，表明反演策略具有很高的加速比，此时$\frac{\ln(T_i)}{\ln(T_0)}$很小，说明反演效率很高；$\sigma$的存在保证了介质密度模型重构误差与声波速度模型重构误差相差不大，即保证双参数同步反演的精度。该反演评价函数既反映了密度、速度同时反演的准确性，又反映了反演效率，其中反演结果的准确性占主导因素，经过计算，在不考虑时间项时，当$Error_{\rho}=Error_v=1$时函数取得最大值$\phi_{Evaluation}=\ln(1025)$，当$Error_{\rho}=Error_v=0$时函数取得最小值$\phi_{Evaluation}=0$，不考虑时间项时的函数图形如图\ref{Evaluation}所示，图中上层为反演策略评价函数值，xy面为反演策略评价函数的等值线图，当$Error_{\rho}=Error_v$时函数取得极小值，这就保证了反演算法的整体准确性，总体而言，评价函数值越小正演全波形反演策略越优。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=3in]  {./Section5/Evaluation.png}}        
+\caption{\label{Evaluation} 反演评价函数形态}      
+\end{figure}
+为了定量说明三种全波形反演策略的效率和精度，BP1994模型全波形反演参数如表\ref{RandomSourceTab}所示，不同策略的总耗时、模型重构误差及反演策略评价函数如图\ref{RandomSourceScheme}所示，全波形反演使用的计算机配置为Intel Xeon(R) Platimum 8168 CPU 2.76GHz$\times$96，RAM Memory 503.6GiB，系统环境为Ubuntu18.04.2 TLS，Gnome 3.28.2，编成环境为Anaconda3 Spyder4 Python3.6.2，反演过程使用震源并行技术。
+\begin{table}[H]
+\centering
+\caption{不同策略全波形反演参数表}\label{RandomSourceTab}
+\renewcommand\tabcolsep{0.2em}
+\begin{tabular}{cccccc}
+\toprule
+{策略} & {迭代次数}  & {单次迭代耗时(s)} & {总耗时(s)} & {模型重构误差$\rho$} & {模型重构误差$v$} \\
+\midrule 
+S1 & 28(L)+92(H) & 356.2531 & 43177 & 0.5316 & 0.5372\\
+
+S2 & 30(L)+60(H) & \tabincell{c}{ 131.1562(S2-3)\\
+175.5425(S2-6)\\
+206.5642(S2-9)\\
+242.1564(S2-12)\\
+272.1254(S2-15)} & 19516 & 0.5484 & 0.5165\\
+
+S3 & 30(L)+60(H) & \tabincell{c}{ 145.1562(S3-3)\\
+186.1256(S3-6)\\
+219.5432(S3-9)\\
+256.2161(S3-12)\\
+287.5646(S3-15)} & 20754 & 0.5322 & 0.5209\\
+\bottomrule
+\end{tabular}
+\end{table}
+表中S2、S3策略迭代次数为人工给定，由于初始震源数量为3个，每次迭代从震源块中增加3个独立震源，最终震源数量为15个，因此对于S2、S3策略而言单次耗时是不同的，括号中第一项代表全波形反演策略，第二项代表当前使用的震源数量。从表\ref{RandomSourceTab}可以得到如下结论：S1策略具有很低的模型重构误差，但是单次反演迭代耗时巨大，且需要较高的反演迭代次数才能够达到反演终止条件，反演效率十分低下；S2策略给定了较少的反演迭代次数，单次迭代耗时对比S1策略有所下降，总耗时加速比为2.21，但是由于震源数量的减少，使得地下介质密度信息不足，进而导致增加了介质密度重构误差，从声波速度重构误差减小来看说明对于速度而言震源相对冗余；S3策略加载了正则化模型约束，导致单次反演迭代耗时增加，但对比S1策略仍然高效，总耗时加速比为2.08，同样由于震源数量的减少，使得底下介质信息不足，导致了模型重构误差增加的问题，但是由于加载了正则化模型约束在一定程度上较S2策略降低了部分模型重构误差，最终反演结果显示模型重构误差基本上满足全波形反演的要求。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4in]  {./Section5/RandomSourceScheme.png}}        
+\caption{\label{RandomSourceScheme} 不同策略全波形反演的模型重构误差、总耗时及反演策略评价函数对比图}      
+\end{figure}
+图\ref{RandomSourceScheme}更加直观地表示出S1策略具有较好的模型重构误差，但是反演总耗时巨大；S2策略反演总耗时明显降低，但是由于震源数量的减少导致介质密度模型重构误差增加，且双参数之间的模型重构误差具有较大的差异，反演效果并不理想；S3策略反演总耗时较S2策略有所增加，但是降低了介质密度模型重构误差，且双参数之间的模型重构误差较为接近，并且当使用较少的震源进行全波形反演时可以发现介质密度的模型重构误差均大于声波速度的模型重构误差，但传统全波形反演策略的介质密度重构误差却要小与声波速度模型重构误差，这个现象说明了当减少震源数量时会损失部分介质密度信息，但对声波速度信息而言震源数量就显得冗余了，由于S2策略导致的介质密度模型重构误差增加，且拉大了双参数间的模型重构误差差距，因此，反演评价函数值大于S1策略，说明S2策略相比S1策略效果要差，S3策略的反演策略评价函数值小于S1策略，说明综合考虑全波形反演的精度及效率之后S3策略为全波形反演的最优策略。
+\subsection{震源编码全波形反演策略}
+震源编码全波形反演策略是指首先随机生成时域震源编码序列，然后通过随机选取独立震源与时域震源编码序列作卷积运算并叠加形成超级炮，最后将超级炮剖面当作震源来进行全波形反演的一种高效全波形反演策略，常用的几种震源编码方案有：1.随机极性编码(Krebs J.R., Anderson J.E., Hinkley D., Neelamani R., Lee S., Baumstein A., Lacasse M.D., 2009)\upcite{Krebs2009} 2.随机时移编码(Romero L.A., Ghiglia D.C., Ober C.C Morton, S.A.,2000；Schuster, G.T., Wang, X., Huang, Y., Dai, W. Voonyasiriwat, C.， 2011)\upcite{Romero1999,Schuster2011}3.平面波编码(Vigh, D. Starr, E.W., 2008)\upcite{Vigh2008}。
+\subsubsection{震源编码全波形反演算法}
+如果将多个炮的剖面直接叠加形成超级炮进而进行全波形反演，则会因为直接叠加时相邻炮间产生的串扰噪声而造成反演的不稳定及反演结果存在大量噪声的问题，因此在减少全波形反演耗时的同时，能够尽可能地压制炮间叠加产生的串扰噪声，则需要给定一个随机时域震源编码序列与原始炮集做卷积运算再进行叠加，随机时域震源编码序列可以定义为：
+\begin{equation}\label{5-5}
+e_n=(-1)^{P_r}A_r(1-2\pi^2(ft-1-t_r)^2)\exp(-\pi^2(ft-1-t_r)2)
+\end{equation}
+\par
+式(\ref{5-5})实质为随机振幅、随机相位、随机极性的Ricker子波序列，其中$P_r$为改变编码序列极性而随机给出的整数序列，$A_r$为改变编码序列振幅而随机给出的实值序列，$t_r$为改变编码序列相位而随机给出的实值序列，通过添加随机时延改变编码序列的相位。对3者的不同设置对应了不同的震源编码方法，当$A_r$、$t_r$为常数，$P_r$为随机序列时，对应随机极性震源编码策略；当$A_r$、$P_r$为常数，$t_r$为随机序列时，对应随机相位震源编码策略；当$P_r$、$t_r$为常数，$A_r$为随机序列时，对应随机振幅震源编码策略；当$P_r$、$A_r$和$t_r$均为随机序列时，得到的时域震源编码序列同时具有极性随机、振幅随机和相位随机的特点。
+\par
+在以上三种随机时域震源编码序列的基础上，增加炮点位置随机的特点，即随机抽取炮点组成一个超级炮剖面，这样就有了四种随机策略，分别为：(a)横向炮点位置随机；(b)纵向炮点相位随机(对各个震源加上一个随机长度的时延)；(c)纵向炮点极性随机(分别对各个炮点乘以均匀随机的1或-1)；(d)震源振幅随机。
+\par
+由于使用了震源编码全波形反演策略，则需要将式(\ref{3-3})所示的反演目标函数修改为如下形式：
+\begin{equation}\label{5-6}
+Q(\boldsymbol{p})=\frac{1}{2}\sum_{m=1}^{M}\sum_{n=1}^{N}\int_{0}^{T} |e_n \otimes U_m(\boldsymbol{p};\boldsymbol{r}_n,t)-e_n \otimes \tilde{U}_m(\boldsymbol{r}_n,t)|^2dt
+\end{equation}
+\par
+式(\ref{5-6})中，$e_n$为时域震源编码序列，$\otimes$表示时域卷积，由于计算第一项时可以将所有震源编码入超级炮同时激发，因此只需要计算一次$U_m$而不需要计算M次声波正演模拟，这样就大大缩减了全波形反演的耗时，对于全波形反演目标函数的梯度推导，可以直接令$U_{m1}=e_n \otimes U_m$，$\tilde{U}_{m1}=e_n \otimes \tilde{U}_m$，则有：
+\begin{equation}\label{5-7}
+g_{v}=\sum_{m=1}^M \int_0^T \frac{2}{\rho v^3}\frac{\partial p_1}{\partial t}p_1^*dt
+\end{equation}
+\begin{equation}\label{5-8}
+g_{\rho}=\sum_{m=1}^M \int_0^T (\frac{1}{\rho^2 v^2}\frac{\partial p_1}{\partial t}p_1^*+\frac{1}{\rho^2}\frac{\partial p_1}{\partial x}v_{x1}^*+\frac{1}{\rho^2}\frac{\partial p_1}{\partial z}v_{z1}^*)dt
+\end{equation}
+\par
+其中$p_1$为超级炮剖面激发的波场，$p_1^*,v_{x1}^*,v_{z1}^*$为超级炮剖面激发的伴随波场。
+\par
+震源编码全波形反演步骤如下：
+\par
+首先给定反演初始模型$\rho_{initial},v_{initial}$、超级炮组合数$SuperShotsNum$和随机震源编码序列$e_n$，之后，随机抽取独立震源并将其添加值相应的超级炮组合$Super\ Shots$中，进行正演计算获得相应的正演剖面$\tilde{U}_m$，接着使用正演剖面数据$\tilde{U}_m$与随机震源编码序列$e_n$做卷积运算，得到超级炮剖面数据$\tilde{U}_{m1}$，然后便使用猜测模型进行正演计算并同样与随机震源编码序列$e_n$做卷积运算，分别得到超级炮剖面数据$U_{m1}$和相应的波场数据，用来计算目标函数的梯度，并更新模型参数，得到全波形反演结果。
+震源编码的流程如算法\ref{AlgoSourceEncoding}所示：
+\begin{algorithm}[H]
+\caption{震源编码算法流程}
+\label{AlgoSourceEncoding}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Source$
+\Ensure
+$\rho,v$
+\State Initialization $e_n,Super\ Shots \gets$ \Call{RANDOM}{$Source$}$\otimes e_n$ 
+\State Compute $\tilde{U}_{m1}=e_n \otimes \tilde{U}_m$ according to Eq.\ref{5-6}
+\For{all Iterations}
+\State Calculate Gradient by $Super\ Shots$ according to Eq.\ref{5-8}
+\State Update $\rho$ and $v$ by L-BFGS 
+\EndFor
+\State \Return $\rho,v$
+\end{algorithmic}
+\end{algorithm}
+\par
+\subsubsection{直接叠加超级炮全波形反演策略}
+若不考虑时域震源编码序列与原始剖面做卷积运算再叠加形成超级炮剖面而是直接将剖面叠加形成超级炮剖面确实会节省一些反演时间，但是这样就无法压制由于直接叠加剖面引起的相邻炮间产生的串扰噪声，从而导致全波形反演不稳定，且反演效果因串扰噪声的存在而十分杂乱，不能满足全波形反演的精度要求。
+\par
+以BP1994模型为例，尝试不使用时域震源编码序列而是直接叠加形成超级炮剖面进行全波形反演计算，为简化描述将传统全波形反演方法称为S1策略，直接叠加形成超级炮全波形反演策略称为S2策略，叠加后的超级炮剖面如图\ref{BP1994DirectSuperShots}所示，图中可见震源除位置进行随机选取外未做任何其他处理，仅仅进行了简单的叠加运算，形成了一个超级炮剖面，各炮间存在较为严重的串扰噪声，各炮间的数据相互干扰。图\ref{BP1994DirectResult}为S1策略的全波形反演结果。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=3in]  {./Section5/BP1994DirectSuperShots.png}}        
+\caption{\label{BP1994DirectSuperShots} 直接叠加形成超级炮剖面图}  
+\end{figure} 
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994DirectResult.png}}        
+\caption{\label{BP1994DirectResult} 直接叠加形成超级炮全波形反演结果} 
+\end{figure}
+\par
+图\ref{BP1994DirectResult}表示的S1策略全波形反演结果由于未对炮间的串扰噪声进行处理，因此导致了很差的反演结果，重构模型中褶皱界面杂乱无章，断层界面也不清晰，信噪比很差，反演效果非常不理想。
+\subsubsection{随机极性震源编码全波形反演策略}
+考虑随机极性震源编码策略，为简化描述将这种策略称为S3策略，随机极性震源编码策略是指采用具有随机极性的时域震源序列与观测剖面做卷积运算后叠加形成超级炮再进行全波形反演的方法，如式(\ref{5-5})所示，当$A_r$、$t_r$为常数，$P_r$为随机序列时，即为随机极性震源编码策略。
+\par
+图\ref{BP1994PolarRandomSuperShot}为随机极性时域震源编码序列及与原始剖面做卷积运算并叠加得到的超级炮剖面，图中可见，时域震源编码序列与超级炮剖面均具有随机极性和炮点位置随机的特点，然而由于极性反转的存在，在叠加得到的超级炮剖面中存在零值，因而在特定的位置间导致部分信息的丢失，并引入了新的串扰噪声(零值)，可以预见，S3策略的反演结果虽然压制了部分串扰噪声，但是效果依旧不是十分理想。图\ref{BP1994PolarRandomResult}为S3策略全波形反演得到的结果，由于随机极性震源编码策略对炮间的串扰噪声具有一定的压制作用，相对S2策略的反演精度大幅提高，噪声得到了较好的削弱，异常体大体轮廓能够清晰反映，但反演结果的中深层部位依然存在较大的串扰噪声，主要体现在反演结果具有明显的震荡现象。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994PolarRandomSuperShot.png}}        
+\caption{\label{BP1994PolarRandomSuperShot} 随机极性震源编码策略时域震源编码序列及超级炮}  
+\end{figure} 
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994PolarRandomResult.png}}        
+\caption{\label{BP1994PolarRandomResult} 随机极性震源编码策略全波形反演结果} 
+\end{figure}
+\subsubsection{随机相位震源编码全波形反演策略}
+考虑随机相位震源编码策略，为简化描述将这种策略称为S4策略，随机相位震源编码策略是指采用具有随机相位的时域震源序列(即为震源序列加上不同的时延)与观测剖面做卷积运算后叠加形成超级炮再进行全波形反演的方法，如式(\ref{5-5})所示，当$A_r$、$P_r$为常数，$t_r$为随机序列时，即为随机相位震源编码策略。
+\par
+图\ref{BP1994PhaseRandomSuperShot}为随机相位时域震源编码序列及与原始剖面做卷积运算并叠加得到的超级炮剖面，图中可见，时域震源编码序列与超级炮剖面均具有随机相位和炮点位置随机的特点，然而由于加入了随机时延，将导致深层信息不够完整，炮间仍具有串扰噪声，可以预见，S4策略的反演结果将导致模型深部结果较差的问题。图\ref{BP1994PhaseRandomResult}为S4策略全波形反演得到的结果，由于随机相位震源编码策略对炮间的串扰噪声具有一定的压制作用，异常体大体轮廓能够清晰显示，与S3策略反演结果类似，在深层部分仍绕存在未消除的串扰噪声，反演结果亦有振荡现象，且由于深层部分的信息缺失，导致了相比S3策略更差的深层反演结果。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994PhaseRandomSuperShot.png}}        
+\caption{\label{BP1994PhaseRandomSuperShot} 随机相位震源编码策略时域震源编码序列及超级炮}  
+\end{figure} 
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994PhaseRandomResult.png}}        
+\caption{\label{BP1994PhaseRandomResult} 随机相位震源编码策略全波形反演结果} 
+\end{figure}
+\subsubsection{随机振幅震源编码全波形反演策略}
+考虑随机振幅震源编码策略，为简化描述将这种策略称为S5策略，随机振幅震源编码策略是指采用具有随机振幅的时域震源序列(即为震源序列加上不同的时延)与观测剖面做卷积运算后叠加形成超级炮再进行全波形反演的方法，如式(\ref{5-5})所示，当$P_r$、$t_r$为常数，$A_r$为随机序列时，即为随机振幅震源编码策略。
+\par
+图\ref{BP1994AmplitudeRandomSuperShot}为随机振幅时域震源编码序列及与原始剖面做卷积运算并叠加得到的超级炮剖面，图中可见，时域震源编码序列与超级炮剖面均具有随机振幅和炮点位置随机的特点，由于加入了随机振幅，因此炮间的串扰噪声得到了很好的改善，地下信息也不存在缺失的情况，然而由于振幅的不对称性，将导致参与反演的各炮间信息不对称，可以预见，S5策略的反演结果虽然较S2、S3、S4策略有所提升，但依旧存在着细节反演不准确的问题。图\ref{BP1994AmplitudeRandomResult}为S5策略全波形反演得到的结果，由于随机振幅震源编码策略对炮间的串扰噪声具有一定的压制作用，异常体大体轮廓能够清晰显示，与S3、S4策略反演结果类似，在深层部分仍然存在未消除的串扰噪声，反演结果亦有振荡现象，且在细节方面较S4策略存在差距，主要体现在细节没有得到很好的突出，这是由于炮间信息不对称而导致的。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994AmplitudeRandomSuperShot.png}}        
+\caption{\label{BP1994AmplitudeRandomSuperShot} 随机振幅震源编码策略时域震源编码序列及超级炮}  
+\end{figure} 
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994AmplitudeRandomResult.png}}        
+\caption{\label{BP1994AmplitudeRandomResult} 随机振幅震源编码策略全波形反演结果} 
+\end{figure}
+\subsubsection{动态随机震源编码全波形反演策略}
+动态随机震源编码全波形反演策略是指在综合考虑以上三种随机时域震源编码序列及炮点位置随机的基础上，对随机编码策略作出一些改进，即每进行5次全波形反演迭代后，便重新从参与反演的所有震源中随机抽出若干炮重新组合并进行随机震源编码，使参与编码的独立震源也是随机挑选的，具有炮点位置动态随机、炮点组合动态随机的特点\upcite{Lianghuang2017}，以上四种随机策略综合动态策略共同形成了动态随机震源编码策略，该策略能够从多个方便综合压制炮间的串扰噪声，各种随机时域震源编码方法优势互补，共同作用极大地削弱了串扰噪声对全波形反演的影响，并且由于采用了动态策略，既避免了相同的独立震源导致的相同的串扰噪声作用在每次反演迭代中\upcite{Lianghuang2017}，从而进一步压制串扰噪声，又避免了随机相位震源编码造成深部信息缺失及随机振幅震源编码造成炮信息不对称的问题，并对受串扰噪声干扰的部分加以修正，从而大幅提高全波形反演的精度。动态随机震源编码全波形反演算法步骤如下：
+\par
+算法的整体步骤与震源编码全波形反演策略相同，在生成超级炮剖面数据$Super\ Shots$时采用在反演迭代数次后重新生成一个新的随机超级炮剖面数据，并将上次使用的超级炮剖面数据的反演结果作为该次反演的初始模型，最后重复此过程，得到最终的动态随机震源编码全波形反演结果。
+\par
+动态随机震源编码算法如算法\ref{AlgoDynamicSourceEncoding}所示。
+\begin{algorithm}[H]
+\caption{动态随机震源编码算法流程}
+\label{AlgoDynamicSourceEncoding}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Source$
+\Ensure
+$\rho,v$
+\State Initialization $e_n$
+\For{all Dynamic}
+$Super\ Shots \gets$ \Call{RANDOM}{$Source$}$\otimes e_n$ 
+\State Compute $\tilde{U}_{m1}=e_n \otimes \tilde{U}_m$ according to Eq.\ref{5-6}
+\For{all Iterations}
+\State Calculate Gradient by $Super\ Shots$ according to Eq.\ref{5-8}
+\State Update $\rho$ and $v$ by L-BFGS 
+\EndFor
+\EndFor
+\State \Return $\rho,v$
+\end{algorithmic}
+\end{algorithm}
+\par
+如式(\ref{5-5})所示，当$P_r$、$t_r$、$A_r$均为随机序列时，再加上动态策略，便组成了动态随机震源编码策略，为简化描述，该策略称为S6策略。
+\par
+随机动态震源编码算法的核心代码如下所示：
+\begin{python}
+import Create_Model
+import Calculate_Gradient_NoSave_Pool
+import numpy as np
+import random
+from pathlib import Path
+from Optimization import para,options,Optimization
+
+...
+
+#建立超级炮信息
+#超级炮组数
+super_source_num=4
+#总震源数
+source_num=40
+#每个超级炮剖面中含有的独立震源数
+single_source_num=int(source_num/super_source_num)        
+#震源编码
+#相位随机
+phase_data=np.random.uniform(0,10,source_num)
+#振幅随机
+amplitude_data=np.random.uniform(1,10,source_num)
+#编码序列长度及主频
+add_k_max=400
+add_ricker_freq=60
+#极性随机
+t=np.arange(add_k_max)*para.dt
+shuffle_M=np.arange(source_num)
+np.random.shuffle(shuffle_M)
+amplitude_data[shuffle_M[:int(len(shuffle_M)/2)]]*=1
+amplitude_data[shuffle_M[int(len(shuffle_M)/2):]]*=-1
+#卷积计算
+convolve_f=[]
+for idx_ in range(source_num):
+    convolve_f.append\
+    (Wavelet.ricker(t,add_ricker_freq,amplitude_data[idx_],\
+    phase_data[idx_]))   
+para.f=[]
+record_f=[]
+for idx_ in range(source_num):
+    record_f.append(convolve_f[idx_])
+    para.f.append\
+    (scipy.signal.convolve(original_f,convolve_f[idx_])[:para.k_max])
+para.convolve_data=[]
+for idx_ in range(source_num):
+    data_tmp=np.empty((para.k_max+add_k_max-1,para_data[idx_].shape[1]))
+    for tmp_idx_ in range(para_data[idx_].shape[1]):
+        data_tmp[:,tmp_idx_]=scipy.signal.convolve\
+        (convolve_f[idx_],para_data[idx_][:,tmp_idx_])
+    para.convolve_data.append(data_tmp[:para.k_max,:])        
+            
+#如果使用初始频率，则建立反演初始模型
+if idx==0:
+    irho,ivp=Create_Model.Initial_BP94(rho,vp,30)
+#如果使用非初始频率，则使用上个频率计算出的模型参数作为反演初始模型
+else:
+    dir_path='./%sHz_imodel_file'%frequence[idx-1]
+    file_num=int(len(list(Path(dir_path).iterdir()))/2)-1
+    data=np.load('./%sHz_imodel_file/%s_imodel.npy'%\
+    (frequence[idx-1],file_num))
+    irho=data[:int(len(data)/2)].reshape((para.xl+2*8+2*para.CPML,-1))
+    ivp=data[int(len(data)/2):].reshape((para.xl+2*8+2*para.CPML,-1))
+#建立目标函数梯度计算的匿名函数
+fh=lambda x,y:Calculate_Gradient_NoSave_Pool.misfit(x,y,para)    
+imodel=np.hstack((irho.flatten(),ivp.flatten()))
+#重建超级炮次数，20表示需要重建20次超级炮剖面进行全波形反演
+for Iteration in range(20):
+    #数据随机
+    #建立超级炮剖面
+    irho=imodel[:int(len(imodel)/2)]
+    ivp=imodel[int(len(imodel)/2):]
+    shuffle_Source=np.arange(source_num)
+    np.random.shuffle(shuffle_Source)
+    para.super_source_info.source_site=[]
+    para.super_source_info.f=[]
+    para.data=[]
+    for idx_ in range(super_source_num):
+        para.super_source_info.source_site.append\
+        (list(para.source_site[shuffle_Source\
+        [single_source_num*idx_:single_source_num*(idx_+1)]]))
+        tmp_f=[]
+        p_data=0
+        for tmp_idx in range(single_source_num):
+            tmp_f.append\
+            (para.f[shuffle_Source[single_source_num*idx_+tmp_idx]])
+            p_data+=(para.convolve_data[shuffle_Source\
+            [single_source_num*idx_+tmp_idx]])
+        para.data.append(p_data)
+        para.super_source_info.f.append(tmp_f)
+    #L-BFGS最优化算法参数设置  
+    options.method='lbfgs'
+    options.tol=1e-4
+    options.maxiter=5
+    Optimization_=Optimization(fh,irho,ivp)
+    imodel,info=Optimization_.optimization()
+\end{python}
+\par
+图\ref{BP1994ESSSuperShot}为动态随机震源编码策略时域震源编码序列及与原始剖面做卷积运算并叠加得到的超级炮剖面，图中可见，时域震源编码序列与超级炮剖面均具有极性随机、相位随机、振幅随机和炮点位置随机的特点，由于综合了各种随机策略的优点，对于各种随机策略的缺陷也可以通过加载另外的随机策略进行弥补，再加上采用动态策略，不仅可以有效避免相同的串扰噪声每次作用在相同位置，还能够有效弥补随机振幅震源编码带来的炮点不对称问题，并且可以有效地消除随机相位震源编码引起的深部信息缺失问题。图\ref{BP1994ESSResult}为S6策略全波形反演得到的结果，对炮间的串扰噪声具有很好的压制作用，异常体轮廓能够清晰显示，深层部分的反演结果显示串扰噪声也基本被压制，震荡现象明显减小，反演精度与传统反演方法接近。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994ESSSuperShot.png}}        
+\caption{\label{BP1994ESSSuperShot} 动态随机震源编码策略时域震源编码序列及超级炮}  
+\end{figure} 
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994ESSResult.png}}        
+\caption{\label{BP1994ESSResult} 动态随机震源编码策略全波形反演结果} 
+\end{figure}
+\par
+综上所述，震源编码全波形反演策略虽然能够有效提高全波形反演的计算效率，但是以精度的损失作为代价的，如何在反演过程中平衡计算精度和见算效率之间的关系，在提高反演效率的基础上最大程度地保证反演精度至关重要。为了进一步压制深层部分的振荡现象，最好的解决方法是引入正则化模型约束，因此，将考虑高阶项的修正全变差正则化模型约束与动态随机震源编码策略相结合形成综合反演策略，成为S7策略，得到的全波形反演结果如图\ref{BP1994ESSMCTVResult}所示，图中明显可见，综合反演策略的反演结果与传统全波形反演得到的结果更为接近，异常体分界面更加清晰，串扰噪声得到了进一步的压制，再深层部分和细节部分几乎没有震荡现象，与真实模型更加接近。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994ESSMCTVResult.png}}        
+\caption{\label{BP1994ESSMCTVResult} 考虑高阶项的修正全变差正则化模型约束的动态随机震源编码策略全波形反演结果} 
+\end{figure}
+\subsubsection{震源编码全波形反演策略对比}
+本节主要从反演精度和反演效率两个方面比较以上描述的震源编码全波形反演策略，对于反演精度而言，为了更直观地说明上述七种(S1-S7)不同策略的反演精度，选取图\ref{BP1994TrueModel}中紫色的纵向界面，得到各种策略下的单道切线如图\ref{BP1994SourceEncodingSchemeLine}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994SourceEncodingSchemeLine.png}}        
+\caption{\label{BP1994SourceEncodingSchemeLine} 对比各种策略下的单道切线结果图} 
+\end{figure}
+\par
+图\ref{BP1994SourceEncodingSchemeLine}所示的七种全波形反演策略的反演结果与真实模型的单道切线对比结果显示，传统全波形反演策略(S1)总体趋势与真实模型能够较好地吻合，浅层偏差较小，由于观测方式为地面观测，得到的深层信息不足，因此导致了深层出现细微偏差，S1策略整体符合全波形反演的要求，但耗时巨大，反演效率十分低下；直接叠加得到超级炮全波形反演策略(S2)与真实模型虽然具有大体相同的曲线形态，但是数值上具有很大的偏离，反演结果具有剧烈的震荡和很大的串扰噪声，重构结果十分杂乱，反演精度很差；随机极性震源编码全波形反演策略(S3)、随机相位震源编码全波形反演策略(S4)与随机振幅震源编码全波形反演策略(S5)的反演结果类似，与真实模型的大体趋势较为吻合，相对S2策略反演精度有了很大的提升，但是在细节方面都存在着较剧烈的震荡，说明串扰噪声依然存在，没有得到很好地压制，尤其是深层部分，受到串扰噪声的影响更为严重；动态随机震源编码全波形反演策略(S6)的反演结果与S1策略反演结果的单道切线基本重合，在突变界面处较S1策略更为明显，曲线基本不存在大的震荡，说明串扰噪声得到了很大的削弱；加载考虑高阶项的修正变差正则化模型约束的动态随机震源编码策略(S7)在S6策略反演结果的基础上进一步压制了串扰噪声，减小了曲线的震荡，使得曲线形态更加平滑，且在介质分界面处的突变更加明显，与真实模型最为接近，具有最好的反演结果。
+\par
+为了定量说明七种全波形反演策略的反演效率和计算精度，表\ref{SourceEncodingTab}详细给出了采用不同全波形反演策略的BP1994模型双参数反演参数，全波形反演使用的计算机配置为Intel Xeon(R) Platimum 8168 CPU 2.76GHz$\times$96，RAM Memory 503.6GiB，系统环境为Ubuntu18.04.2 TLS，Gnome 3.28.2，编成环境为Anaconda3 Spyder4 Python3.6.2，反演过程使用震源并行技术。
+
+\begin{table}[H]
+\centering
+\caption{不同策略全波形反演参数表}\label{SourceEncodingTab}
+\renewcommand\tabcolsep{0.25em}
+\begin{tabular}{cccccc}
+\toprule
+{策略} & {迭代次数}  & {单次迭代耗时(s)} & {总耗时(s)} & {模型重构误差$\rho$} & {模型重构误差$v$} \\
+\midrule 
+S1 & 28(L)+92(H) & 356.2531 & 43177 & 0.5316 & 0.5372\\
+S2 & 79(L)+81(H) & 165.7408 & 26783 & 0.8976 & 0.8433\\
+S3 & 47(L)+147(H) & 166.5273 & 32629 & 0.5496 & 0.5390\\
+S4 & 26(L)+149(H) & 166.7539 & 29473 & 0.5630 & 0.5408\\
+S5 & 35(L)+140(H) & 166.4637 & 29306 & 0.5410 & 0.5231\\
+S6 & 25(L)+65(H) & 165.4385 & 16378 & 0.5336 & 0.5284\\
+S7 & 25(L)+65(H) & 178.6794 & 17665 & 0.5174 & 0.5161\\
+\bottomrule
+\end{tabular}
+\end{table}
+\par
+表\ref{SourceEncodingTab}中S6、S7策略的反演迭代次数为自行设定，其他全波形反演策略的迭代次数均由反演达到终止条件时自行终止得到，表\ref{SourceEncodingTab}中的数据明显显示S1策略具有很低的模型重构误差，但单次反演迭代耗时巨大，且需要较高的高频反演迭代次数才能够达到终止条件，反演效率低下；S2策略具有较多的低频反演迭代次数，证明在反演模型大体轮廓的过程中由于串扰噪声的影响降低了反演的收敛性，且最终结果具有很高的重构误差；S3策略、S4策略和S5策略都降低了低频反演迭代次数，且S4策略在低频反演时更为高效，但三者都同时增加了高频反演迭代次数，证明在对低频模型进行细节反演时由于串扰噪声的影响降低了反演的收敛性，三者的单次反演迭代加速比大约为2.14，但由于增加了反演迭代总次数，因此总耗时加速比仅为1.32、1.46和1.47，最终反演综合结果模型重构误差都高于S1策略；S6策略和S7策略在给定较少反演迭代次数的情况下达到了与S1策略十分接近的反演精度，S7策略甚至优于S1策略，单次反演迭代加速比分别为2.15和1.99，然而总耗时加速比分别为2.64和2.44，说明动态随机全波形反演策略可以在较少反演迭代次数的情况下达到与传统全波形反演策略接近的反演精度。
+\par
+图\ref{SourceEncodingScheme}为七种不同全波形反演策略的模型重构误差、总耗时及反演策略评价函数对比图，很直观地反映了S1策略具有较低的模型重构误差，但同时具有最长的反演总耗时；S2策略具有相当高的模型重构误差，但反演总耗时明显降低，S3策略、S4策略及S5策略具有较低、总体而言都大于S1策略的模型重构误差，反演总耗时也有明显的降低，但都存在着双参数反演精度相差过大的问题；S6策略具有与S1策略接近的模型重构误差，双参数反演精度相差也不大，且具有最低的反演总耗时；S7策略具有比S1策略更低的模型重构误差，双参数反演精度几乎相等，反演总耗时由于正则化模型约束的加载略高于S6策略，但相比其他策略仍大幅降低。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4in]  {./Section5/SourceEncodingScheme.png}}        
+\caption{\label{SourceEncodingScheme} 不同策略全波形反演的重构误差、总耗时及反演策略评价函数对比图}      
+\end{figure}
+\par
+结合反演策略评价函数值也可以看出，S1策略具有较小的反演评价函数值；S2策略由于重构结果太差因此具有最大的反演评价函数值；S3策略、S4策略和S5策略反演总耗时相差不大，但是由于重构结果的差异，反演函数评价值由小到大分别为S5策略、S3策略、S4策略；说明三种策略中S5策略更为有效；S6策略的反演重构结果与S1策略的反演结果比较接近，但是具有更高的反演效率，因此获得了更小的反演评价函数值，S7策略的反演评价函数值最小，综合上述讨论结果可以认为S7策略为最优的全波形反演策略。
+
+\subsection{随机震源与震源编码全波形联合反演策略}
+根据上文的叙述，随机震源全波形反演策略的实质是剔除冗余炮点，但是反演算法的核心依然是传统的全波形反演算法，因此不存在炮间的串扰噪声，反演结果具有较高的分辨率；震源编码全波形反演策略的实质是将多个震源剖面叠加为一个超级炮震源剖面，利用超级炮震源替代原始震源，从而减少震源的个数，各种随机策略和动态策略的加载是为了压制炮间存在的串扰噪声，但是串扰噪声无法完全消除，因此通过结合随机震源全波形反演策略及震源编码反演策略各自的优点，形成随机震源与震源编码全波形联合反演策略。
+\subsubsection{随机震源与震源编码全波形联合反演}
+由于震源编码全波形反演策略旨在通过将多个震源剖面叠加为一个超级炮震源剖面，然后将超级炮作为一个震源来替代原始震源达到减少震源个数的目的，因此，当超级炮组数与原始震源个数相等时，震源编码全波形反演策略就退化为传统全波形反演策略，并且随着超级炮组数的增多，炮间的串扰噪声也随之减少，至此，可以提出一种新的全波形反演算法，即使用随机震源的反演策略分块抽取独立震源并叠加为超级炮，随着反演迭代次数的增加，进而增加超级炮的组数，这样就可以逐步减少炮间的串扰噪声，对反演模型逐步进行修正，从而取得更高的反演精度。
+\par
+随机震源与震源编码全波形联合反演策略的计算步骤如下：
+\par
+首先给定一个初始的超级炮组数$SuperShotsNum$、反演初始模型$\rho_{initial},v_{initial}$和随机震源编码序列$e_n$，之后将震源$Source$划分震源块$Source\ Block$，接下来在震源块中均匀抽取独立震源添加至相应的超级炮剖面中，利用L-BFGS最优化算法进行反演计算，然后增加超级炮组数$SuperShotsNum$，在震源块中均匀抽取独立震源添加至相应的超级炮剖面中，使用上次计算得到的模型参量作为该次反演初始模型，利用L-BFGS最优化算法进行反演计算，重复以上工作，最后得到最终反演结果。
+\par
+随机震源与震源编码全波形联合反演策略的计算流程如算法\ref{AlgoRandomSourceEncoding}所示
+\begin{algorithm}[H]
+\caption{随机震源与震源编码全波形联合反演算法流程}
+\label{AlgoRandomSourceEncoding}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Source$
+\Ensure
+$\rho,v$
+\State Initialization $SuperShotsNum,e_n$
+\For{all $SuperShotsNum$}
+\State $Source\ Block \gets Source$
+\State Compute $\tilde{U}_{m1}=e_n \otimes \tilde{U}_m$ according to Eq.\ref{5-6}
+\State $Super\ Shots \gets$ \Call{RANDOM}{$Source\ Block$} $\otimes e_n$
+\For{all Iterations}
+\State Calculate Gradient by $Super\ Shots$ according to Eq.5-8
+\State Update $\rho$ and $v$ by L-BFGS
+\EndFor
+\State Add $SuperShotsNum$
+\EndFor
+\State \Return $\rho,v$
+\end{algorithmic}
+\end{algorithm}
+\par
+下面对算法\ref{AlgoRandomSourceEncoding}的每一步进行详细的说明：
+\par
+算法\ref{AlgoRandomSourceEncoding}第1行首先初始化随机震源编码序列$e_n$和超级炮组数$SuperShotsNum$，第2行对当前超级炮组数进行循环，通过随机震源全波形反演的思路根据超级炮的个数均匀分配震源块，这样做的目的在于使超级炮尽可能覆盖所有地下介质情况，保证每个超级炮中含有的独立震源能够完全反映地下构造，图\ref{RandomSourceEncoding}详细描述了这个过程，通过颜色对应将震源剖面分配至各个超级炮剖面进行叠加，第4、5行通过随机震源全波形反演的思路对震源块随机抽取并与时域震源编码序列做卷积运算形成超级炮剖面。
+\par
+\begin{figure}[H]        
+\centerline{\includegraphics[width=3in]  {./Section5/RandomSourceEncoding.png}}        
+\caption{\label{RandomSourceEncoding} 随机震源与震源编码全波形联合反演策略震源分配示意图}      
+\end{figure}
+\par
+算法\ref{AlgoRandomSourceEncoding}第6-9行通过超级炮进行全波形反演计算，第10行改变了当前超级炮的组数，超级炮组数由小到大，这样做的原因时当超级炮个数较少时，每一个超级炮中含有的独立震源个数较多，炮间的串扰噪声也就越强烈，使用这样的数据仅能反演到模型的大体形态，由于串扰噪声的存在将导致模型细节部分被覆盖，很难反演，当超级炮个数增加时，每一个超级炮中含有的独立震源个数变少，炮间的串扰噪声会逐步减小，这样对先前的模型加以修正，细节部分逐步得到精确反演。
+\par
+随机震源与震源编码全波形联合反演算法的核心代码如下所示：
+\begin{python}
+import Create_Model
+import Calculate_Gradient_NoSave_Pool
+import numpy as np
+import random
+from pathlib import Path
+from Optimization import para,options,Optimization
+
+...
+
+#建立超级炮信息
+#总震源数
+source_num=40
+#震源编码
+#相位随机
+phase_data=np.random.uniform(0,10,source_num)
+#振幅随机
+amplitude_data=np.random.uniform(1,10,source_num)
+#编码序列长度及主频
+add_k_max=400
+add_ricker_freq=60
+#极性随机
+t=np.arange(add_k_max)*para.dt
+shuffle_M=np.arange(source_num)
+np.random.shuffle(shuffle_M)
+amplitude_data[shuffle_M[:int(len(shuffle_M)/2)]]*=-1
+amplitude_data[shuffle_M[int(len(shuffle_M)/2):]]*=1
+#卷积计算
+convolve_f=[]
+for idx_ in range(source_num):
+    convolve_f.append\
+    (Wavelet.ricker(t,add_ricker_freq,amplitude_data[idx_],\
+    phase_data[idx_]))   
+    
+para.f=[]
+record_f=[]
+for idx_ in range(source_num):
+    record_f.append(convolve_f[idx_])
+    para.f.append\
+    (scipy.signal.convolve(original_f,convolve_f[idx_])[:para.k_max])
+para.convolve_data=[]
+for idx_ in range(source_num):
+    data_tmp=np.empty((para.k_max+add_k_max-1,para_data[idx_].shape[1]))
+    for tmp_idx_ in range(para_data[idx_].shape[1]):
+        data_tmp[:,tmp_idx_]=scipy.signal.convolve\
+        (convolve_f[idx_],para_data[idx_][:,tmp_idx_])
+    para.convolve_data.append(data_tmp[:para.k_max,:])        
+            
+#如果使用初始频率，则建立反演初始模型
+if idx==0:
+    irho,ivp=Create_Model.Initial_BP94(rho,vp,30)
+#如果使用非初始频率，则使用上个频率计算出的模型参数作为反演初始模型
+else:
+    dir_path='./%sHz_imodel_file'%frequence[idx-1]
+    file_num=int(len(list(Path(dir_path).iterdir()))/2)-1
+    data=np.load('./%sHz_imodel_file/%s_imodel.npy'%\
+    (frequence[idx-1],file_num))
+    irho=data[:int(len(data)/2)].reshape((para.xl+2*8+2*para.CPML,-1))
+    ivp=data[int(len(data)/2):].reshape((para.xl+2*8+2*para.CPML,-1))
+#建立目标函数梯度计算的匿名函数
+fh=lambda x,y:Calculate_Gradient_NoSave_Pool.misfit(x,y,para)    
+#超级炮组数列表
+super_source_num_list=[4,8,20,40]
+imodel=np.hstack((irho.flatten(),ivp.flatten()))
+for Iteration in range(len(super_source_num_list)):
+    #超级炮组数
+    super_source_num=super_source_num_list[Iteration]
+    #总震源数
+    single_source_num=int(source_num/super_source_num)
+    #数据随机
+    #建立超级炮剖面
+    irho=imodel[:int(len(imodel)/2)]
+    ivp=imodel[int(len(imodel)/2):]
+    shuffle_Source=np.arange(source_num)
+    np.random.shuffle(shuffle_Source)
+    para.super_source_info.source_site=[]
+    para.super_source_info.f=[]
+    para.data=[]
+    for idx_ in range(super_source_num):
+        para.super_source_info.source_site.append\
+        (list(para.source_site[shuffle_Source\
+        [single_source_num*idx_:single_source_num*(idx_+1)]]))
+        tmp_f=[]
+        p_data=0
+        for tmp_idx in range(single_source_num):
+            tmp_f.append\
+            (para.f[shuffle_Source[single_source_num*idx_+tmp_idx]])
+            p_data+=(para.convolve_data[shuffle_Source\
+            [single_source_num*idx_+tmp_idx]])
+        para.data.append(p_data)
+        para.super_source_info.f.append(tmp_f)
+    #L-BFGS最优化算法参数设置 
+    options.method='lbfgs'
+    options.tol=1e-4
+    options.maxiter=20
+    Optimization_=Optimization(fh,irho,ivp)
+    imodel,info=Optimization_.optimization()
+\end{python}
+\par
+对BP1994国际标准模型进行试算，为简化文字，传统全波形反演策略称为S1策略，随机震源与震源编码全波形联合反演策略称为S2策略，加载了考虑高阶项的修正全变差正则化模型约束的随机震源与震源编码全波形联合反演策略称为S3策略，则S2策略与S3策略的反演结果分别如图\ref{BP1994RandomSourceEncodingResult}和图\ref{BP1994RandomSourceEncodingResultMCTV}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomSourceEncodingResult.png}}        
+\caption{\label{BP1994RandomSourceEncodingResult} 随机震源与震源编码全波形联合反演策略反演结果}      
+\end{figure}
+
+\begin{figure}[H]   
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomSourceEncodingResultMCTV.png}}  
+\caption{\label{BP1994RandomSourceEncodingResultMCTV} 考虑高阶项的修正全变差正则化的随机震源与震源编码全波形联合反演结果}
+\end{figure}
+
+\par
+图\ref{BP1994RandomSourceEncodingResult}的反演结果能够较好地体现BP1994地形偏移国际标准模型的细节部分，与真实模型较为接近，相比震源编码全波形反演策略具有更好的分辨率，串扰噪声基本被压制。通过对比图\ref{BP1994RandomSourceEncodingResult}与图\ref{BP1994RandomSourceEncodingResultMCTV}可以发现，加载了考虑高阶项的修正全变差正则化模型约束策略的反演结果具有更高的反演精度，介质分界面更加突出，串扰噪声的现象得到了进一步的压制，与真实模型更为接近，为了更直观地体现三种算法的精度差异，选取图\ref{BP1994TrueModel}中紫色虚线所示的单道切线剖面进行对比，结果如图\ref{BP1994RandomSourceEncodingLine}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomSourceEncodingLine.png}}        
+\caption{\label{BP1994RandomSourceEncodingLine} 对比三种策略的全波形反演单道切线结果图}      
+\end{figure}
+\par
+图\ref{BP1994RandomSourceEncodingLine}显示，S1策略与S2策略得到的全波形反演单道切线结果相差不大，但是S2策略相较S1策略具有更加剧烈的震荡现象，这是由于串扰噪声没有完全消除的原因导致的，而S3策略相比S1策略和S2策略曲线形态更加平滑，介质分界面更加突出，与真实模型更为接近。
+\par
+为了定量说明三种全波形反演策略的效率和精度，BP1994模型全波形反演参数如表\ref{RandomSourceEncodingTab}所示，不同策略的总耗时、模型重构误差及反演策略评价函数如图\ref{RandomSourceEncodingScheme}所示，全波形反演使用的计算机配置为Intel Xeon(R) Platimum 8168 CPU 2.76GHz$\times$96，RAM Memory 503.6GiB，系统环境为Ubuntu18.04.2 TLS，Gnome 3.28.2，编成环境为Anaconda3 Spyder4 Python3.6.2，反演过程使用震源并行技术。
+\begin{table}[H]
+\centering
+\caption{不同策略全波形反演参数表}\label{RandomSourceEncodingTab}
+\renewcommand\tabcolsep{0.2em}
+\begin{tabular}{cccccc}
+\toprule
+{策略} & {迭代次数}  & {单次迭代耗时(s)} & {总耗时(s)} & {模型重构误差$\rho$} & {模型重构误差$v$} \\
+\midrule 
+S1 & 28(L)+92(H) & 356.2531 & 43177 & 0.5316 & 0.5372\\
+
+S2 & 40(L)+40(H) & \tabincell{c}{ 135.4142(S2-3)\\
+143.8654(S2-4)\\
+187.4564(S2-7)\\
+354.4515(S2-21)} & 16441 & 0.5342 & 0.5402\\
+
+S3 & 40(L)+40(H) & \tabincell{c}{ 161.2168(S3-3)\\
+160.7465(S3-4)\\
+302.1327(S3-7)\\
+371.4654(S3-21)} & 19930 & 0.5164 & 0.5160\\
+\bottomrule
+\end{tabular}
+\end{table}
+表中S2、S3策略迭代次数为人工给定，由于初始超级炮数量为3个，每次迭代都给定了不同数量的超级炮，最终超级炮数量为21个，因此对于S2、S3策略而言单次耗时是不同的，括号中第一项代表全波形反演策略，第二项代表当前使用的超级炮数量。从表\ref{RandomSourceEncodingTab}可以得到如下结论：S1策略具有很低的模型重构误差，但是单次反演迭代耗时巨大，且需要较高的反演迭代次数才能够达到反演终止条件，反演效率十分低下；S2策略给定了较少的反演迭代次数，单次迭代耗时对比S1策略有所下降，总耗时加速比为2.63，但是由于依然存在着串扰噪声的原因，模型重构误差相比S1策略仍然有所增加；S3策略加载了正则化模型约束，导致单次反演迭代耗时增加，但对比S1策略仍然高效，总耗时加速比为2.17，由于加载了正则化模型约束，对串扰噪声做了进一步的压制，因此较S2策略降低了模型重构误差，且明显低于S1策略的模型重构误差，最终反演结果满足全波形反演的要求。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4in]  {./Section5/RandomSourceEncodingScheme.png}}        
+\caption{\label{RandomSourceEncodingScheme} 不同策略全波形反演的模型重构误差、总耗时及反演策略评价函数对比图}      
+\end{figure}
+图\ref{RandomSourceEncodingScheme}更加直观地表示出S1策略具有较好的模型重构误差，但是反演总耗时巨大；S2策略反演总耗时明显降低，但是由于串扰噪声的存在导致模型重构误差略有增加，然而双参数之间的模型重构误差相差并不明显；S3策略反演总耗时较S2策略有所增加，但是降低了模型重构误差，且双参数之间的模型重构误差十分接近，此时S2策略的模型重构误差与S1策略的模型重构误差相差不大，但是S2策略的反演效率要远高于S1策略，因此，反演评价函数值小于S1策略，说明S2策略相比S1策略效果要好，S3策略虽然降低了部分反演效率但是获得了更高的反演精度，因此反演策略评价函数值远远小于S1策略和S2策略，说明综合考虑全波形反演的精度及效率之后S3策略为全波形反演的最优策略。
+
+\subsubsection{随机震源与动态震源编码全波形联合反演}
+随机震源与动态震源编码全波形联合反演策略是指在随机震源与震源编码全波形联合反演的基础上考虑动态策略，即使用随机震源全波形反演策略与动态随机震源编码全波形反演策略相结合，在使用震源编码全波形反演的过程中加入动态策略，具体计算流程如算法\ref{AlgoRandomDynamicSourceEncoding}所示
+\begin{algorithm}[H]
+\caption{随机震源与动态震源编码全波形联合反演算法流程}
+\label{AlgoRandomDynamicSourceEncoding}
+\renewcommand{\algorithmicrequire}{\textbf{输入:}}
+\renewcommand{\algorithmicensure}{\textbf{输出:}}
+\begin{algorithmic}[1]
+\Require
+$Source$
+\Ensure
+$\rho,v$
+\State Initialization $SuperShotsNum,e_n$
+\For{all $SuperShotsNum$}
+\For{all Dynamic}
+\State $Source\ Block \gets Source$
+\State Compute $\tilde{U}_{m1}=e_n \otimes \tilde{U}_m$ according to Eq.\ref{5-6}
+\State $Super\ Shots \gets$ \Call{RANDOM}{$Source\ Block$} $\otimes e_n$
+\For{all Iterations}
+\State Calculate Gradient by $Super\ Shots$ according to Eq.5-8
+\State Update $\rho$ and $v$ by L-BFGS
+\EndFor
+\EndFor
+\State Add $SuperShotsNum$
+\EndFor
+\State \Return $\rho,v$
+\end{algorithmic}
+\end{algorithm}
+\par
+比较算法\ref{AlgoRandomSourceEncoding}和算法\ref{AlgoRandomDynamicSourceEncoding}发现，随机震源与动态震源编码全波形联合反演策略是对随机震源与震源编码全波形联合反演策略的改进，具体表现在当使用超级炮计算时加入了动态策略，这样做的目的在于避免相同的独立震源导致的相同的串扰噪声作用在每次反演迭代中，从而进一步压制串扰噪声，并对受串扰噪声干扰的部分加以修正。
+\par
+随机震源与动态震源编码全波形联合反演算法的核心代码如下所示：
+\begin{python}
+import Create_Model
+import Calculate_Gradient_NoSave_Pool
+import numpy as np
+import random
+from pathlib import Path
+from Optimization import para,options,Optimization
+
+...
+
+#建立超级炮信息
+#总震源数
+source_num=40        
+#震源编码
+#相位随机
+phase_data=np.random.uniform(0,10,source_num)
+#振幅随机
+amplitude_data=np.random.uniform(1,10,source_num)
+#编码序列长度及主频
+add_k_max=400
+add_ricker_freq=60
+#极性随机
+t=np.arange(add_k_max)*para.dt
+shuffle_M=np.arange(source_num)
+np.random.shuffle(shuffle_M)
+amplitude_data[shuffle_M[:int(len(shuffle_M)/2)]]*=-1
+amplitude_data[shuffle_M[int(len(shuffle_M)/2):]]*=1
+#卷积计算
+convolve_f=[]
+for idx_ in range(source_num):
+    convolve_f.append\
+    (Wavelet.ricker(t,add_ricker_freq,amplitude_data[idx_],\
+    phase_data[idx_]))   
+para.f=[]
+record_f=[]
+for idx_ in range(source_num):
+    record_f.append(convolve_f[idx_])
+    para.f.append\
+    (scipy.signal.convolve(original_f,convolve_f[idx_])[:para.k_max])
+para.convolve_data=[]
+for idx_ in range(source_num):
+    data_tmp=np.empty((para.k_max+add_k_max-1,para_data[idx_].shape[1]))
+    for tmp_idx_ in range(para_data[idx_].shape[1]):
+        data_tmp[:,tmp_idx_]=scipy.signal.convolve\
+        (convolve_f[idx_],para_data[idx_][:,tmp_idx_])
+        para.convolve_data.append(data_tmp[:para.k_max,:])        
+            
+#如果使用初始频率，则建立反演初始模型
+if idx==0:
+    irho,ivp=Create_Model.Initial_BP94(rho,vp,30)
+#如果使用非初始频率，则使用上个频率计算出的模型参数作为反演初始模型
+else:
+    dir_path='./%sHz_imodel_file'%frequence[idx-1]
+    file_num=int(len(list(Path(dir_path).iterdir()))/2)-1
+    data=np.load('./%sHz_imodel_file/%s_imodel.npy'%\
+    (frequence[idx-1],file_num))
+    irho=data[:int(len(data)/2)].reshape((para.xl+2*8+2*para.CPML,-1))
+    ivp=data[int(len(data)/2):].reshape((para.xl+2*8+2*para.CPML,-1))
+#建立目标梯度计算的匿名函数
+fh=lambda x,y:Calculate_Gradient_NoSave_Pool.misfit(x,y,para)    
+#超级炮组数列表
+super_source_num_list=[4,8,20,40]
+imodel=np.hstack((irho.flatten(),ivp.flatten()))
+for Super_Iteration in range(len(super_source_num_list)):
+    #超级炮组数
+    super_source_num=super_source_num_list[Super_Iteration]
+    #总震源数
+    single_source_num=int(source_num/super_source_num)
+    #动态策略
+    for Dynamic_Iteration in range(5):
+        #数据随机
+        #建立超级炮剖面
+        irho=imodel[:int(len(imodel)/2)]
+        ivp=imodel[int(len(imodel)/2):]
+        shuffle_Source=np.arange(source_num)
+        np.random.shuffle(shuffle_Source)
+        para.super_source_info.source_site=[]
+        para.super_source_info.f=[]
+        para.data=[]
+        for idx_ in range(super_source_num):
+            para.super_source_info.source_site.append\
+            (list(para.source_site[shuffle_Source\
+            [single_source_num*idx_:single_source_num*(idx_+1)]]))
+            tmp_f=[]
+            p_data=0
+            for tmp_idx in range(single_source_num):
+                tmp_f.append(para.f[shuffle_Source\
+                [single_source_num*idx_+tmp_idx]])
+                p_data+=(para.convolve_data[shuffle_Source\
+                [single_source_num*idx_+tmp_idx]])
+            para.data.append(p_data)
+            para.super_source_info.f.append(tmp_f)
+        #L-BFGS最优化算法参数设置   
+        options.method='lbfgs'
+        options.tol=1e-4
+        options.maxiter=5
+        Optimization_=Optimization(fh,irho,ivp)
+        imodel,info=Optimization_.optimization()
+\end{python}
+\par
+对BP1994国际标准模型进行试算，为简化文字，传统全波形反演策略称为S1策略，随机震源与动态震源编码全波形联合反演策略称为S2策略，加载了考虑高阶项的修正全变差正则化模型约束的随机震源与动态震源编码全波形联合反演策略称为S3策略，则S2策略与S3策略的反演结果分别如图\ref{BP1994RandomDynamicSourceEncodingResult}和图\ref{BP1994RandomDynamicSourceEncodingResultMCTV}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomDynamicSourceEncodingResult.png}}        
+\caption{\label{BP1994RandomDynamicSourceEncodingResult} 随机震源与动态震源编码全波形联合反演策略反演结果}      
+\end{figure}
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomDynamicSourceEncodingResultMCTV.png}}        
+\caption{\label{BP1994RandomDynamicSourceEncodingResultMCTV} 考虑高阶项的修正全变差正则化随机震源与动态震源编码全波形联合反演结果}      
+\end{figure}
+\par
+图\ref{BP1994RandomDynamicSourceEncodingResult}的反演结果能够较好地体现BP1994地形偏移国际标准模型的细节部分，与真实模型较为接近，相比震源编码全波形反演策略具有更好的分辨率，串扰噪声基本被压制。通过对比图\ref{BP1994RandomDynamicSourceEncodingResult}与图\ref{BP1994RandomDynamicSourceEncodingResultMCTV}可以发现，加载了考虑高阶项的修正全变差正则化模型约束策略的反演结果具有更高的反演精度，介质分界面更加突出，串扰噪声的现象得到了进一步的压制，与真实模型更为接近，为了更直观地体现三种算法的精度差异，选取图\ref{BP1994TrueModel}中紫色虚线所示的单道切线剖面进行对比，结果如图\ref{BP1994RandomDynamicSourceEncodingLine}所示。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=6in]  {./Section5/BP1994RandomDynamicSourceEncodingLine.png}}        
+\caption{\label{BP1994RandomDynamicSourceEncodingLine} 对比三种策略的全波形反演单道切线结果图}      
+\end{figure}
+\par
+图\ref{BP1994RandomDynamicSourceEncodingLine}显示，S1策略与S2策略得到的全波形反演单道切线结果相差不大，但是S2策略相较S1策略具有更加剧烈的震荡现象，这是由于串扰噪声没有完全消除的原因导致的，而S3策略相比S1策略和S2策略曲线形态更加平滑，介质分界面更加突出，与真实模型更为接近。
+\par
+为了定量说明三种全波形反演策略的效率和精度，BP1994模型全波形反演参数如表\ref{RandomDynamicSourceEncodingTab}所示，不同策略的总耗时、模型重构误差及反演策略评价函数如图\ref{RandomDynamicSourceEncodingScheme}所示，全波形反演使用的计算机配置为Intel Xeon(R) Platimum 8168 CPU 2.76GHz$\times$96，RAM Memory 503.6GiB，系统环境为Ubuntu18.04.2 TLS，Gnome 3.28.2，编成环境为Anaconda3 Spyder4 Python3.6.2，反演过程使用震源并行技术。
+\begin{table}[H]
+\centering
+\caption{不同策略全波形反演参数表}\label{RandomDynamicSourceEncodingTab}
+\renewcommand\tabcolsep{0.2em}
+\begin{tabular}{cccccc}
+\toprule
+{策略} & {迭代次数}  & {单次迭代耗时(s)} & {总耗时(s)} & {模型重构误差$\rho$} & {模型重构误差$v$} \\
+\midrule 
+S1 & 28(L)+92(H) & 356.2531 & 43177 & 0.5316 & 0.5372\\
+
+S2 & 40(L)+60(H) & \tabincell{c}{ 134.9534(S2-3)\\
+146.1738(S2-4)\\
+188.6423(S2-7)\\
+353.1672(S2-21)} & 20594 & 0.5078 & 0.4835\\
+
+S3 & 40(L)+60(H) & \tabincell{c}{ 159.4371(S3-3)\\
+162.3124(S3-4)\\
+300.7256(S3-7)\\
+375.3329(S3-21)} & 24970 & 0.4837 & 0.4851\\
+\bottomrule
+\end{tabular}
+\end{table}
+表中S2、S3策略迭代次数为人工给定，由于初始超级炮数量为3个，每次迭代都给定了不同数量的超级炮，最终超级炮数量为21个，因此对于S2、S3策略而言单次耗时是不同的，括号中第一项代表全波形反演策略，第二项代表当前使用的超级炮数量。从表\ref{RandomDynamicSourceEncodingTab}可以得到如下结论：S1策略具有很低的模型重构误差，但是单次反演迭代耗时巨大，且需要较高的反演迭代次数才能够达到反演终止条件，反演效率十分低下；S2策略给定了较少的反演迭代次数，单次迭代耗时对比S1策略有所下降，总耗时加速比为2.10，由于采用了动态随机震源编码策略，每次反演迭代的串扰噪声是不同的\upcite{Lianghuang2017}，因此可以很好地压制串扰噪声，加上每次反演迭代使用的震源不同，则每次反演迭代的反演结果都会进行修正，因此相比S1策略，S2策略获得了更低的模型重构误差；S3策略加载了正则化模型约束，导致单次反演迭代耗时增加，但对比S1策略仍然高效，总耗时加速比为1.73，由于加载了正则化模型约束，对串扰噪声做了进一步的压制，因此较S1策略和S2策略降低了模型重构误差，最终反演结果满足全波形反演的要求。
+\begin{figure}[H]        
+\centerline{\includegraphics[width=4in]  {./Section5/RandomDynamicSourceEncodingScheme.png}}        
+\caption{\label{RandomDynamicSourceEncodingScheme} 不同策略全波形反演的模型重构误差、总耗时及反演策略评价函数对比图}      
+\end{figure}
+图\ref{RandomDynamicSourceEncodingScheme}更加直观地表示出S1策略具有较好的模型重构误差，但是反演总耗时巨大；S2策略反演总耗时明显降低，由于采用了动态随机震源编码策略，每次反演迭代的串扰噪声是不同的，因此可以很好地压制串扰噪声，加上每次反演迭代使用的震源不同，则每次反演迭代的反演结果都会进行修正因此获得了更低的模型重构误差，然而双参数之间的模型重构误差却相差较大；S3策略反演总耗时较S2策略有所增加，但是获得了更低的模型重构误差，且双参数之间的模型重构误差十分接近，此时S2策略的模型重构误差相对S1策略的模型重构误差明显减小，并且S2策略的反演效率要远高于S1策略，尽管双参数的模型重构误差相差较大，但是反演评价函数值仍然小于S1策略，说明S2策略相比S1策略效果要好，S3策略虽然降低了部分反演效率但是获得了更高的反演精度，因此反演策略评价函数值远远小于S1策略和S2策略，说明综合考虑全波形反演的精度及效率之后S3策略为全波形反演的最优策略。
+\setcounter{figure}{0}
+\setcounter{table}{0}
+\setcounter{algorithm}{0}
+\newpage
+\section{全文总结及后续研究工作的展望}
+\subsection{结论}
+本文研究了声波方程DGTD算法高精度正演模拟及声波方程全波形双参数反演策略，实现了基于完全匹配层的间断Galerkin声波方程高精度正演模拟，声波方程全波形双参数反演基本算法、多尺度串行全波形反演策略、多步长全波形反演策略、正则化模型约束策略及高效全波形双参数反演策略，本文的主要成果如下：
+\par
+(1)完成了声波方程DGTD算法的理论推导，详细说明了DGTD的算法流程，完成了完全匹配层吸收边界的加载，使用LSERK算法完成了对时间积分的处理，使DGTD算法具有更高的稳定性，比较了DGTD算法、FETD算法与FDTD算法对声波正演模拟的差异，证明了DGTD算法具有更高的正演精度，说明了基函数阶数的选择与插值节点个数的关系，证明了基函数的阶数对声波方程正演模拟精度的影响。
+\par
+(2)推导了时间域声波方程全波形双参数反演的目标函数及其梯度的计算公式，介绍了L-BFGS最优化算法，采用多尺度串行全波形反演策略得到了更加稳定、更加精确的双参数反演结果，利用多步长策略解决了由于声波速度与介质密度的摄动对反演结果的敏感程度不同而导致的介质密度反演精度较低的问题，并将这种策略应用于复杂的Marmousi-II国际标准模型的全波形反演中得到了很好的效果。
+\par
+(3)完成了Tikhonov正则化、传统全变差正则化、修正全变差正则化和考虑高阶项的修正全变差正则化模型约束的公式推导，通过对简单模型的试算详细对比了各种正则化模型约束策略对反演结果的影响，证明了通过加载正则化模型约束策略可以提高声波方程全波形双参数反演的稳定性和精确性。并将正则化模型约束策略用于复杂的SEAM国际标准模型的全波形反演中获得了良好的效果。
+\par
+(4)对声波方程全波形双参数高效反演策略进行了详细说明，提出了震源并行技术加快了正演模拟的速度，从而提高了反演的效率，详细描述了随机震源全波形反演的算法流程，对BP1994地形偏移国际标准模型进行试算，说明了随机震源全波形反演具有较高的反演效率和较高的反演精度，以BP1994地形偏移国际标准模型为例详细对比了各种震源编码全波形反演策略，证明了动态随机震源编码策略具有最好的反演结果，在随机震源全波形反演和震源编码全波形反演策略的基础上提出了随机震源与震源编码全波形联合反演策略及其改进的全波形反演策略，利用BP1994地形偏移国际标准模型进行了算法验证。
+\subsection{后续研究工作的展望}
+(1)论中研究了二维声波方程DGTD算法正演模拟，但实际勘探中地下介质往往是粘弹性的，因此开展粘弹性声波方程的正演模拟更加接近于真实地质模型，下一步的工作重点主要集中于开展粘弹性声波方程的正演研究中。
+\par
+(2)论文研究了时间域二维声波方程全波形双参数反演，但实际中采用的是三维数据，并且大部分采用弹性波动方程，因此，三维领域及弹性波领域的研究可以作为下一步工作的重点。
+\par
+(3)对于声波方程全波形双参数反演精度的提升方法仅考虑了正则化模型约束策略，还有其他策略例如预条件策略尚未考虑，另外还有其他正则化模型约束策略没有研究，比如Seislet正则化模型约束策略，因此，了解并实现提高反演精度的策略将会作为今后的研究领域。
+\par
+(4)对于声波方程全波形双参数高效反演策略针对目前提出了震源并行策略、随机震源策略、震源编码策略及随机震源与震源编码联合反演策略都处于研究的初级阶段，对于很多细节问题未进行更为详细的讨论，例如地震块的划分方式等关乎反演精度的细节问题尚未解决。
+\par
+(5)论文中仅仅对理论模型进行了全波形双参数反演计算，还没有将这些策略应用于实际工作中，对于实测数据更加需要进行全波形反演的研究，下一步的工作方向主要放在对实测数据的全波形反演研究中，然而实际生产中子波的形态往往是未知的，因此需要首先对子波进行反演，或者采用不依赖子波的全波形反演策略。
+\par
+(6)鉴于目前已经研究了大量的声波正演及反演策略，已经形成了一个初步的声波计算流程，因此，可以考虑将已有的工作内容总结为一套软件，形成相应的声波正反演处理软件，方便地震勘探工作者的使用。
+\newpage
+\pagestyle{fancy}
+\lhead{\fancyplain{}{硕士学位论文}}
+\rhead{\fancyplain{}{参考文献}} 
+\cfoot{\fancyplain{}{\thepage}}
+\addcontentsline{toc}{section}{参考文献}
+\bibliographystyle{unsrt}
+\bibliography{./Master_Doc}
+\newpage
+\addcontentsline{toc}{section}{攻读学位期间主要的研究成果目录}
+\section*{\sanhao\hei\centerline{攻读学位期间主要的研究成果目录}}
+\pagestyle{fancy}
+\lhead{\fancyplain{}{硕士学位论文}}
+\rhead{\fancyplain{}{攻读学位期间主要的研究成果目录}} 
+\cfoot{\fancyplain{}{\thepage}}
+(一)发表/录用的论文
+\par
+\hangindent 3.5em
+[1] 冯德山, 王向宇. 基于卷积完全匹配层的旋转交错网格高阶差分法模拟弹性波传播[J]. 物探与化探, 2018, 42(4): 766-776.(CSCD)
+\par
+\hangindent 3.5em
+[2] Deshan Feng, Xiangyu Wang, Xun Wang. Multiscale full waveform inversion of variable-density acoustic wave equation based on modified total variation regularization[J]. Journal of Seismic Exploration, 2019(SCI, 在投稿件)
+\par
+\hangindent 3.5em
+[3] Deshan Feng, Xiangyu Wang, Xun Wang. Application of dynamic stochastic source encoding and minmax-concave total variation regularization in full waveform inversion of variation density acoustic wave equation[J]. Geophysical Journal International, 2019(SCI, 在投稿件)
+\par
+\hangindent 3.5em
+[4] Deshan Feng, Xiangyu Wang, Xun Wang. A new algorithm of interpolating scaling functions method with fourth-order Runge-Kutta for 3D GPR[J]. Advances in Computational Mathematics, 2019(SCI, 在投稿件)
+\par
+\hangindent 3.5em
+[5] 冯德山, 王向宇, 王珣. 动态随机震源编码在变密度声波方程全波形反演中的应用[J]. 地球物理学报, 2019(SCI, 在投稿件)
+\\
+\par
+(二)参加的科研项目
+\par
+\hangindent 3em
+1.  国家自然科学基金项目“特殊介质的第二代小波有限元/配点法自适应GPR正演及多尺度全波形双参数反演”(41574116)
+\par
+\hangindent 3em
+2.  国家自然科学基金项目“基于配点策略的新型间断小波Galerkin法复杂GPR模型正演”(41774132)
+\par
+\hangindent 3em
+3.  中南大学研究生自主探索创新项目“ 弹性波动方程间断Galerkin法正演模拟”(2018zzts688)
+\newpage
+\addcontentsline{toc}{section}{致谢}
+\section*{\sanhao\hei\centerline{致谢}}
+\pagestyle{fancy}
+\lhead{\fancyplain{}{硕士学位论文}}
+\rhead{\fancyplain{}{致谢}} 
+\cfoot{\fancyplain{}{\thepage}}
+转眼间，硕士研究生的学习阶段已经结束，来到中南已经七个年头，回首点滴，彷徨中前行。想起曾经陪伴我进步的老师、同学、朋友和家人,感慨万千。
+\par
+我首先衷心的感谢我的导师冯德山教授。在中南的这几年学习生活中，冯老师在学习上的给予了全面指导、提供良好的学习环境,从论文的选题、准备、到具体的研究及论文的撰写无不倾注了老师的心血。青春易彷徨，每当我迷茫、犹豫蹉跎不前，他严谨的治学态度、前瞻性的眼光、平易近人的交谈，总能影响并鞭策我前行。在生活上，他也给予了无微不至的关怀，他对待学生和蔼可亲，经常从学生的角度考虑问题，了解学生的感受，帮助我解决了很多学习之外的问题和困惑，使我感受到导师亦是我真挚的朋友! 他严谨求实的治学态度、前瞻性的学术洞察力以及脚踏实地、平易近人的工作作风，将对我今后的工作、学习和生活产生重要影响，受益终身。在此，谨向导师致以崇高的敬意和由衷的感谢。
+\par
+感谢戴前伟教授，中南的学习期间，我得到了他在学习、生活等各方面的帮助，他对我学习和研究给予了许多宝贵建议，他平易近人的工作风格、具有创造性的思考方式，让我深表佩服和感谢，受益良多。
+\par
+由衷感谢我身边每一个同学,他们给我的温暖和感动是不可替代的。感谢我的同门师兄弟张彬师兄、王珣师兄、雷轶师兄、蔡洋师兄、刘金宝师兄、曹岑师姐、张华、苏玄，与他们的讨论经常能让我及时发现学习上的问题；感谢物探所2016级的同学们，让我的学习生活丰富多彩，有滋有味，让我懂得了很多，成长了很多，给了我最深厚的友谊和最深切的关怀。
+感谢Stack Overflow论坛上的各位网友，他们帮助我解决了许多编程以及算法上的难点，对我的学习研究有很大的帮助；感谢Google Schoolar，他们帮助我查阅了很多论文，让我有了更广阔的视野；感谢SEG Wiki Open Data，他们提供了很多地震模型，感谢Github，他们让我了解了更多的算法知识；感谢Ubuntu和\LaTeX 他们为我提供了稳定的系统环境和文档编写环境；感谢Python社区，他们为我提供了开源且免费的算法工具包。感谢中南大学研究生自由探索创新项目(2018zzts688)给予的经费支持，感谢L4D2的各位玩家在我烦恼的时候给予我的陪伴。
+\par
+最后，感谢我的父母对我多年来的培养和支持，未婚妻周燕女士的关心、理解、支持和鼓励，是他们的辛勤劳动给我创造了良好的学习机会,让我能安心完成学业。 谨以此文,深深感谢所有求学路上给予我帮助、关心的师长、亲人及朋友们!
+\end{document}
